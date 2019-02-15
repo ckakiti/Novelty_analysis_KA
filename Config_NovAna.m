@@ -11,7 +11,7 @@ video_ywid=420;                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fpm = 1800;             % frames per minute
 fps = fpm./60;          % frames per second
 ppc = 42/6.3; %123/23; %340/(2*30);   % pixels per cm   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-radius_cm = 8; %10 for tea obj  % Time spent around the obj radius (cm)   %%%%%%%%%%%%%
+radius_cm = 7; %10 for tea obj  % Time spent around the obj radius (cm)   %%%%%%%%%%%%%
 radius = radius_cm.*ppc;% Time spent around the obj radius (pixels)
 angle_radius = 15;      % Time orient towards the obj radius (degree)
 
