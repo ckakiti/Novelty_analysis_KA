@@ -13,6 +13,7 @@
 % Labels(:,11) Tailbase x (pixel)
 % Labels(:,12) Tailbase y (pixel)
 % Labels(:,14) Head x (pixel) 'average of nose, leftear and rightear'
+                             % for center of mass, use average of nose and tail 
 % Labels(:,15) Head y (pixel)
 % Labels(:,17) Head distance from object 1 (cm)
 % Labels(:,18) Head distance from object 2
@@ -33,13 +34,13 @@
 %***********************************************************
 clear
 clc
-cd /home/alex/Programs/Novelty_analysis
+cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
 radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Ice&Fire_conf_DLC/Jon/181223
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_stimuli_DLC/Alcohol/181130
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
@@ -98,8 +99,8 @@ for fiter =1:flen
     %***********************************************************
 
     % Calculate head position
-    Labels(:,14)=(Labels(:,2)+Labels(:,5)+Labels(:,8))./3;
-    Labels(:,15)=(Labels(:,3)+Labels(:,6)+Labels(:,9))./3;
+    Labels(:,14)=(Labels(:,2)+Labels(:,11))./2; %Labels(:,5)+Labels(:,8))./3;
+    Labels(:,15)=(Labels(:,3)+Labels(:,12))./2; %Labels(:,6)+Labels(:,9))./3;
     %Labels(:,16)=(Labels(:,4)+Labels(:,7)+Labels(:,10))./3;
 
     % head distance from object center
