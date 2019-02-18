@@ -1,12 +1,12 @@
-networkname_format='DeepCut_resnet50_noveltyMay21shuffle1_700000'; % rubber toy orig
+% networkname_format='DeepCut_resnet50_noveltyMay21shuffle1_700000'; % rubber toy orig
 % networkname_format='DeepCut_resnet50_MoSeqNoveltySep12shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000';
-% networkname_format='DeepCut_resnet50_MoSeqConfiguralDec04shuffle1_1030000';
+networkname_format='DeepCut_resnet50_MoSeqConfiguralDec04shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MoSeqWithOldArenaDec31shuffle1_1030000';
 videoname_format='XYZ_YYMMDD_rgb.mp4'; %avi';
 
-video_xlen=520;
-video_ywid=420;                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+video_xlen=512;%520;
+video_ywid=424;%420;                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fpm = 1800;             % frames per minute
 fps = fpm./60;          % frames per second
