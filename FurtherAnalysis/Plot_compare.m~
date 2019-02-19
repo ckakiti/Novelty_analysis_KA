@@ -2,17 +2,11 @@ clear
 close all
 clc
 
-%Config_NovAna
-start_min=0.005;
-end_min=start_min+10;
-fps=30;
-startframe=start_min.*60.*fps;
-endframe=end_min.*60.*fps;
-radius_cm = 'n/a';
+Config_NovAna
 
-%cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC
-cd('/media/alex/TOSHIBA EXT/DLC_Analyzed_Videos/NewHope-ROTJ/')
-timeStat = readtable('TimeStatistic.csv');
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine
+%cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/NewHope-ROTJ/')
+timeStat = readtable('boutAnalysis_body.csv'); %'TimeStatistic_body.csv');
 timeStat2 = timeStat{:,3:end};
 
 names = timeStat{1:height(timeStat)/2,1}';
@@ -57,7 +51,7 @@ stuaavg=mean(Y_ang(cond1,:));
 conastd=std(Y_ang(cond2,:));
 stuastd=std(Y_ang(cond1,:));
 
-
+%% for plotting time around object and orientation to object
 disfig=figure(1);
 set(disfig, 'Position', [600 600 1200 450])
 
@@ -131,6 +125,81 @@ xticklabels(XTick);
 %saveas(angfig,'orientToObj_10min')
 %saveas(disfig,'timeNearObj_10min.tif')
 %saveas(angfig,'orientToObj_10min.tif')
+
+%% for plotting number of bouts and bout length
+boutNumfig=figure(1);
+set(boutNumfig, 'Position', [600 600 1200 450])
+
+subplot(1, 2, 2)
+hold on
+plot(repmat(X, length(cond2), 1)', Y_dis(cond2,:)', ...
+    'Color', cond2Color, 'Marker', '*')
+plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', ...
+    'Color', cond1Color, 'Marker', '*')
+title(['Number of bouts in ' num2str(round(Dis_te_frame/fps/60))  'min; Rad = ' num2str(radius_cm) 'cm'])
+set(gca, 'FontSize', 14)
+xlabel('Training day')
+ylabel('Number of bouts')
+% legend(names)
+xlim([0 X(end)+1])
+ylimDis = boutNumfig.CurrentAxes.YLim;
+xticks(X);
+xticklabels(XTick);
+
+subplot(1, 2, 1)
+hold on
+errorbar(X,condavg,condstd, 'Color', cond2Color)
+errorbar(X,studavg,studstd, 'Color', cond1Color)
+title(['Number of bouts in ' num2str(round(Dis_te_frame/fps/60))  'min; Rad = ' num2str(radius_cm) 'cm'])
+set(gca, 'FontSize', 14)
+xlabel('Training day')
+ylabel('Number of bouts')
+legend([cond2name ' (n=' num2str(length(cond2)) ')'], ...
+    [cond1name ' (n=' num2str(length(cond1)) ')'])
+xlim([0 X(end)+1])
+ylim(ylimDis)
+xticks(X);
+xticklabels(XTick);
+
+
+Y_ang = Y_ang/fps;
+
+boutLenfig=figure(2);
+set(boutLenfig, 'Position', [400 50 1200 450])
+
+subplot(1, 2, 2)
+hold on
+plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', ...
+    'Color', cond2Color, 'Marker', '*')
+plot(repmat(X, length(cond2), 1)', Y_ang(cond1,:)', ...
+    'Color', cond1Color, 'Marker', '*')
+title(['Average bout length (' num2str(round(Dis_te_frame/fps/60)) 'min); Rad = ' num2str(radius_cm) 'cm'])
+set(gca, 'FontSize', 14)
+xlabel('Training day')
+ylabel('Average bout length (frames)')
+% legend(names)
+xlim([0 X(end)+1])
+ylimAng = boutLenfig.CurrentAxes.YLim;
+xticks(X);
+xticklabels(XTick);
+
+subplot(1, 2, 1)
+hold on
+errorbar(X,conaavg,conastd, 'Color', cond2Color)
+errorbar(X,stuaavg,stuastd, 'Color', cond1Color)
+title(['Average bout length (' num2str(round(Dis_te_frame/fps/60)) 'min); Rad = ' num2str(radius_cm) 'cm'])
+set(gca, 'FontSize', 14)
+xlabel('Training day')
+ylabel('Average bout length (frames)')
+legend([cond2name ' (n=' num2str(length(cond2)) ')'], ...
+    [cond1name ' (n=' num2str(length(cond1)) ')'])
+xlim([0 X(end)+1])
+ylim(ylimAng)
+xticks(X);
+xticklabels(XTick);
+
+%saveas(boutNumfig,'boutNum_10min_body.tif')
+%saveas(boutLenfig,'boutLen_10min_body.tif')
 
 %%
 
