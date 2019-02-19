@@ -2,10 +2,10 @@ clear
 clc
 Config_NovAna;
 
-currSet = 'Miami_DLC';
-currMouse = 'Jon';
+currSet = 'Iku_6OHDA_DLC';
+currMouse = 'M01';
 
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet])% '/' currMouse '/181223'])
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse '/181226'])
 path=cd;
 PathRoot=[path '/'];
 filelist=dir([PathRoot,'*.csv']);
