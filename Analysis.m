@@ -16,6 +16,7 @@
 % Labels(:,11) Tailbase x (pixel)
 % Labels(:,12) Tailbase y (pixel)
 % Labels(:,14) Head x (pixel) 'average of nose, leftear and rightear'
+     % for center of mass, use average of nose and tail 
 % Labels(:,15) Head y (pixel)
 % Labels(:,17) Head distance from object (cm)
 % Labels(:,18) upper left corner distance from object center  (cm)
@@ -37,11 +38,11 @@
 %***********************************************************
 clear
 clc
-cd /home/alex/Programs/Novelty_analysis
+cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
 %cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Miami_DLC %CvsS_180831_DLC/Wash
-cd('/media/alex/TOSHIBA EXT/DLC_Analyzed_Videos/NewHope-ROTJ/S6_Wedge')
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine/C1_Aldehyde')
 cd Analyzed_Data;
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -58,7 +59,7 @@ end
 flen = length(filelist);
 
 tic;
-for fiter =1:flen
+for fiter =1:flen 
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];
     disp(['Analyzing: ' fn]);
@@ -82,20 +83,20 @@ for fiter =1:flen
     % Calculation
     %***********************************************************
 
-    % Calculate head position
-    Labels(:,14)=(Labels(:,2)+Labels(:,5)+Labels(:,8))./3;
-    Labels(:,15)=(Labels(:,3)+Labels(:,6)+Labels(:,9))./3;
-    Labels(:,16)=(Labels(:,4)+Labels(:,7)+Labels(:,10))./3;
+    % Calculate head or body position
+    Labels(:,14)=(Labels(:,2)+Labels(:,11))./2; %Labels(:,5)+Labels(:,8))./3;
+    Labels(:,15)=(Labels(:,3)+Labels(:,12))./2; %Labels(:,6)+Labels(:,9))./3;
+%    Labels(:,16)=(Labels(:,4)+Labels(:,7)+Labels(:,10))./3;
 
     % head distance from object center
     Labels(:,17)=sqrt((obj_center(fiter,1)-Labels(:,14)).^2+(obj_center(fiter,2)-Labels(:,15)).^2)/ppc;
 
     % upper left corner distance from object center
     Labels(:,18)=sqrt((obj_center(fiter,1)-arena(fiter,1)).^2+(obj_center(fiter,2)-arena(fiter,2)).^2)/ppc;
-    % buttom left or upper right conerner distance from object center
+    % bottom left or upper right corner distance from object center
     Labels(:,19)=0.5.*(sqrt((obj_center(fiter,1)-arena(fiter,1)).^2+(obj_center(fiter,2)-arena(fiter,4)).^2)...
                     + sqrt((obj_center(fiter,1)-arena(fiter,3)).^2+(obj_center(fiter,2)-arena(fiter,2)).^2))/ppc;                   
-    % buttom right corner distance from object center
+    % bottom right corner distance from object center
     Labels(:,20)=sqrt((obj_center(fiter,1)-arena(fiter,3)).^2+(obj_center(fiter,2)-arena(fiter,4)).^2)/ppc;
 
 
@@ -221,12 +222,16 @@ for fiter =1:flen
 
 %     saveas(Disfigure,['Distance_' vn(1:end-4) '.png'])
 %     saveas(Angfigure,['Orientation_' vn(1:end-4) '.png'])
+    cd('./body') %%%
     saveas(Hmfigure,['Heatmap_' vn(1:end-4) '.tif'])
     saveas(Trafigure,['Trajectory_' vn(1:end-4) '.tif'])
 
 %     cd ..
 
     save(vn(1:end-4),'Labels','Dis_t_obj','Ang_t_obj', 'radius', 'radius_cm');
+    
+    cd .. %%%
+    
     close all
     clearvars -except arena obj obj_center filelist fiter fpm fps ppc radius radius_cm angle_radius...
                       Dis_ts_frame Dis_te_frame Ang_ts_frame Ang_te_frame video_xlen video_ywid...

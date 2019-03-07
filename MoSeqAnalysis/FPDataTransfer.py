@@ -1,9 +1,9 @@
 import numpy as np
 import scipy.io as sio
 
-save_directory='/media/alex/DataDrive1/MoSeqData/SynTest/session_20190213104251/MoSeqFP_Miami_190125.mat'
-filename = '/media/alex/DataDrive1/MoSeqData/SynTest/session_20190213104251/nidaq.dat'
-nch=4
+save_directory='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Miami/temp/Miami_190125_nidaq'
+filename = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Miami/temp/Miami_190125_nidaq.dat'
+nch=3
 dtype='<f8'
 with open(filename, "rb") as file_read:
     dat = np.fromfile(file_read, dtype)

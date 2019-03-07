@@ -5,7 +5,7 @@ Config_NovAna;
 currSet = 'Iku_6OHDA_DLC';
 currMouse = 'M01';
 
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse '/181226'])
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse])% '/181226'])
 path=cd;
 PathRoot=[path '/'];
 filelist=dir([PathRoot,'*.csv']);
