@@ -60,7 +60,7 @@ tdTom = filtered_tdTom;
 diff_GCaMP = diff(GCaMP);
 std_GCaMP = std(diff_GCaMP);
 ind_noise = find(diff_GCaMP>5*std_GCaMP);
-exclude_green = size(ind_noise)
+exclude_green = size(ind_noise);
 
 for i = 1:length(ind_noise)
     GCaMP(ind_noise(i))=GCaMP(ind_noise(i)-1);
@@ -74,7 +74,7 @@ end
 diff_tdTom = diff(tdTom);
 std_tdTom = std(diff_tdTom);
 ind_noise = find(diff_tdTom>5*std_tdTom);
-exclude_red = size(ind_noise)
+exclude_red = size(ind_noise);
 
 for i = 1:length(ind_noise)
     tdTom(ind_noise(i))=tdTom(ind_noise(i)-1);
