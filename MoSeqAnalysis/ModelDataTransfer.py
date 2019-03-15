@@ -1,9 +1,9 @@
 # load in the model and the index to the extracted data
-index_file = '/media/alex/DataDrive1/MoSeqData/Miami/Miami_PCA/moseq2-index.yaml'
-model_file = '/media/alex/DataDrive1/MoSeqData/Miami/Miami_PCA/my_model.p'
+index_file = '/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/moseq2-index.yaml'
+model_file = '/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/my_model.p'
 
 # Save file directory
-save_directory='/media/alex/DataDrive1/MoSeqData/Miami/Miami_PCA/MoSeqDataFrame.mat'
+save_directory='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/MoSeqDataFrame.mat'
 
 
 import scipy.io as sio

@@ -4,9 +4,9 @@ clc
 
 Config_NovAna % ppc = 42/6.3;
 
-currMouse = 'Ester';
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_stimuli_DLC/' currMouse ...
-    '/181201/'])
+currMouse = 'Mattimeo';
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Redwall/' currMouse ...
+    '/190305/'])
 
 start_min=0.005;
 end_min=start_min+10;
@@ -24,13 +24,13 @@ folderlen=length(foldernames);
 squareSize = 4; % must be a factor of both vidWidth and vidHeight
 roundTargets = squareSize:squareSize:max(video_xlen, video_ywid);
 
-for folderi=1%:folderlen
+for folderi=1:folderlen
     cd(foldernames{folderi});
-    %cd Analyzed_Data
+    %cd Analyzed_Data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir([PathRoot, [currMouse '*.mat']]); %foldernames{folderi}, '*.mat']);
+    filelist=dir([PathRoot, 'session*.mat']); %[currMouse '*.mat']]); %foldernames{folderi}, '*.mat']);
     flen = length(filelist);
 
     for filei = 1:flen
@@ -51,7 +51,19 @@ for folderi=1%:folderlen
         totalDist(filei,1) = sum(diffs)/ppc;
         
         roundedArea  = interp1(roundTargets, roundTargets, [Labels(:,14) Labels(:,15)], 'nearest');
-        linearInd    = sub2ind([video_ywid video_xlen], roundedArea(:,1), roundedArea(:,2));
+        
+        if(sum(isnan(roundedArea(:)))>0)
+            for replace_nan = 1:length(roundedArea)
+                if(isnan(roundedArea(replace_nan,1)))
+                    roundedArea(replace_nan,1) = roundedArea(replace_nan-1,1);
+                end
+                if(isnan(roundedArea(replace_nan,2)))
+                    roundedArea(replace_nan,2) = roundedArea(replace_nan-1,2);
+                end
+            end
+        end
+        
+        linearInd    = sub2ind([video_xlen video_ywid], roundedArea(:,1), roundedArea(:,2)); %%%%%%
         arenaTargets = interp1(roundTargets, roundTargets, arena(filei,:), 'nearest');
         arenaArea    = (arenaTargets(1,4)-arenaTargets(1,2))*...
                        (arenaTargets(1,3)-arenaTargets(1,1))/16;
@@ -62,7 +74,7 @@ for folderi=1%:folderlen
             ppc roundTargets video_ywid video_xlen arena currMouse
     end
     %Time_distance_all(folderi,:)=Time_distance;
-    %cd ..
+    %cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
 
@@ -78,6 +90,6 @@ Table=table(rownames, ...
     totalDist, runArea);
 Table.Properties.VariableNames = {'Session' 'Obj1' 'Obj2' 'Obj3' 'Obj4', 'totalDist', 'runArea'};
 % %
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_stimuli_DLC/' currMouse])
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Redwall/' currMouse])
 writetable(Table,'TimeStatistic.csv');
 clear all

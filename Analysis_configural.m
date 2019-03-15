@@ -40,7 +40,7 @@ Config_NovAna;
 radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_stimuli_DLC/Alcohol/181130
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Redwall/Luke/190228
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
@@ -71,7 +71,7 @@ flen = length(filelist);
 
 tic;
 
-for fiter =1:flen
+for fiter =1:flen%%%%%
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];
     disp(['Analyzing: ' fn]);
@@ -203,7 +203,7 @@ for fiter =1:flen
     Trafigure=figure('visible','off');
     scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),20);
     rectangle('Position',[arena(fiter,1),arena(fiter,2),arena(fiter,3)-arena(fiter,1),arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',4)
-    for numOfObj = 1 %:4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    for numOfObj = 1:4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         rectangle('Position', [obj{fiter,numOfObj}(1), obj{fiter,numOfObj}(2), ...
             obj{fiter,numOfObj}(3)-obj{fiter,numOfObj}(1), obj{fiter,numOfObj}(4)-obj{fiter,numOfObj}(2)],...
             'EdgeColor','r','linewidth',4)

@@ -1,41 +1,54 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Importing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-filename = 'depth_ts.txt';
+clear
+clc
+close all
+
+startAgain = 692;
+
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp
+filename = 'Francisco_190220_depth_ts.txt';
 
 delimiter = ' ';
 
-%% Format for each line of text:
+% Format for each line of text:
 %   column2: double (%f)
 % For more information, see the TEXTSCAN documentation.
 formatSpec = '%*q%f%[^\n\r]';
 
-%% Open the text file.
+% Open the text file.
 fileID = fopen(filename,'r');
 
-%% Read columns of data according to the format.
+% Read columns of data according to the format.
 % This call is based on the structure of the file used to generate this
 % code. If an error occurs for a different file, try regenerating the code
 % from the Import Tool.
 dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 
-%% Close the text file.
+% Close the text file.
 fclose(fileID);
 
-%% Post processing for unimportable data.
+% Post processing for unimportable data.
 % No unimportable data rules were applied during the import, so no post
 % processing code is included. To generate code which works for
 % unimportable data, select unimportable cells in a file and regenerate the
 % script.
 
-%% Create output variable
+% Create output variable
 depthts = [dataArray{1:end-1}];
-%% Clear temporary variables
+
+% Clear temporary variables
+
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load('MoSeqFP.mat');
-acttime=csvread('NoveltyResponse.csv');
+load('Francisco_190220_nidaq.mat');
+%load('MoSeqFP.mat');
+acttime=csvread('Francisco_190220_rgbDeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000.csv',...
+    3, 0);
+acttime=acttime(:,1);
+%acttime=csvread('NoveltyResponse.csv');
 acttime=acttime+1; % labeled frame number start at 0 while depthts start at 1
 
 GCaMP=ch00;
@@ -55,7 +68,8 @@ GCaMP = filtered_GCaMP;
 filtered_tdTom = filtfilt(d,tdTom);
 tdTom = filtered_tdTom;
 
-%remove sudden rise noise
+if(0)
+% remove sudden rise noise
 
 diff_GCaMP = diff(GCaMP);
 std_GCaMP = std(diff_GCaMP);
@@ -93,6 +107,7 @@ tdTom = normR;
 
 GCaMP=GCaMP-mean(GCaMP);
 tdTom=tdTom-mean(tdTom);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 len=length(tstep);
 deplen=length(depthts);
@@ -136,10 +151,10 @@ for iter=1:deplen
 end
 
 % legend('GCaMP','tdTom');
-y_bound=[-0.2,0.4];
+y_bound=[0.9 1.3];%[0.7 1.1];%[0.3,0.7]; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 mywaitbar = waitbar(0,[num2str(round(100*0/deplen)) '%' '    |    ' num2str(0) '/' num2str(deplen)]);
 figure('Position',[0 0 300 100],'visible','off');
-for plotiter = 1:deplen
+for plotiter = startAgain:deplen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     plot(m_time(plotiter,:),m_sg1(plotiter,:),'Color','g')
     hold on
     plot(m_time(plotiter,:),m_sg2(plotiter,:),'Color','r')
@@ -147,7 +162,8 @@ for plotiter = 1:deplen
     plot([nor_depthts(plotiter),nor_depthts(plotiter)],[y_bound(1),y_bound(2)],'Color','m','LineWidth',1.5);
     axis([nor_depthts(plotiter)-plot_window_t nor_depthts(plotiter)+plot_window_t y_bound(1) y_bound(2)]);
     drawnow limitrate
-    saveas(gcf,['/Users/yuxie/Downloads/Temp/fig_' num2str(plotiter) '.jpg']);
+    %saveas(gcf,['/Users/yuxie/Downloads/Temp/fig_' num2str(plotiter) '.jpg']);
+    saveas(gcf,['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp/jpgs/fig_' num2str(plotiter) '.jpg']);
     clf
     waitbar(plotiter/deplen,mywaitbar,[num2str(round(100*plotiter/deplen)) '%' '    |    ' num2str(plotiter) '/' num2str(deplen)]);
 end

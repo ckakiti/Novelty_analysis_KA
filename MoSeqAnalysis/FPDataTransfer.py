@@ -1,8 +1,8 @@
 import numpy as np
 import scipy.io as sio
 
-save_directory='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Miami/temp/Miami_190125_nidaq'
-filename = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Miami/temp/Miami_190125_nidaq.dat'
+save_directory='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp/Francisco_190220_nidaq'
+filename = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp/Francisco_190220_nidaq.dat'
 nch=3
 dtype='<f8'
 with open(filename, "rb") as file_read:

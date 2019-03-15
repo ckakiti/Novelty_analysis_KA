@@ -1,27 +1,35 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-G1_Mice=[1 2 3 4];
-G2_Mice=[5 6 7 8];
-G1_Days=[3 4 5 6];
-G2_Days=[3 4 5 6];
+clear
+clc
+close all
 
-% G3 Base line
-G3_Mice=1:8;
-G3_Days=[1 2];
+setName = '7day_preexposure';
 
+G1_Mice = 7:12; %[1 2 3 4];
+G2_Mice = 1:6;  %[5 6 7 8];
+G1_Days = 3:7;  %[3 4 5 6];
+G2_Days = 3:7;  %[3 4 5 6];
+
+% G3 Base line (habituation)
+G3_Mice = 1:12; %1:8;
+G3_Days = [1 2];
+
+cd /media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq
 load('MoSeqDataFrame.mat')
 cmap=jet(100);
 fps=30;
 Syllablebinedge=[-6,-0.5:1:99.5];
 
-Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
+%'/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
 run(Mice_Index_path);
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tic
+%tic
 
 % Generate Transition Matrix
 
@@ -56,7 +64,8 @@ for miceiter=1:length(Mice)
                 continue
             end
 
-            Mice(miceiter).ExpDay(dayiter).BiMatrix(readwindow(1)+1,readwindow(2)+1) = 1 + Mice(miceiter).ExpDay(dayiter).BiMatrix(readwindow(1)+1,readwindow(2)+1);
+            Mice(miceiter).ExpDay(dayiter).BiMatrix(readwindow(1)+1,readwindow(2)+1) = ...
+                1 + Mice(miceiter).ExpDay(dayiter).BiMatrix(readwindow(1)+1,readwindow(2)+1);
             Mice(miceiter).ExpDay(dayiter).BiMatrixSum=Mice(miceiter).ExpDay(dayiter).BiMatrixSum+1;
 
         end
@@ -144,46 +153,65 @@ for miceiter=G2_Mice
 end
 InterG2BM=G2BM-G2BM.*diag(ones(1,100));     % subtract self transition
 PG2BM=InterG2BM./sum(sum(InterG2BM));       % Normalization
-
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Making plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+close all
 X=0:100;
 SyllablesX=-1:99;
 fsize=16;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Plot_GeneralUsage=figure;
+Plot_GeneralUsage=figure(1);
 plot(X,GSortedusage,'LineWidth',1.5)
-title('General Syllable Usage (sorted by usage, CvsS 180831)','FontSize',fsize)
-ylabel('Percentage','FontSize',fsize)
-xlabel('Syllables','FontSize',fsize)
+title(['General Syllable Usage (sorted by usage, ', setName, ')'],'FontSize',fsize, ...
+    'Interpreter', 'none')
+ylabel('Fractional usage','FontSize',fsize)
+xlabel('Syllable Number','FontSize',fsize)
 xticks(X);
 xticklabels(SyllablesX(GSortedusageindex));
 
+% just plot top 20 most used syllables
+Plot_GeneralUsage_Top20=figure(2);
+hold on
+plot(X(1:20),GSortedusage(1:20),'LineWidth',1.5, 'Marker', 'o', 'LineStyle', '-')
+line([X(1) X(20)], [1/length(SyllablesX) 1/length(SyllablesX)], 'Color', 'b', 'LineStyle', '--')
+title(['Syllable Usage Across All Mice/Days (', setName, ')'],'FontSize',fsize, ...
+    'Interpreter', 'none')
+ylim([0 max(PGUsage)+0.001])
+ylabel('Fractional Usage','FontSize',fsize)
+xlabel('Syllable Number','FontSize',fsize)
+xticks(X(1:20));
+xticklabels(SyllablesX(GSortedusageindex(1:20)));
+set(Plot_GeneralUsage_Top20, 'Position', [340 386 716 450])
+hold off
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Plot_AccGeneralUsage=figure;
+Plot_AccGeneralUsage=figure(3);
 plot(X,AccGSortedusage,'LineWidth',1.5)
-title('Accumulated General Syllable Usage (CvsS 180831)','FontSize',fsize)
+title(['Accumulated General Syllable Usage (', setName, ')'],'FontSize',fsize,...
+    'Interpreter', 'none')
 ylabel('Percentage','FontSize',fsize)
 xlabel('Syllables Rank','FontSize',fsize)
 xticks(X);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Plot_UsageCompare=figure;
+Plot_UsageCompare=figure(4);
 plot(X,PG1Usage,'LineWidth',1.5)
 hold on
 plot(X,PG2Usage,'LineWidth',1.5)
 
 legend('Contextual Novelty','Stimulus Novelty')
-title('Syllable Usage Comparison of Contextual/Stimulus Novely Mice (CvsS 180831)','FontSize',fsize)
+title(['Syllable Usage Comparison of Contextual/Stimulus Novely Mice (', setName, ')'],...
+    'FontSize',fsize,'Interpreter', 'none')
 ylabel('Percentage','FontSize',fsize)
 xlabel('Syllables','FontSize',fsize)
 xticks(X);
 xticklabels(SyllablesX);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Plot_UsageCompare_sorted=figure;
+Plot_UsageCompare_sorted=figure(5);
 plot(X,PG1Usage(G2vsG1Sortedusageindex),'LineWidth',1.5)
 hold on
 plot(X,PG2Usage(G2vsG1Sortedusageindex),'LineWidth',1.5)
@@ -191,8 +219,9 @@ hold on
 plot(X,PG3Usage(G2vsG1Sortedusageindex),'LineWidth',1,'Color','Black')
 
 legend({'Contextual Novelty','Stimulus Novelty','Habituattion'},'FontSize',fsize)
-title('Syllable Usage Comparison of Contextual/Stimulus Novely Mice (CvsS 180831) (Sorted by stimulus novelty enrichment)','FontSize',fsize)
-ylabel('Percentage','FontSize',fsize)
+title(['Syllable Usage Comparison of Contextual/Stimulus Novely Mice (', setName, ...
+    ') (Sorted by stimulus novelty enrichment)'],'FontSize',fsize,'Interpreter', 'none')
+ylabel('Fractional usage','FontSize',fsize)
 xlabel('Syllables','FontSize',fsize)
 xticks(X);
 xticklabels(SyllablesX(G2vsG1Sortedusageindex));
@@ -202,7 +231,7 @@ xticklabels(SyllablesX(G2vsG1Sortedusageindex));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Saving Datas
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pause
+%pause
 close all
 clearvars Plot_UsageCompare_sorted Plot_UsageCompare Plot_AccGeneralUsage Plot_GeneralUsage
 save('GeneralUsage.mat')

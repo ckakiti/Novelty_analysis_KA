@@ -15,7 +15,7 @@ Fsize=20;
 
 
 %%
-IntSyllable=[45 20 9 33 14 17 64 62 60 95 85 94 36 50 55 11 0 10 16 2];%[42 94 39 38 70 13];
+IntSyllable=36;%[42 94 39 38 70 13];
 
 SyllableDis=figure;
 title('Syllable Position Distribution','FontSize',Fsize)
@@ -30,8 +30,8 @@ for syliter=1:length(IntSyllable)
     scatter(XPos,YPos,MarkerSize,'filled')
     %hold on
     
-    disp(IntSyllable(syliter))
-    pause
+%    disp(IntSyllable(syliter))
+%    pause
 end
 %
 legend(strcat('Syllable  ',num2str(IntSyllable')))

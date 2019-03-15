@@ -1,9 +1,10 @@
 clear
 clc
+close all
 Config_NovAna;
 
-currSet = 'Iku_6OHDA_DLC';
-currMouse = 'M01';
+currSet = 'Iku_photometry_DLC';
+currMouse = 'Gardner';
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse])% '/181226'])
 path=cd;
@@ -13,7 +14,7 @@ flen = length(filelist);
 
 
 fn = filelist(flen).name;
-vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%% -9
+vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%% -4 -9
 Labels = csvread(fn,3,0);
 video=VideoReader(vn);
 video.CurrentTime = 1;
@@ -99,7 +100,7 @@ clearvars -except arena obj obj_center currSet currMouse
 save('Arena_Obj_Pos.mat')
 
 cd ..
-cd /home/alex/Programs/Novelty_analysis
+cd /home/alex/Programs/Novelty_analysis_KA
 
 
 fourObj = input('Create 4obj file? 0/1: ');

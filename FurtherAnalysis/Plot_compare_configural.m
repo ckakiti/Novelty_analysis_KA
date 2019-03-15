@@ -5,8 +5,8 @@ clc
 Config_NovAna
 radius_cm = 10; %8; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-group_name = {'Configural_stimuli_DLC'};%, 'Quarky_conf_DLC', 'Ice&Fire_conf_DLC'};
-mouse_name = {'Alcohol', 'Aldehyde', 'Amine', 'Ester'};%, 'Strange', 'Up', 'Arya', 'Jon'};
+group_name = {'Redwall'};%, 'Quarky_conf_DLC', 'Ice&Fire_conf_DLC'};
+mouse_name = {'Luke', 'Martin', 'Matthias', 'Mattimeo'};%, 'Strange', 'Up', 'Arya', 'Jon'};
 %    {'Arya', 'Brienne', 'Daenerys', 'Jon'};
 %    {'Bottom', 'Charm', 'Strange', 'Up'};
 timeStat_all = zeros(12, 6, length(mouse_name)); %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,7 +34,7 @@ XTick = {'1' '2' '3' '4' '5' '6' '7' '8' 'N1' 'N2' 'N3' 'N4'};
 X     = 1:size(timeStat_all,1);
 
 %% time spent around certain positions in arena
-currMouse = 1;
+currMouse = 4;
 
 disPosFig=figure(1);
 set(disPosFig, 'Position', [600 600 1200 450])
@@ -58,7 +58,7 @@ xlim([0 X(end)+1])
 xticks(X);
 xticklabels(XTick);
 
-%cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name])% '/' ...
+%cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name{1}])% '/' ...
 %    mouse_name{currMouse}])
 %saveas(disPosFig,'timeNearPos')
 %saveas(disPosFig,['timeNearPos_' mouse_name{currMouse} '.tif'])
@@ -72,9 +72,9 @@ timeStat_switch(9:12,novelObjs(1),currMouse) = timeStat_all(9:12,novelObjs(2),cu
 timeStat_switch(9:12,novelObjs(2),currMouse) = timeStat_all(9:12,novelObjs(1),currMouse);
 
 disObjFig=figure(1);
-set(disObjFig, 'Position', [600 600 1200 950]) %[600 600 1200 450])
+set(disObjFig, 'Position', [600 600 1200 450]) %[600 600 1200 450]) %[600 600 1200 950])
 
-subplot(3,1,1) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%subplot(3,1,1) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 hold on
 plot(X, timeStat_switch(:,1,currMouse)', ...
     'color', [1 0 1], 'Marker', '*', 'LineStyle', '-')
@@ -94,7 +94,7 @@ xlim([0 X(end)+1])
 xticks(X);
 xticklabels(XTick);
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if(0) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 subplot(3,1,2)
 plot(X, timeStat_all(:,5,currMouse)', ...
     'color', [0 0 0], 'Marker', '*', 'LineStyle', '-')
@@ -116,10 +116,11 @@ ylim([0 1])
 xlim([0 X(end)+1])
 xticks(X);
 xticklabels(XTick);
+end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name{1}])% '/' ...
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name{1}])% '/' ...
 %    mouse_name{currMouse}])
-%saveas(disObjFig,'timeNearObj')
+saveas(disObjFig,['timeNearObj_' mouse_name{currMouse} '.tif'])
 %saveas(disObjFig,['timeDistArea_' mouse_name{currMouse} '.tif']) %timeNearObj
 
 %% total distance run
@@ -143,7 +144,7 @@ xticks(X);
 xticklabels(XTick);
 
 title([group_name{1} ': Total distance run across all mice (10 min)'], 'interpreter', 'none')
-saveas(currStat, 'runArea_all.tif')
+%saveas(currStat, 'runArea_all.tif')
 
 %% summary plot #1 (scatter plot with 3 groups along x-axis)
 currMouse = 1;
@@ -200,8 +201,8 @@ set(gca, 'FontSize', 14, 'XTick', 1:3, ...
 %disp('saved')
 
 %% summary plot #2 (scatter/line plot, will be novel vs will be familiar   and   novel vs familiar)
-cond_6OHDA = [2 3]; %%%%%%%%%%%%%%%%%%%%%%%%%%
-cond_saline = [1 4]; %%%%%%%%%%%%%%%%%%%%%%%%%
+cond_6OHDA = 1:2; % [2 3]; %%%%%%%%%%%%%%%%%%%%%%%%%
+cond_saline = 3:4; % [1 4]; %%%%%%%%%%%%%%%%%%%%%%%%
 
 avgStatAll = figure(3);
 set(avgStatAll, 'Position', [480 450 1250 550])
@@ -222,7 +223,7 @@ errorbar(4, mean(avgStat_avg(4,:),2), ...
 
 basePlot6OHDA = plot([repmat(1.1, size(avgStat_avg,2)/2, 1), ...
                       repmat(2.1, size(avgStat_avg,2)/2, 1)]', ...
-                     [avgStat_avg(1,cond_6OHDA); avgStat_avg(2,cond_6OHDA)], 'ro-');
+                     [avgStat_avg(1,cond_6OHDA); avgStat_avg(2,cond_6OHDA)], 'ko-');%'ro-'); %%%%%
                  
 basePlotSaline = plot([repmat(1.1, size(avgStat_avg,2)/2, 1), ...
                        repmat(2.1, size(avgStat_avg,2)/2, 1)]', ...
@@ -230,7 +231,7 @@ basePlotSaline = plot([repmat(1.1, size(avgStat_avg,2)/2, 1), ...
                   
 novelPlot6OHDA = plot([repmat(3.1, size(avgStat_avg,2)/2, 1), ...
                        repmat(4.1, size(avgStat_avg,2)/2, 1)]', ...
-                      [avgStat_avg(3,cond_6OHDA); avgStat_avg(4,cond_6OHDA)], 'ro-');
+                      [avgStat_avg(3,cond_6OHDA); avgStat_avg(4,cond_6OHDA)], 'ko-');%'ro-'); %%%%%
                   
 novelPlotSaline = plot([repmat(3.1, size(avgStat_avg,2)/2, 1), ...
                         repmat(4.1, size(avgStat_avg,2)/2, 1)]', ...
@@ -253,7 +254,7 @@ ylim([0 max(avgStat_avg(:))])
 ylabel('Time around objects (s)')
 title(['Time around objects (n=4 mice); r=', num2str(radius_cm), 'cm'], ...
     'Interpreter', 'none')
-legend([basePlot6OHDA; basePlotSaline], {'6OHDA', '', 'saline', ''})
+%legend([basePlot6OHDA; basePlotSaline], {'6OHDA', '', 'saline', ''})
 set(gca, 'FontSize', 14, 'XTick', 1:size(avgStat_avg,2), ...
     'XTickLabel', {'will be familiar (8)', 'will be novel (8)' 'familiar (9)', 'novel (9)'})
 
@@ -264,7 +265,7 @@ set(gca, 'FontSize', 14, 'XTick', 1:size(avgStat_avg,2), ...
 
 %% summary plot #3 (scatter/line plot, will be familiar vs familiar   and   will be novel vs novel)
 cond_6OHDA = [2 3]; %%%%%%%%%%%%%%%%%%%%%%%%%%
-cond_saline = 1:8; %[1 4]; %%%%%%%%%%%%%%%%%%%%%%%%%
+cond_saline = [1 4]; % 1:8; %%%%%%%%%%%%%%%%%%%%%%%%
 
 avgStatAll2 = figure(4);
 set(avgStatAll2, 'Position', [480 450 1250 550])
@@ -284,16 +285,16 @@ hold on
 %             std(avgStat_avg(4,:),0,2)/size(avgStat_avg,2), ...
 %     'LineWidth', 2, 'Marker', 'x')
 
-% fam6OHDA = plot([repmat(1.1, size(avgStat_avg,2)/2, 1), repmat(2.1, size(avgStat_avg,2)/2, 1)]', ...
-%     [avgStat_avg(1,cond_6OHDA); avgStat_avg(3,cond_6OHDA)], 'ro-');%, 'filled')
+fam6OHDA = plot([repmat(1.1, size(avgStat_avg,2)/2, 1), repmat(2.1, size(avgStat_avg,2)/2, 1)]', ...
+    [avgStat_avg(1,cond_6OHDA); avgStat_avg(3,cond_6OHDA)], 'ko-');%'ro-');%, 'filled') %%%%%
 
-famSaline = plot([repmat(1.1, size(avgStat_avg,2), 1), repmat(2.1, size(avgStat_avg,2), 1)]', ...
+famSaline = plot([repmat(1.1, size(avgStat_avg,2)/2, 1), repmat(2.1, size(avgStat_avg,2)/2, 1)]', ...
     [avgStat_avg(1,cond_saline); avgStat_avg(3,cond_saline)], 'ko-');%, 'filled')
 
-% nov6OHDA = plot([repmat(3.1, size(avgStat_avg,2)/2, 1), repmat(4.1, size(avgStat_avg,2)/2, 1)]', ...
-%     [avgStat_avg(2,cond_6OHDA); avgStat_avg(4,cond_6OHDA)], 'ro-', 'MarkerFaceColor', 'r');
+nov6OHDA = plot([repmat(3.1, size(avgStat_avg,2)/2, 1), repmat(4.1, size(avgStat_avg,2)/2, 1)]', ...
+    [avgStat_avg(2,cond_6OHDA); avgStat_avg(4,cond_6OHDA)], 'ko-', 'MarkerFaceColor', 'k'); % 'ro-'%%%
 
-novSaline = plot([repmat(3.1, size(avgStat_avg,2), 1), repmat(4.1, size(avgStat_avg,2), 1)]', ...
+novSaline = plot([repmat(3.1, size(avgStat_avg,2)/2, 1), repmat(4.1, size(avgStat_avg,2)/2, 1)]', ...
     [avgStat_avg(2,cond_saline); avgStat_avg(4,cond_saline)], 'ko-', 'MarkerFaceColor', 'k');
 
 xlim([0 5])
