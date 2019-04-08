@@ -9,7 +9,7 @@ videoname_format='XYZ_YYMMDD_rgb.mp4'; %mp4; %avi';
 video_xlen=512;%520;%512;
 video_ywid=424;%420;%424;            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-fpm = 1500; %1500 %1800 % frames per minute
+fpm = 900; %1800 %1500 %900 % frames per minute
 fps = fpm./60;          % frames per second
 ppc = 42/6.3; %123/23; %340/(2*30);   % pixels per cm   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 radius_cm = 8; %10 for tea obj  % Time spent around the obj radius (cm)   %%%%%%%%%%%%%
