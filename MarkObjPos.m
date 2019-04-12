@@ -3,8 +3,8 @@ clc
 close all
 Config_NovAna;
 
-currSet = 'Iku_photometry_DLC';
-currMouse = 'Gardner';
+currSet = 'MSFP_Test';
+currMouse = 'MSFP';
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse])% '/181226'])
 path=cd;
@@ -14,7 +14,7 @@ flen = length(filelist);
 
 
 fn = filelist(flen).name;
-vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%% -4 -9
+vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%% -4 -9 -12
 Labels = csvread(fn,3,0);
 video=VideoReader(vn);
 video.CurrentTime = 1;
@@ -35,7 +35,7 @@ end
 for fi =flen:-1:1
 
     fn = filelist(fi).name;
-    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -9
+    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12
 
     Labels = csvread(fn,3,0);
     video=VideoReader(vn);
@@ -43,7 +43,7 @@ for fi =flen:-1:1
     frame=readFrame(video);
 
     if fi == flen
-        arena_choice=input('Use deflault arena? 1/0: ');
+        arena_choice=0;%input('Use deflault arena? 1/0: ');
         if arena_choice == 1
             cur_arena = [133.4 31.2 483.4 391.6];
         elseif arena_choice == 0

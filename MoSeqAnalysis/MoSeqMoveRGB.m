@@ -1,9 +1,8 @@
 % this code move rgb videos from a MoSeq folder into a new folder suitable for DeepLabCut analysis, also rename those rgb video by mice names and date
 
-%cd /media/alex/DataDrive1/MoSeqData/Miami
-cd('/media/alex/My Passport/MoSeqData/Iku_6OHDA')
+cd /media/alex/DataDrive1/MoSeqData/Iku_photometry_new
 
-groupname='Iku_6OHDA';
+groupname='Iku_photometry';
 rootpath=cd;
 mkdir([groupname '_DLC']);
 cd([groupname '_MoSeq']);
@@ -15,7 +14,7 @@ foldernames = {folderd(isub).name}';
 foldernames(ismember(foldernames,{'.','..'})) = [];
 folderlen=length(foldernames);
 
-for i=2:folderlen
+for i=1%1:folderlen
     cd(foldernames{i});
 
     subfolderpath = cd;

@@ -41,8 +41,8 @@ clc
 cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
-%cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Miami_DLC %CvsS_180831_DLC/Wash
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine/C1_Aldehyde')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/MSFP_Test/MSFP %CvsS_180831_DLC/Wash
+%cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Moana/TeFiti')
 cd Analyzed_Data;
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -59,7 +59,7 @@ end
 flen = length(filelist);
 
 tic;
-for fiter =1:flen 
+for fiter =1:flen %%%%%%%% 
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];
     disp(['Analyzing: ' fn]);
@@ -222,7 +222,7 @@ for fiter =1:flen
 
 %     saveas(Disfigure,['Distance_' vn(1:end-4) '.png'])
 %     saveas(Angfigure,['Orientation_' vn(1:end-4) '.png'])
-    cd('./body') %%%
+    %cd('./body') %%%
     saveas(Hmfigure,['Heatmap_' vn(1:end-4) '.tif'])
     saveas(Trafigure,['Trajectory_' vn(1:end-4) '.tif'])
 
@@ -230,7 +230,7 @@ for fiter =1:flen
 
     save(vn(1:end-4),'Labels','Dis_t_obj','Ang_t_obj', 'radius', 'radius_cm');
     
-    cd .. %%%
+    %cd .. %%%
     
     close all
     clearvars -except arena obj obj_center filelist fiter fpm fps ppc radius radius_cm angle_radius...
@@ -243,6 +243,6 @@ end
 
 close all
 clear
-cd /home/alex/Programs/Novelty_analysis
+cd /home/alex/Programs/Novelty_analysis_KA
 
 disp('end')

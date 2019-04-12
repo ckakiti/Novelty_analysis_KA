@@ -1,5 +1,4 @@
 % photometry analysis
-
 clear
 clc
 close all

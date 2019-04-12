@@ -8,8 +8,8 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine
-%cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/NewHope-ROTJ/')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/MSFP_Test/
+%cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Holidays/')
 
 start_min=0.005;
 end_min=start_min+10;
@@ -20,14 +20,14 @@ folderpath = cd;
 folderd = dir(folderpath);
 isub = [folderd(:).isdir];
 foldernames = {folderd(isub).name}'; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-foldernames(ismember(foldernames,{'.','..','incomplete','Trajectories_H2N1'})) = []; %%%%%%%%%%%%%%%%%%%%%%%
+foldernames(ismember(foldernames,{'.','..','incomplete','3day'})) = []; %%%%%%%%%%%%%%%%%%%%%%%
 folderlen=length(foldernames);
 
 for folderi=1:folderlen
     cd(foldernames{folderi});
     cd Analyzed_Data/
     load('Arena_Obj_Pos.mat','arena')
-    cd ./body %%%%%%%%%%%%%%%%
+    %cd ./body %%%%%%%%%%%%%%%%
 
     subpath=cd;
     PathRoot=[subpath '/'];
@@ -69,7 +69,7 @@ for folderi=1:folderlen
     Time_periphery_all(folderi,:)=Time_periphery;
     clearvars Time_angle Time_distance Time_periphery
     cd ..
-    cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
     DisOrAng{folderi,1}='Distance';
     DisOrAng{folderlen+folderi,1}='Angle';
@@ -83,7 +83,8 @@ Time_angle_all    = Time_angle_all./(endframe-startframe);
 Table  = table(cat(1,foldernames,foldernames),DisOrAng,[Time_distance_all;Time_angle_all]);
 Table2 = table(cat(1,foldernames), Periph, Time_periphery_all);
 
-%writetable(Table,'TimeStatistic_body.csv');
+writetable(Table,'TimeStatistic.csv');
 %writetable(Table2,'TimeStatistic_body_periph.csv');
 
 clear all
+disp('end')

@@ -3,6 +3,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear
+close all
+clc
+
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
+
 PlotWidth=500;
 BarHeight=5;
 cmap=jet(100);
@@ -14,15 +20,17 @@ G1_Mice=[1 2 3 4];
 G2_Mice=[5 6 7 8];
 
 load('MoSeqDataFrame.mat');
-Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Mice_Index_auto.m';
+%Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
 run(Mice_Index_path);
 
-trim_frame_start=1200;
-
-AllActLabels=csvread('CvsS_poke_labels_N1.csv',1,2);
-AllActLabels=AllActLabels-trim_frame_start;
-AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;
-
+%trim_frame_start=1200;
+%AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,2);
+%AllActLabels=AllActLabels-trim_frame_start;
+%AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;
+AllActLabels=csvread('CvsS_poke_labels_N1_auto')';
+AllActLabels=AllActLabels./fps;
+%%
 Mice(1).index=1;
 for miceiter=2:length(Mice)
     Mice(miceiter).index=Mice(miceiter-1).index+Mice(miceiter-1).datanum;
@@ -37,7 +45,7 @@ for miceiter=1:length(Mice)
     Mice(miceiter).ExpDay(AnalysisDay).act=AllActLabels(Mice(miceiter).index:Mice(miceiter).index+Mice(miceiter).datanum-1,:);
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
@@ -186,7 +194,7 @@ PG2AASU=G2AASU./size(G2actalignedusage,1);
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Making plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 timeline=((1:PlotWidth)-round(PlotWidth./2,0))./fps;
@@ -199,7 +207,7 @@ xlabel('Time (s)','FontSize',fsize)
 ylabel('Usage Percentage','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Plot_G1actalignedusage=figure;
 G1areahandle=area(timeline,PG1AASU','LineWidth',0.05);
 title('Syllable Usage of Contextual Novelty Mice','FontSize',fsize)
@@ -207,7 +215,7 @@ xlabel('Time (s)','FontSize',fsize)
 ylabel('Usage Percentage','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Plot_G2actalignedusage=figure;
 G2areahandle=area(timeline,PG2AASU','LineWidth',0.05);
 title('Syllable Usage of Stimulus Novelty Mice','FontSize',fsize)
@@ -223,7 +231,7 @@ axis([timeline(1),timeline(end),0,1])
 % end
 % areahandle(101).FaceColor=[0 0 0];
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Saving
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
