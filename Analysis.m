@@ -41,8 +41,9 @@ clc
 cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/MSFP_Test/MSFP %CvsS_180831_DLC/Wash
-%cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Moana/TeFiti')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry2_DLC/Nashville/190425R %CvsS_180831_DLC/Wash
+%cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/' ...
+%    'Nashville/190425/session_20190425162005/proc'])
 cd Analyzed_Data;
 load('Arena_Obj_Pos.mat');
 cd ..

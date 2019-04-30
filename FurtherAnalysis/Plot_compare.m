@@ -4,7 +4,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/MSFP_Test
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry2_DLC
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/NewHope-ROTJ/')
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_6OHDA_DLC/')
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/')
@@ -33,8 +33,8 @@ XTick = {'H1' 'H2' 'N1' 'N2' 'N3' 'N4' 'N5' 'N6' 'N7' 'N8' 'N9' 'N10'};% 'N11' '
 % stim = 5:8; % 5:8 rows are stimulus novelty (CvsS); 4-6 quarky
 cond2name = 'cont';%'6OHDA';
 cond1name = 'stim';%'saline';
-cond2 = [];%1:6;%[2 4 6];%[2 5 6];%[];%1:4; %3:4; %[1:3 5:7 9:11]; %[2 3]; %1:3; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-cond1 = 1;%7:12;%[1 3 5];%[1 3 4];%1:7;%5:8;%1:2; %[4 8 12];       %[1 4]; %4:6; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cond2 = [2 4 6];%1:6;%[2 4 6];%[2 5 6];%[];%1:4; %3:4; %[1:3 5:7 9:11]; %[2 3]; %1:3; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+cond1 = [1 3 5];%7:12;%[1 3 5];%[1 3 4];%1:7;%5:8;%1:2; %[4 8 12];       %[1 4]; %4:6; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cond2Color = [0.5 0.0 0.5]; 
 cond1Color = [1.0 0.5 0.0]; 
 

@@ -8,7 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/MSFP_Test/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry2_DLC/Nashville/
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Holidays/')
 
 start_min=0.005;

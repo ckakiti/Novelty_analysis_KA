@@ -3,21 +3,31 @@ clc
 close all
 Config_NovAna;
 
-currSet = 'MSFP_Test';
-currMouse = 'MSFP';
+currSet = 'Iku_photometry2_MoSeq'; %_DLC %'Iku_photometry2_MoSeq'; %%%
+currMouse = 'Vegas';
+currDate  = '190428';
+timeShift = 1;
 
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse])% '/181226'])
+%cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' %currMouse '/' currDate]) %%
+cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/' currSet '/' currMouse '/' currDate]) %%%
+
+currSessionName = dir('session*'); %%%
+cd([currSessionName.name '/proc']) %%%
 path=cd;
 PathRoot=[path '/'];
-filelist=dir([PathRoot,'*.csv']);
-flen = length(filelist);
 
+vn = dir('*.mp4'); %%%
+vn = vn.name; %%%
+flen=1; %%%
 
-fn = filelist(flen).name;
-vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%% -4 -9 -12
-Labels = csvread(fn,3,0);
+%filelist=dir([PathRoot,'*.csv']); %%
+%flen = length(filelist); %%
+%fn = filelist(flen).name; %%
+%vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+%Labels = csvread(fn,3,0); %%
+
 video=VideoReader(vn);
-video.CurrentTime = 1;
+video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
 frame=readFrame(video);
 imshow(frame)
 number_of_obj = input('How many objects? Enter integer # 1-5: ');
@@ -33,15 +43,15 @@ else
 end
 
 for fi =flen:-1:1
-
-    fn = filelist(fi).name;
-    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12
-
-    Labels = csvread(fn,3,0);
+    
+    %fn = filelist(fi).name; %%
+    %vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
+    %Labels = csvread(fn,3,0); %%
+    
     video=VideoReader(vn);
-    video.CurrentTime = 1;
+    video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
     frame=readFrame(video);
-
+    
     if fi == flen
         arena_choice=0;%input('Use deflault arena? 1/0: ');
         if arena_choice == 1
@@ -50,7 +60,7 @@ for fi =flen:-1:1
             fig1 = figure(1);
             set(fig1, 'Position', [545 1 1200 950]);
             cur_arena=Labelrect(frame,'Please Select Arena');
-
+            
             close all
         else
             error('invalid input');
@@ -58,7 +68,7 @@ for fi =flen:-1:1
     end
     arena(fi,:)=cur_arena;
     
-
+    
     fig1 = figure(1);
     set(fig1, 'Position', [545 1 1200 950]);
     if(number_of_obj == 1)
@@ -79,14 +89,26 @@ for fi =flen:-1:1
             
             obj(fi,objNum)   = cur_obj(objNum);
             cur_obj_center   = 0.5.*[cur_obj{objNum}(1,1) + cur_obj{objNum}(1,3), ...
-                                     cur_obj{objNum}(1,2) + cur_obj{objNum}(1,4)];
+                cur_obj{objNum}(1,2) + cur_obj{objNum}(1,4)];
             obj_center(fi,objNum) = {cur_obj_center};
         end
+    
         close all
         
     end
-
+    
 end
+
+video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
+frame=readFrame(video);
+LED_yn = input('Select LED position? 0/1: ');
+if(LED_yn==1)
+    clf
+    fig1 = figure(1);
+    set(fig1, 'Position', [545 1 1200 950]);
+    LEDpos = Labelrect(frame, 'Please Select LED position');
+end
+close all
 
 %***********************************************************
 % Save
@@ -96,7 +118,7 @@ end
 mkdir Analyzed_Data
 cd Analyzed_Data
 
-clearvars -except arena obj obj_center currSet currMouse
+clearvars -except arena obj obj_center currSet currMouse LEDpos
 save('Arena_Obj_Pos.mat')
 
 cd ..

@@ -16,8 +16,8 @@ AN_G2Usage=mean(N_G2Usage,3);
 StdN_G1Usage=std(N_G1Usage,0,3);
 StdN_G2Usage=std(N_G2Usage,0,3);
 
-SemN_G1Usage=StdN_G1Usage./sqrt(size(N_G1Usage,3));
-SemN_G2Usage=StdN_G2Usage./sqrt(size(N_G2Usage,3));
+SemN_G1Usage=StdN_G1Usage./sqrt(size(N_G1Usage,2)); %3));
+SemN_G2Usage=StdN_G2Usage./sqrt(size(N_G2Usage,2)); %3));
 
 G2vsG1usage=(AN_G2Usage-AN_G1Usage)./(AN_G2Usage+AN_G1Usage);
 [G2vsG1Sortedusage,G2vsG1Sortedusageindex]=sort(G2vsG1usage,'descend');
