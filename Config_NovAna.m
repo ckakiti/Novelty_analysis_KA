@@ -6,7 +6,7 @@
 % networkname_format='DeepCut_resnet50_MoSeqConfiguralUpdateMar04shuffle1_1030000';
 networkname_format='DeepCut_resnet50_MoSeqFPApr24shuffle1_1030000';
 
-videoname_format='XYZ_YYMMDD_rgb.mp4'; %mp4; %avi';
+videoname_format='XYZ_YYMMDD_rgb.avi'; %mp4; %avi';
 
 video_xlen=512;%520;%512;
 video_ywid=424;%420;%424;            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
