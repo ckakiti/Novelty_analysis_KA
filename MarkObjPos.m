@@ -4,9 +4,9 @@ close all
 Config_NovAna;
 
 currSet = 'Iku_photometry2_MoSeq'; %_DLC %'Iku_photometry2_MoSeq'; %%%
-currMouse = 'Vegas';
+currMouse = 'Omaha';
 currDate  = '190428';
-timeShift = 1;
+timeShift = 32452-900;
 
 %cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' %currMouse '/' currDate]) %%
 cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/' currSet '/' currMouse '/' currDate]) %%%
