@@ -7,26 +7,24 @@ Config_NovAna
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC
 run('MiceIndex')
 
-oneStat = 0;
+oneStat = 1;
 
 if(oneStat) 
     % only one statistic to plot (e.g. time in periphery or totalDistRun
 %     timeStat = readtable('TimeStatistic_periph.csv');
 %     timeStat = readtable('TimeStatistic_nose_totalDistCut.csv');
-    timeStat = readtable('areaAnalysis_nose_center10.csv');
-%     timeStat2 = csvread('TimeStatistic_norm');
-    timeStat2 = timeStat{:,3:end};
+%     timeStat = readtable('areaAnalysis_nose_center10.csv');
+    timeStat2 = csvread('TimeStatistic_norm');%timeStat{:,3:end};
 
 %     names = timeStat{1:height(timeStat),1}';
     names = cat(1, Mice.name);
-%     Y_dis = timeStat2(1:height(timeStat), :);
-    Y_dis = timeStat2(1:size(timeStat2,1), :);
+    Y_dis = timeStat2(1:height(timeStat), :);
     Y_ang = Y_dis;
 else
     % two different statistics to plot (e.g. timeNearObj/orient or boutNum/boutLen
 %     timeStat = readtable('TimeStatistic.csv');
-    timeStat = readtable('boutAnalysis_nose.csv');   
-%     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
+%     timeStat = readtable('boutAnalysis_nose.csv');   
+    timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
     timeStat2 = timeStat{:,3:end};
 
 %     names = timeStat{1:height(timeStat)/2,1}';
@@ -76,19 +74,17 @@ set(disfig, 'Position', [600 600 1200 450])
 
 subplot(1, 2, 2)
 hold on
-d1 = plot(repmat(X, length(cond2), 1)', Y_dis(cond2,:)', 'Marker', '*'); %...
-%     'Color', cond2Color, 'Marker', '*');
-d2 = plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', 'Marker', '*'); %...
-%     'Color', cond1Color, 'Marker', '*');
+plot(repmat(X, length(cond2), 1)', Y_dis(cond2,:)', 'Marker', '*') %...
+%     'Color', cond2Color, 'Marker', '*')
+plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', 'Marker', '*') %...
+%     'Color', cond1Color, 'Marker', '*')
 title(Y_dis_title)
 set(gca, 'FontSize', 14)
 xlabel('Training day')
 ylabel(Y_dis_ylabel)
 legend(names, 'location', 'northwest')
-% legend([d1(1) d2(1)], {'cont', 'stim'})
 xlim([0 X(end)+1])
 ylim([0 0.35])
-% ylim([0 1])
 ylimDis = disfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -114,19 +110,17 @@ set(angfig, 'Position', [400 50 1200 450])
 
 subplot(1, 2, 2)
 hold on
-a1 = plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', 'Marker', '*');%...
-%     'Color', cond2Color, 'Marker', '*');
-a2 = plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', 'Marker', '*');%...
-%     'Color', cond1Color, 'Marker', '*');
+plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', 'Marker', '*')%...
+%     'Color', cond2Color, 'Marker', '*')
+plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', 'Marker', '*')%...
+%     'Color', cond1Color, 'Marker', '*')
 title(Y_ang_title)
 set(gca, 'FontSize', 14)
 xlabel('Training day')
 ylabel(Y_ang_ylabel)
 legend(names, 'location', 'northwest')
-% legend([a1(1) a2(1)], {'cont', 'stim'})
 xlim([0 X(end)+1])
-% ylim([0 0.35])
-% ylim([0 1])
+ylim([0 0.35])
 ylimAng = angfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -146,27 +140,25 @@ ylim(ylimAng)
 xticks(X);
 xticklabels(XTick);
 
-if(0)
-    %saveas(disfig,'timeNearObj_10min')
-    %saveas(angfig,'orientToObj_10min')
-    saveas(disfig,'timeNearObj_10min.tif')
-    saveas(angfig,'orientToObj_10min.tif')
-end
+%saveas(disfig,'timeNearObj_10min')
+%saveas(angfig,'orientToObj_10min')
+%saveas(disfig,'timeNearObj_10min.tif')
+%saveas(angfig,'orientToObj_10min.tif')
 
 %% for plotting number of bouts and bout length
 %    (based on file from bout_analysis.m)
-Y_dis_title = ['Number of bouts (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
-Y_dis_ylabel = 'Number of bouts';
+% Y_dis_title = ['Number of bouts (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
+% Y_dis_ylabel = 'Number of bouts';
 
-Y_ang_title = ['Mean bout length (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
-Y_ang_ylabel = 'Mean bout length (s)';
+% Y_ang_title = ['Average bout length (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
+% Y_ang_ylabel = 'Average bout length (s)';
 % Y_ang_title = ['Median bout length (' num2str(round(Dis_te_frame/fps/60)) 'min)];
 % Y_ang_ylabel = 'Median bout length (s)';
 
-% Y_dis_title = ['Time spent in quadrant 3 (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
-% Y_dis_ylabel = 'Fraction of time in quad 3';
-% Y_ang_title = ['Time spent in quadrant 4 (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
-% Y_ang_ylabel = 'Fraction of time in quad 4';
+Y_dis_title = ['Time spent in quadrant 3 (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
+Y_dis_ylabel = 'Fraction of time in quad 3';
+Y_ang_title = ['Time spent in quadrant 4 (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
+Y_ang_ylabel = 'Fraction of time in quad 4';
 
 close all
 boutNumfig=figure(1);
@@ -184,7 +176,7 @@ xlabel('Training day')
 ylabel(Y_dis_ylabel)
 legend(names, 'location', 'northwest')
 xlim([0 X(end)+1])
-% ylim([0 1])
+ylim([0 1])
 ylimDis = boutNumfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -205,6 +197,11 @@ xticks(X);
 xticklabels(XTick);
 
 
+% Y_ang = Y_ang/fps; %%%%%%%%%%%%%%%%%%%%%%
+conaavg=mean(Y_ang(cond2,:));
+stuaavg=mean(Y_ang(cond1,:));
+conastd=std(Y_ang(cond2,:));
+stuastd=std(Y_ang(cond1,:));
 
 boutLenfig=figure(2);
 set(boutLenfig, 'Position', [400 50 1200 450])
@@ -221,7 +218,7 @@ xlabel('Training day')
 ylabel(Y_ang_ylabel)
 legend(names, 'location', 'northwest')
 xlim([0 X(end)+1])
-% ylim([0 1])
+ylim([0 1])
 ylimAng = boutLenfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -299,11 +296,9 @@ ylim(ylimDis)
 xticks(X);
 xticklabels(XTick);
 
-if(0)
-    saveas(oneStatFig,'totalDistanceRun_10min_nose.tif')
-    saveas(oneStatFig,'timePeriph_10min_body.tif')
-    saveas(oneStatFig,'centerTime_10min_nose.tif')
-end
+%saveas(oneStatFig,'totalDistanceRun_10min_nose.tif')
+%saveas(oneStatFig,'timePeriph_10min_body.tif')
+%saveas(oneStatFig,'centerTime_10min_nose.tif')
 
 %%
 

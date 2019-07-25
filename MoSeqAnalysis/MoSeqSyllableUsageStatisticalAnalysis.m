@@ -2,7 +2,7 @@ clear
 clc
 close all
 
-cd /media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq
+cd /media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/
 
 load('GeneralUsage.mat')
 fsize=16;
@@ -96,7 +96,7 @@ mksize=4;
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot syllable usage without plotting less frequently used syllables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

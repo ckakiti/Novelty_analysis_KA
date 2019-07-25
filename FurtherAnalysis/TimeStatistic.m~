@@ -135,8 +135,8 @@ Table3 = table(cat(1,foldernames), TotalDist, TotalDistCut_all);
 
 if(0)
     writetable(Table,'TimeStatistic.csv');
-    writetable(Table2,'TimeStatistic_body_periph.csv');
-    writetable(Table3,'TimeStatistic_nose_totalDistCut.csv');
+    %writetable(Table2,'TimeStatistic_body_periph.csv');
+    %writetable(Table3,'TimeStatistic_nose_totalDistCut.csv');
     disp('saved')
 end
 

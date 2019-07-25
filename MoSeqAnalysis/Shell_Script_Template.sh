@@ -31,7 +31,7 @@ moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Test/session_20180922154
 #moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Gardner/190216/session_20190216140726/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl
 #moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Gardner/190215/session_20190215132339/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl
 #moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Francisco/190220/session_20190220120254/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl
-#oseq2-extract extract /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Francisco/190219/session_20190219153503/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl
+#moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Francisco/190219/session_20190219153503/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl
 #moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Francisco/190218/session_20190218143552/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl
 
 #moseq2-pca train-pca -c 6 -n 1

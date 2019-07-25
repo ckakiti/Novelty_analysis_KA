@@ -1,30 +1,31 @@
 clear
 clc
 close all
+
 Config_NovAna;
 
-currSet = 'Iku_photometry2_MoSeq'; %_DLC %'Iku_photometry2_MoSeq'; %%%
-currMouse = 'Omaha';
-currDate  = '190428';
-timeShift = 32452-900;
+currSet = 'Rim_KO_DLC'; %%%
+currMouse = '06';
+% currDate  = '190618'; %190702
+timeShift = 4605;%901-900; 
 
-%cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' %currMouse '/' currDate]) %%
-cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/' currSet '/' currMouse '/' currDate]) %%%
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse]) %'/' currDate]) %%
+%cd(['/media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq/' currSet '/' currMouse])% '/' currDate]) %%%
 
-currSessionName = dir('session*'); %%%
-cd([currSessionName.name '/proc']) %%%
+%currSessionName = dir('session*'); %%%
+%cd([currSessionName.name '/proc']) %%%
 path=cd;
 PathRoot=[path '/'];
 
-vn = dir('*.mp4'); %%%
-vn = vn.name; %%%
-flen=1; %%%
+%vn = dir('*.avi'); %%%
+%vn = vn.name; %%%
+%flen=1; %%%
 
-%filelist=dir([PathRoot,'*.csv']); %%
-%flen = length(filelist); %%
-%fn = filelist(flen).name; %%
-%vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
-%Labels = csvread(fn,3,0); %%
+filelist=dir([PathRoot,'*.mp4']);%'*.csv']); %%
+flen = length(filelist); %%
+fn = filelist(flen).name; %%
+vn=filelist(end).name;%[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+% Labels = csvread(fn,3,0); %%
 
 video=VideoReader(vn);
 video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
@@ -44,9 +45,9 @@ end
 
 for fi =flen:-1:1
     
-    %fn = filelist(fi).name; %%
-    %vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
-    %Labels = csvread(fn,3,0); %%
+    fn = filelist(fi).name; %%
+    vn=fn;%[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
+%     Labels = csvread(fn,3,0); %%
     
     video=VideoReader(vn);
     video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
@@ -130,7 +131,7 @@ if(fourObj==1)
 % modify Arena_Obj_Pos.mat (when only 1 obj in arena, add 3 pseudo-positions at each corner)
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' ...
-    currSet '/' currMouse '/181223/Analyzed_Data'])
+    currSet '/' currMouse '/Analyzed_Data'])
 
 if isfile('Arena_Obj_Pos_4obj.mat')
     error('this code has already been run')

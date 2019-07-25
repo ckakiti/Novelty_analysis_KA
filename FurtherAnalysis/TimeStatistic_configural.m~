@@ -4,8 +4,8 @@ clc
 
 Config_NovAna % ppc = 42/6.3;
 
-currMouse = '06';
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/' currMouse '/'])
+currMouse = 'Bishop';
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Chess_DLC/' currMouse '/'])
 
 start_min=(10/60);
 end_min=start_min+10;
@@ -17,13 +17,13 @@ folderpath = cd;
 folderd = dir(folderpath);
 isub = [folderd(:).isdir];
 foldernames = {folderd(isub).name}';
-foldernames(ismember(foldernames,{'.','..','Analyzed_Data','RetrainSep17','temp'})) = [];
+foldernames(ismember(foldernames,{'.','..','Analyzed_Data'})) = [];
 folderlen=length(foldernames);
 
 % squareSize = 4; % must be a factor of both vidWidth and vidHeight
 % roundTargets = squareSize:squareSize:max(video_xlen, video_ywid);
 
-% for folderi=1:folderlen
+for folderi=1:folderlen
 %     cd(foldernames{folderi});
     cd('Analyzed_Data_4obj')
 
@@ -49,7 +49,7 @@ folderlen=length(foldernames);
         diffs = hypot(diff(Labels(:,14)), diff(Labels(:,15)));
         totalDist(filei,1) = sum(diffs)/ppc;
         
-%         roundedPawnArea  = interp1(roundTargets, roundTargets, [Labels(:,14) Labels(:,15)], 'nearest');
+%         roundedArea  = interp1(roundTargets, roundTargets, [Labels(:,14) Labels(:,15)], 'nearest');
 %         
 %         if(sum(isnan(roundedArea(:)))>0)
 %             for replace_nan = 1:length(roundedArea)
@@ -75,7 +75,7 @@ folderlen=length(foldernames);
 %     Time_distance_all(folderi,:)=Time_distance;
     cd ..
 
-% end
+end
 
 for filei = 1:flen
     rownames{filei, 1} = ['Session' num2str(filei)];

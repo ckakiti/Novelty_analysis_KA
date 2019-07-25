@@ -42,7 +42,7 @@ disp('start')
 save_time = [5000:5000:numberOfFrames-1 numberOfFrames];
 %sync_light = zeros(1,numberOfFrames);
 %sync_light = csvread('save_42000');
-for frame = 38410%:numberOfFrames %3000
+for frame = 36000:37000%:numberOfFrames %3000
     disp(frame)
     
     % Extract one frame and make it grayscale
@@ -78,7 +78,7 @@ disp('end')
 %middle = (max(sync_norm)-min(sync_norm))/2;
 %crosses = crossing(sync_norm, [], middle);
 sync_norm = double(sync_light);
-middle = 35;
+middle = 25;
 crosses = crossing(sync_norm, [], middle);
 
 disp(['middle= ' num2str(middle)])
@@ -88,7 +88,7 @@ figure(1)
 set(gcf, 'Position', [46 329 1867 450])
 hold on
 plot(sync_norm);
-line([crosses; crosses], repmat([0 10], length(crosses), 1)') % [-1.5 2.5]
+line([crosses; crosses], repmat([-10 0], length(crosses), 1)') % [-1.5 2.5]
 line([0 length(sync_norm)], [middle middle], 'color', 'k')
 
 LED_on = crosses(1:2:end);
@@ -98,7 +98,7 @@ missing_on = find(missing_int~=1);
 if(~isempty(missing_on))
     disp(['missing LED: ' num2str(length(missing_on))])
     line([LED_on(missing_on); LED_on(missing_on)], ...
-        repmat([-10 0], length(missing_on), 1)', 'color', 'r')
+        repmat([-12 -10], length(missing_on), 1)', 'color', 'r')
 end
 
 pause
@@ -121,7 +121,7 @@ for addIn = 1:length(missing_update)
     disp(addIn)
     disp(missingCurr)
     line([missingCurr; missingCurr], ...
-    repmat([-12 -10], length(missingCurr), 1)', 'color', 'b')
+    repmat([-14 -12], length(missingCurr), 1)', 'color', 'b')
     pause
 end
 %line([LED_on; LED_on], ...

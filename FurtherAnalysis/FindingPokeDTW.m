@@ -7,211 +7,54 @@ clc
 
 Config_NovAna
 
-AnalysisDay=3; % 3 = first novelty day
-fps=30; % 15 rgb; % 25; 30 depth; 
+fps=25; % 15 rgb; % 25; 30 depth; 
 
 startframe=1;%1;%900;
 endframe=(fps*60*10)+startframe;%15000;%18000;
 Swindow=40;         % Smooth Window Size %40;
-DisThreshold=radius;   % Distance threshold % 10; 60;
 
-mouseSet = 'Iku_photometry2_MoSeq';
-%cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' mouseSet])
-cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/' mouseSet])
-Mice(1).name='Nashville';
-Mice(2).name='Omaha';
-Mice(3).name='Rochester';
-Mice(4).name='Syosset';
-Mice(5).name='Universal';
-Mice(6).name='Vegas';
-Mice(1).novelty='S';
-Mice(2).novelty='S';
-Mice(3).novelty='S';
-Mice(4).novelty='S';
-Mice(5).novelty='S';
-Mice(6).novelty='S';
-Mice(1).datanum=[];
-Mice(2).datanum=[];
-Mice(3).datanum=[];
-Mice(4).datanum=[];
-Mice(5).datanum=[];
-Mice(6).datanum=[];
+% mouseSet = '7day_preexposure_combine';
+mouseSet = 'Chess_DLC';
+% mouseSet = 'Hiking_DLC';
+% mouseSet = 'Chess_DLC';
 
-%%
-%mouseSet = 'CvsS_180831_DLC';
-%mouseSet = '7day_preexposure_combine';
-mouseSet = 'Iku_photometry_DLC';
-%mouseSet = 'MSFP_Test';
-%mouseSet = 'FP_Test';
+%run(['/media/alex/DataDrive1/MoSeqData/' mouseSet '/' mouseSet '_MoSeq/Mice_Index.m'])
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' mouseSet])% '_DLC'])
 
-if(strcmp(mouseSet, 'CvsS_180831_DLC'))
-    cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
-    Mice(1).name='C4';
-    Mice(2).name='C5';
-    Mice(3).name='C6';
-    Mice(4).name='C7';
-    Mice(5).name='S4';
-    Mice(6).name='S5';
-    Mice(7).name='Mal';
-    Mice(8).name='Wash';
-    Mice(1).novelty='C';
-    Mice(2).novelty='C';
-    Mice(3).novelty='C';
-    Mice(4).novelty='C';
-    Mice(5).novelty='S';
-    Mice(6).novelty='S';
-    Mice(7).novelty='S';
-    Mice(8).novelty='S';
-    Mice(1).datanum=71;
-    Mice(2).datanum=68;
-    Mice(3).datanum=40;
-    Mice(4).datanum=37;
-    Mice(5).datanum=35;
-    Mice(6).datanum=39;
-    Mice(7).datanum=46;
-    Mice(8).datanum=82;
-    %AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,2);
-    
-elseif(strcmp(mouseSet, '7day_preexposure_combine'))
-    Mice(1).name='C1_Aldehyde';
-    Mice(2).name='C2_Ester';
-    Mice(3).name='C3_Thiol';
-    Mice(4).name='C4_George';
-    Mice(5).name='C5_Hermione';
-    Mice(6).name='C6_Ron';
-    Mice(7).name='S1_Alcohol';
-    Mice(8).name='S2_Amine';
-    Mice(9).name='S3_Ketone';
-    Mice(10).name='S4_Fred';
-    Mice(11).name='S5_Harry';
-    Mice(12).name='S6_Neville';
-    Mice(1).novelty='C';
-    Mice(2).novelty='C';
-    Mice(3).novelty='C';
-    Mice(4).novelty='C';
-    Mice(5).novelty='C';
-    Mice(6).novelty='C';
-    Mice(7).novelty='S';
-    Mice(8).novelty='S';
-    Mice(9).novelty='S';
-    Mice(10).novelty='S';
-    Mice(11).novelty='S';
-    Mice(12).novelty='S';
-    Mice(1).datanum=26;
-    Mice(2).datanum=40;
-    Mice(3).datanum=43;
-    Mice(4).datanum=21;
-    Mice(5).datanum=52;
-    Mice(6).datanum=67;
-    Mice(7).datanum=50;
-    Mice(8).datanum=36;
-    Mice(9).datanum=14;
-    Mice(10).datanum=57;
-    Mice(11).datanum=38;
-    Mice(12).datanum=42;
-    %AllActLabels=csvread('7day_poke_labels_N1_auto');
-    
-elseif(strcmp(mouseSet, 'Iku_photometry_DLC'))
-    cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/
-    Mice(1).name='Francisco';
-    Mice(2).name='Gardner';
-    Mice(3).name='Houston';
-    Mice(4).name='Ithaca';
-    Mice(5).name='Juneau';
-    Mice(6).name='Kennebunk';
-    Mice(7).name='Miami';
-    Mice(1).novelty='S';
-    Mice(2).novelty='S';
-    Mice(3).novelty='S';
-    Mice(4).novelty='S';
-    Mice(5).novelty='S';
-    Mice(6).novelty='S';
-    Mice(7).novelty='S';
-    Mice(1).datanum=50;
-    Mice(2).datanum=41;
-    Mice(3).datanum=27;
-    Mice(4).datanum=37;
-    Mice(5).datanum=18;
-    Mice(6).datanum=41;
-    Mice(7).datanum=36;
-    %AllActLabels=csvread('IkuFP_poke_labels_N1_auto',1,0);
-elseif(strcmp(mouseSet, 'MSFP_Test'))
-    cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/MSFP_Test/
-    Mice(1).name='MSFP';
-    Mice(1).novelty='S';
-    Mice(1).datanum=16;%34; %16
-    
-    cd ./MSFP/Analyzed_Data
-    load('Arena_Obj_Pos.mat') %%%
-    cd ../..
-end
-
-%AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;
-
-% Mice(1).name='C1_Akbar';
-% Mice(2).name='C2_Emperor';
-% Mice(3).name='C3_Piett';
-% Mice(4).name='S1_Anakin';
-% Mice(5).name='S2_Jabba';
-% Mice(6).name='S3_Wedge';
-% Mice(1).novelty='C';
-% Mice(2).novelty='C';
-% Mice(3).novelty='C';
-% Mice(4).novelty='S';
-% Mice(5).novelty='S';
-% Mice(6).novelty='S';
-% Mice(1).datanum=32;
-% Mice(2).datanum=23;
-% Mice(3).datanum=30;
-% Mice(4).datanum=24;
-% Mice(5).datanum=17;
-% Mice(6).datanum=29;
-% AllActLabels=csvread('ROTJManualLabels.csv',1,2);
+run('MiceIndex')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculation (Richard's code)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+AnalysisDay=3; % 3 = first novelty day
 
-for miceiter=1%:length(Mice)
+for miceiter=1:length(Mice)
     cd(Mice(miceiter).name);
-    %cd('Analyzed_Data'); %%%
-    %cd('head'); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    %pokes = load(['NoveltyResponse_' Mice(miceiter).name '_N3_poke']);
+    
+    cd('Analyzed_Data'); %%%
     
     pathname = cd; %%%
     PathRoot=[pathname '/']; %%%
-    filelist=dir([PathRoot,'19*']);%'*rgb.mat']); %%%
+    filelist=dir([PathRoot,'*rgb.mat']); %%%%
     flen = length(filelist); %%%
-    %load(filelist(AnalysisDay+0).name); %1 %%%
-    cd(filelist(AnalysisDay+0).name)
-    currSessionName = dir('session*');
-    cd(currSessionName.name)
-    %byHand = load('RewardResponse_Nashville_190425R.csv');
-    cd ./proc/Analyzed_Data
+    load(filelist(AnalysisDay+0).name, 'Labels'); %%%
+    disp(['radius_cm: ' num2str(radius_cm)])
+    DisThreshold=radius_cm;   % Distance threshold % 10; 60; %radius;
     
-    Labels_MoSeq = load(['MoSeqPos_' Mice(miceiter).name '_' filelist(AnalysisDay+0).name]);
-    xPos = Labels_MoSeq(:,1);
-    yPos = Labels_MoSeq(:,2);
-    Labels17 = Labels_MoSeq(:,3);
-    %Labels17 = Labels(:,17);
     load('Arena_Obj_Pos.mat')
-    
+    Labels17 = Labels(:,17);     % head distance from object
+    %Labels17 = sqrt((obj_center(1,1)-Labels(:,2)).^2+(obj_center(1,2)-Labels(:,3)).^2)/ppc;
+    bodyLen = sqrt( (Labels(:,11)-Labels(:,2)).^2 + ...
+                    (Labels(:,12)-Labels(:,3)).^2 )/ppc;
+                
+                
     % Distance
     Xtime=startframe:endframe;
     Dis=Labels17(startframe:endframe,1); %%%
     SDis=smoothdata(Labels17(startframe:endframe,1),'rloess',Swindow); %%%
-%     cd /media/alex/DataDrive1/MoSeqData/MSFP_Test/DataSet180922
-%     load('MoSeqDataFrame.mat')
-%     uuid_subset = ismember(MoSeqDataFrame.uuid, MoSeqDataFrame.session_uuid(1,:), 'rows');
-%     session_uuid_start = [find(uuid_subset,1,'first'); find(~uuid_subset,1,'first')];
-%     xPos = MoSeqDataFrame.centroid_x_px(session_uuid_start(2):end);
-%     yPos = MoSeqDataFrame.centroid_y_px(session_uuid_start(2):end);
-%     
-%     Dis_whole=sqrt((obj_center(2,1)-xPos).^2+(obj_center(2,2)-yPos).^2);
-%     SDis_whole=smoothdata(Dis_whole,'rloess',Swindow);
-%     Dis=Dis_whole(startframe:endframe);
-%     SDis=smoothdata(Dis_whole(startframe:endframe),'rloess',Swindow);
 
-    
     SDis_whole=smoothdata(Labels17(:,1),'rloess',Swindow); %%%
     DisMin=islocalmin(SDis_whole);
     DisMax=islocalmax(SDis_whole);
@@ -223,33 +66,38 @@ for miceiter=1%:length(Mice)
 %     DisVelocity=diff(Dis);
     DisVelocity=[0 DisVelocity];
     SDisVelocity=smoothdata(DisVelocity,'rloess',Swindow);
-
+ 
     Mice(miceiter).PokingLabels=[];
-    Mice(miceiter).BoutStart=[];
+    Mice(miceiter).BoutApproach=[];
+ 
     
+    if(0) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
     windowiter=startframe;
     while windowiter<endframe
         % mouse crosses into radius around object
-        if SDis_whole(windowiter)<DisThreshold
+%         if SDis_whole(windowiter)<DisThreshold
+        if Labels17(windowiter)<DisThreshold
             
             minfound=0;
             for wpointer=1:length(Labels17)
                 % within bout, find local minimum (poke)
                 if minfound==0
                     if DisMin(windowiter+wpointer)==1
-                        disp(['minfound: ' num2str(windowiter)])
+                        %disp(['minfound: ' num2str(windowiter)])
                         minfound=1;
                         Mice(miceiter).PokingLabels=[Mice(miceiter).PokingLabels windowiter+wpointer];
                         
                         % find beginning of bout (last local maximum before poke)
-                        prevBoutStartAll = find(findDisMax<(windowiter+wpointer),1,'last');
-                        prevBoutStart = findDisMax(prevBoutStartAll);
-                        Mice(miceiter).BoutStart=[Mice(miceiter).BoutStart prevBoutStart];
+                        prevBoutApproachAll = find(findDisMax<(windowiter+wpointer),1,'last');
+                        prevBoutApproach = findDisMax(prevBoutApproachAll);
+                        Mice(miceiter).BoutApproach=[Mice(miceiter).BoutApproach prevBoutApproach];
                     end
                 end
                 
                 % start over when mouse leaves radius
-                if SDis_whole(windowiter+wpointer)>DisThreshold
+%                 if SDis_whole(windowiter+wpointer)>DisThreshold
+                if Labels17(windowiter+wpointer)>DisThreshold
                     break
                 end
             end
@@ -257,40 +105,103 @@ for miceiter=1%:length(Mice)
         end
         windowiter=windowiter+1;
     end
-
-
-
-    DisPlot=figure(1);
-    plot(Xtime,SDis)
-    hold on
-%     plot(Xtime/fps,Labels(startframe:endframe,18),'LineWidth',1.5)
-%     plot(Xtime/fps,Labels(startframe:endframe,19),'LineWidth',1.5)
-%     plot(Xtime/fps,Labels(startframe:endframe,20),'LineWidth',1.5)
-    scatter(Mice(miceiter).PokingLabels,SDis_whole(Mice(miceiter).PokingLabels))
-    scatter(Mice(miceiter).BoutStart,SDis_whole(Mice(miceiter).BoutStart))
-    line([startframe endframe], [DisThreshold DisThreshold], 'color', 'k')
-%     line([poke_byHand-900 poke_byHand-900]', repmat([0 350]', 1, length(poke_byHand)), 'color', 'k')
-    set(DisPlot, 'Position', [44 296 1871 505])
     
+%     if(0) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        DisPlot=figure(1);
+        plot(Xtime,SDis)
+        hold on
+        %     plot(Xtime/fps,Labels(startframe:endframe,18),'LineWidth',1.5)
+        %     plot(Xtime/fps,Labels(startframe:endframe,19),'LineWidth',1.5)
+        %     plot(Xtime/fps,Labels(startframe:endframe,20),'LineWidth',1.5)
+        scatter(Mice(miceiter).PokingLabels,SDis_whole(Mice(miceiter).PokingLabels))
+        scatter(Mice(miceiter).BoutApproach,SDis_whole(Mice(miceiter).BoutApproach))
+        line([startframe endframe], [DisThreshold DisThreshold], 'color', 'k')
+        %     line([poke_byHand-900 poke_byHand-900]', repmat([0 350]', 1, length(poke_byHand)), 'color', 'k')
+        set(DisPlot, 'Position', [44 296 1871 505])
+        title(['Threshold: ', num2str(DisThreshold), 'cm'])
+        ylim([0 60])
+        
+        
+        
+        
+        xPos = Labels(:,2);
+        yPos = Labels(:,3);
+        correctPokingLabels = Mice(miceiter).PokingLabels(Mice(miceiter).BoutApproach(1)...
+            <Mice(miceiter).PokingLabels);
+        
+        boutPlot = figure(2);
+        hold on
+        for int = 1:length(Mice(miceiter).BoutApproach)
+            plot(xPos(Mice(miceiter).BoutApproach(int):correctPokingLabels(int)), ...
+                yPos(Mice(miceiter).BoutApproach(int):correctPokingLabels(int)))%, 'k')
+        end
+        plot(obj_center(1,1), obj_center(1,2), 'r*')
+        
+        th = 0:pi/50:2*pi;
+        x  = obj_center(1,1);
+        y  = obj_center(1,2);
+        xunit = DisThreshold*ppc * cos(th) + x; %radius
+        yunit = DisThreshold*ppc * sin(th) + y; %radius
+        plot(xunit, yunit)
+        xlim([0 video_xlen])
+        ylim([0 video_ywid])
+        
+        axis square
+        set(gca, 'YDir', 'reverse')
+        title(['Threshold: ', num2str(DisThreshold), 'cm'])
+        
+        
+        bodyLenFigure=figure(3);
+        scatter(Labels17(startframe:endframe), bodyLen(startframe:endframe), 20,'filled');
+        %     scatter(Labels17(startframe:endframe), DisVelocity, 20,'filled');
+        
+        title(['Len vs Dist ' Mice(miceiter).name, ' Day', num2str(AnalysisDay), ': '...
+            num2str(round((endframe-startframe)/fpm)) 'min'],...
+            'Interpreter', 'none');
+        xlabel('Distance to object (cm)')
+        ylabel('Body length')
+        set(bodyLenFigure, 'position', [0 0 1200 900]);
+        
+        pause
+        
+        saveas(DisPlot, ['FindingPokeDTW_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+        saveas(boutPlot, ['FindingPokeDTW_boutTrace_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+        saveas(bodyLenFigure, ['BodyLen_vs_DistToObj_', ...
+            Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+        
+        csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '_poke'], ...
+            Mice(miceiter).PokingLabels)
+        csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '_boutApproach'], ...
+            Mice(miceiter).BoutApproach)
+        csvwrite(['Bouts_10min_', Mice(miceiter).name, '_Day', num2str(AnalysisDay)], boutsReshape)
+    end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    correctPokingLabels = Mice(1).PokingLabels(Mice(1).BoutStart(1)<Mice(1).PokingLabels);
-    boutPlot = figure(2); 
-    hold on
-    for int = 1:length(Mice(1).BoutStart)
-        plot(xPos(Mice(1).BoutStart(int):correctPokingLabels(int)), ...
-             yPos(Mice(1).BoutStart(int):correctPokingLabels(int)))%, 'k')
+    pokeMat = zeros(length(pokes), fps*2);
+    for pokeiter = 1:length(pokes)
+        pokeMat(pokeiter,:) = bodyLen(pokes(pokeiter)-fps:pokes(pokeiter)+(fps-1));
     end
-    plot(obj_center(1), obj_center(2), 'r*')
     
-    th = 0:pi/50:2*pi;
-    x  = obj_center(1,1);
-    y  = obj_center(1,2);
-    xunit = radius * cos(th) + x;
-    yunit = radius * sin(th) + y;
-    plot(xunit, yunit)
+    close all
+    bodyLenPokeFigure=figure(4);
+    hold on
+    plot(pokeMat', 'Color', [0.8 0.8 0.8])
+    plot(mean(pokeMat,1), 'k')
     
-    axis square
-    set(gca, 'YDir', 'reverse')
+    title(['BodyLen aligned to poke (' Mice(miceiter).name, ' Day', num2str(AnalysisDay), ': '...
+        num2str(round((endframe-startframe)/fpm)) 'min)'],...
+        'Interpreter', 'none');
+    xlabel('Time (s)')
+    ylabel('Body length (cm)')
+    ylim([4 10])
+    set(gca, 'FontSize', 16)
+    set(bodyLenPokeFigure, 'position', [0 0 800 700]);
+        
+    cd ../..
+    
+    saveas(bodyLenPokeFigure, ['BodyLen_alignPoke_', ...
+        Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+    
+    close all
     
 %     DisMin_cut = DisMin(startframe:endframe);
 %     DisMax_cut = DisMax(startframe:endframe);
@@ -304,7 +215,8 @@ for miceiter=1%:length(Mice)
 %     DisPatchY=[0 70 70 0];
 %     for actiter=1:length(Mice(miceiter).act(:,1))
 %         hold on
-%         patch([Mice(miceiter).act(actiter,1) Mice(miceiter).act(actiter,1) Mice(miceiter).act(actiter,3) Mice(miceiter).act(actiter,3)]/fps,DisPatchY,[0.6 0.4 0.9],...
+%         patch([Mice(miceiter).act(actiter,1) Mice(miceiter).act(actiter,1) ...
+%                Mice(miceiter).act(actiter,3) Mice(miceiter).act(actiter,3)]/fps,DisPatchY,[0.6 0.4 0.9],...
 %         'FaceAlpha',0.3, 'EdgeColor','none')
 %     end
 %     xlim([375 445])
@@ -320,27 +232,188 @@ for miceiter=1%:length(Mice)
 % 
 %     for actiter=1:length(Mice(miceiter).act(:,1))
 %         hold on
-%         patch([Mice(miceiter).act(actiter,1) Mice(miceiter).act(actiter,1) Mice(miceiter).act(actiter,3) Mice(miceiter).act(actiter,3)]/fps,DisPatchY,[0.6 0.4 0.9],...
+%         patch([Mice(miceiter).act(actiter,1) Mice(miceiter).act(actiter,1) ...
+%                Mice(miceiter).act(actiter,3) Mice(miceiter).act(actiter,3)]/fps,DisPatchY,[0.6 0.4 0.9],...
 %         'FaceAlpha',0.3, 'EdgeColor','none')
 %     end
 %     xlim([375 445])
 %     ylabel('Derivative of Distance cm/s')
 %     xlabel('time (s)')
-
-    cd ../..
-
-    %cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 disp('end')
 
+
+%% alternative bout analysis
+AnalysisDay=3; % 3 = first novelty day
+
+for miceiter=1:length(Mice)
+    cd(Mice(miceiter).name);
+    cd('Analyzed_Data');
+    
+    pathname = cd;
+    PathRoot=[pathname '/'];
+    filelist=dir([PathRoot,'*rgb.mat']);
+    flen = length(filelist);
+    load(filelist(AnalysisDay+0).name, 'Labels');
+    disp(['radius_cm: ' num2str(radius_cm)])
+    DisThreshold=radius_cm;   % Distance threshold
+    
+    load('Arena_Obj_Pos.mat')
+    Labels17 = Labels(:,17);  % head distance from object
+    
+    
+    bodyLen = sqrt( (Labels(:,11)-Labels(:,2)).^2 + ...
+                    (Labels(:,12)-Labels(:,3)).^2 )/ppc;
+                
+    % Distance
+    Xtime=startframe:endframe;
+    Dis=Labels17(startframe:endframe,1);
+    SDis=smoothdata(Labels17(startframe:endframe,1),'rloess',Swindow);
+
+    SDis_whole=smoothdata(Labels17(:,1),'rloess',Swindow);
+    DisMin=islocalmin(SDis_whole);
+    DisMax=islocalmax(SDis_whole);
+
+    Mice(miceiter).PokingLabels=[];
+    Mice(miceiter).BoutApproach=[];
+    
+    % Bout analysis
+    crossTmp  = crossing(Labels(startframe:endframe,21), [], 0.5);
+    if(mod(length(crossTmp),2))
+        crossTmp = crossTmp(1:end-1);
+    end
+    cross_In  = crossTmp(1:2:end);
+    cross_Out = crossTmp(2:2:end);
+    
+    for crossiter = 1:length(cross_In)
+        pokecurr = find(DisMin(cross_In(crossiter):cross_Out(crossiter)),1);
+        
+        if(isempty(pokecurr))
+            disp('poke not found')
+            continue
+        end
+        
+        approachcurr = find(DisMax(1:cross_In(crossiter)),1,'last');
+                
+        Mice(miceiter).PokingLabels=[Mice(miceiter).PokingLabels pokecurr+cross_In(crossiter)];
+        Mice(miceiter).BoutApproach=[Mice(miceiter).BoutApproach approachcurr];
+    end
+    
+    close all
+    
+    % Scatter plot of distance to object w/ pokes
+    DisPlot=figure(1);
+    plot(Xtime,Dis)
+    hold on
+    scatter(Mice(miceiter).PokingLabels,Dis(Mice(miceiter).PokingLabels))
+    scatter(Mice(miceiter).BoutApproach,Dis(Mice(miceiter).BoutApproach))
+    line([startframe endframe], [DisThreshold DisThreshold], 'color', 'k')
+    line([cross_In; cross_In], repmat([-5 0]', 1, length(cross_In)))
+    set(DisPlot, 'Position', [44 296 1871 505])
+    title(['Threshold: ', num2str(DisThreshold), 'cm'])
+    ylim([0 60])
+    
+    
+    xPos = Labels(:,2);
+    yPos = Labels(:,3);
+    correctPokingLabels = Mice(miceiter).PokingLabels(Mice(miceiter).BoutApproach(1)...
+        <Mice(miceiter).PokingLabels);
+    
+    % Traces of each approach to poke
+    boutPlot = figure(2);
+    hold on
+    for int = 1:length(Mice(miceiter).BoutApproach)
+        plot(xPos(Mice(miceiter).BoutApproach(int):correctPokingLabels(int)), ...
+            yPos(Mice(miceiter).BoutApproach(int):correctPokingLabels(int)))%, 'k')
+    end
+    plot(obj_center(1,1), obj_center(1,2), 'r*')
+    
+    th = 0:pi/50:2*pi;
+    x  = obj_center(1,1);
+    y  = obj_center(1,2);
+    xunit = DisThreshold*ppc * cos(th) + x; %radius
+    yunit = DisThreshold*ppc * sin(th) + y; %radius
+    plot(xunit, yunit)
+    xlim([0 video_xlen])
+    ylim([0 video_ywid])
+    
+    axis square
+    set(gca, 'YDir', 'reverse')
+    title(['Threshold: ', num2str(DisThreshold), 'cm'])
+    
+    if(0) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
+        bodyLenFigure=figure(3);
+        scatter(Labels17(startframe:endframe), bodyLen(startframe:endframe), 20,'filled');
+        %     scatter(Labels17(startframe:endframe), DisVelocity, 20,'filled');
+        
+        title(['Len vs Dist ' Mice(miceiter).name, ' Day', num2str(AnalysisDay), ': '...
+            num2str(round((endframe-startframe)/fpm)) 'min'],...
+            'Interpreter', 'none');
+        xlabel('Distance to object (cm)')
+        ylabel('Body length')
+        set(bodyLenFigure, 'position', [0 0 1200 900]);
+        
+        pause
+        
+        saveas(DisPlot, ['FindingPokeDTW_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+        saveas(boutPlot, ['FindingPokeDTW_boutTrace_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+        saveas(bodyLenFigure, ['BodyLen_vs_DistToObj_', ...
+            Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+        
+        csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '_poke'], ...
+            Mice(miceiter).PokingLabels)
+        csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '_boutApproach'], ...
+            Mice(miceiter).BoutApproach)
+        csvwrite(['Bouts_10min_', Mice(miceiter).name, '_Day', num2str(AnalysisDay)], boutsReshape)
+
+    
+    pokeMat = zeros(length(pokes), fps*2);
+    for pokeiter = 1:length(pokes)
+        pokeMat(pokeiter,:) = bodyLen(pokes(pokeiter)-fps:pokes(pokeiter)+(fps-1));
+    end
+    
+    close all
+    bodyLenPokeFigure=figure(4);
+    hold on
+    plot(pokeMat', 'Color', [0.8 0.8 0.8])
+    plot(mean(pokeMat,1), 'k')
+    
+    title(['BodyLen aligned to poke (' Mice(miceiter).name, ' Day', num2str(AnalysisDay), ': '...
+        num2str(round((endframe-startframe)/fpm)) 'min)'],...
+        'Interpreter', 'none');
+    xlabel('Time (s)')
+    ylabel('Body length (cm)')
+    ylim([4 10])
+    set(gca, 'FontSize', 16)
+    set(bodyLenPokeFigure, 'position', [0 0 800 700]);
+        
+    cd ../..
+    
+    saveas(bodyLenPokeFigure, ['BodyLen_alignPoke_', ...
+        Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+    
+    close all
+    
+    end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
+disp('end')
+
+
 %% Saving
 
-csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '_poke'], ...
-    Mice(miceiter).PokingLabels)
-csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '_boutStart'], ...
-    Mice(miceiter).BoutStart)
 saveas(DisPlot, ['FindingPokeDTW_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
 saveas(boutPlot, ['FindingPokeDTW_boutTrace_', Mice(miceiter).name, '_Day', num2str(AnalysisDay), '.tif'])
+
+cd ..
+
+csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_N', num2str(AnalysisDay), '_poke'], ...
+    Mice(miceiter).PokingLabels)
+csvwrite(['NoveltyResponse_', Mice(miceiter).name, '_N', num2str(AnalysisDay), '_boutApproach'], ...
+    Mice(miceiter).BoutApproach)
+
+cd ..
+
+close all
 disp('saved')
 
 %save(['NoveltyResponse_Day' num2str(AnalysisDay)])
@@ -395,13 +468,15 @@ formatSpec = '%*q%f%[^\n\r]';
 
 filename = 'depth_ts.txt';
 fileID = fopen(filename,'r');
-dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
+dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, ...
+    'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 fclose(fileID);
 depthts = [dataArray{1}];
 
 filename = 'rgb_ts.txt';
 fileID = fopen(filename,'r');
-dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
+dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, ...
+    'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 fclose(fileID);
 rgbts = [dataArray{1}];
 
@@ -525,3 +600,32 @@ for miceiter = 1:length(Mice)
     
     cd ../..
 end
+
+%% consolidate bout information (if each day is saved separately)
+days = 5;
+boutsNum       = zeros(length(Mice),days);
+boutsLenMean   = zeros(length(Mice),days);
+boutsLenMedian = zeros(length(Mice),days);    
+
+for miceiter=1:length(Mice)
+    cd(Mice(miceiter).name);
+    cd('Analyzed_Data'); %%%
+    %cd head
+    
+    boutFiles = dir('Bouts*');
+    for dayiter = 1:length(boutFiles)
+        boutFileCurr = load(boutFiles(dayiter).name);
+        
+        boutsNumCurr = size(boutFileCurr,2);
+        boutsLenCurr = boutFileCurr(2,:)-boutFileCurr(1,:);
+        boutsNum(miceiter,dayiter) = boutsNumCurr;
+        boutsLenMean(miceiter,dayiter) = mean(boutsLenCurr)/fps;
+        boutsLenMedian(miceiter,dayiter) = median(boutsLenCurr)/fps;
+    end
+    
+    cd ../../
+end
+
+csvwrite([mouseSet, '_boutNum'],boutsNum)
+csvwrite([mouseSet, '_avgBoutLen'],boutsLenMean)
+csvwrite([mouseSet, '_medBoutLen'],boutsLenMedian)

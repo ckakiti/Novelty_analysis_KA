@@ -7,7 +7,9 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
+%cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
+%cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/
+cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq/
 
 PlotWidth=500;
 BarHeight=5;
@@ -16,20 +18,24 @@ fps=30;
 fsize=20;
 
 AnalysisDay=3;      % first novelty day
+%G1_Mice=1;
 G1_Mice=[1 2 3 4];
 G2_Mice=[5 6 7 8];
 
 load('MoSeqDataFrame.mat');
-Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Mice_Index_auto.m';
+%Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Mice_Index_auto.m';
 %Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+Mice_Index_path='./Mice_Index.m';
 run(Mice_Index_path);
+%load('test_NearObj_ts.mat')
 
-%trim_frame_start=1200;
-%AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,2);
-%AllActLabels=AllActLabels-trim_frame_start;
+trim_frame_start=1200;
+AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
+AllActLabels=AllActLabels-trim_frame_start;
 %AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;
-AllActLabels=csvread('CvsS_poke_labels_N1_auto')';
-AllActLabels=AllActLabels./fps;
+%cd ./190425/session_20190425162005
+%AllActLabels=load('AllActLabels_MoSeq_Nashville_N1_poke');
+
 %%
 Mice(1).index=1;
 for miceiter=2:length(Mice)
@@ -48,7 +54,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tic
+%tic
 
 for miceiter=1:length(Mice)
 
@@ -73,7 +79,7 @@ for miceiter=1:length(Mice)
 
     for actiter=1:Mice(miceiter).datanum
 
-        framenum=Mice(miceiter).ExpDay(AnalysisDay).act(actiter,2);
+        framenum=Mice(miceiter).ExpDay(AnalysisDay).act(actiter);%,2);
 
         %Adding Syllable Bar
         middle_x=round(PlotWidth./2,0);
@@ -192,7 +198,8 @@ G2AASU(1,:)=[];
 % Percentage usage
 PG2AASU=G2AASU./size(G2actalignedusage,1);
 
-
+%% save variables for future analysis
+save(['ActAlignedPercentage_Day' num2str(AnalysisDay)], 'middle_x', 'PG1AASU', 'PG2AASU')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Making plots
@@ -230,6 +237,25 @@ axis([timeline(1),timeline(end),0,1])
 %     areahandle(coloriter).FaceColor=cmap(coloriter,:);
 % end
 % areahandle(101).FaceColor=[0 0 0];
+
+%% plots of individual syllables for statistical analysis
+close all
+currSyl = 94; %39
+currWinLen = 180;
+currWin = middle_x-currWinLen:middle_x+currWinLen;
+PG1AASU_currSyl = PG1AASU(currSyl,currWin);
+PG1AASU_currSyl = smooth(PG1AASU_currSyl,10);
+PG2AASU_currSyl = PG2AASU(currSyl,currWin);
+PG2AASU_currSyl = smooth(PG2AASU_currSyl,10);
+
+fig1 = figure(1);
+set(fig1, 'Position', [46 345 1875 390])
+hold on
+group1 = plot(currWin-middle_x, PG1AASU_currSyl,'r');
+group2 = plot(currWin-middle_x, PG2AASU_currSyl,'b');
+ylim([0 0.02])
+title(['Syllable ', num2str(currSyl)])
+legend([group1, group2], {'Contextual' 'Stimulus'})
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Saving

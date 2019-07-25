@@ -43,8 +43,9 @@ for mousei = 1:length(nameDir)
         
         DisX=Labels(startframe:endframe,2); % pix, nose
         DisY=Labels(startframe:endframe,3); % pix, nose
-        Dis=sqrt((obj_center(filei,1)-DisX).^2+(obj_center(filei,2)-DisY).^2)/ppc; % cm
+        Dis=sqrt((obj_center(filei,1)-Labels(:,14)).^2+(obj_center(filei,2)-Labels(:,15)).^2)/ppc;
 
+        
         SDis=smoothdata(Dis,'rloess',Swindow);
         SDis_inRad = double(SDis<radius_cm);
         
@@ -63,7 +64,7 @@ for mousei = 1:length(nameDir)
         
         if(~isempty(cross_In))
             boutNum(mousei,filei) = length(cross_In);
-            boutLen(mousei,filei) = mean(cross_Out-cross_In)/fps; % seconds
+            boutLen(mousei,filei) = mean(cross_Out-cross_In);
         end
     end
     
@@ -91,5 +92,3 @@ TableInfo   = [boutNum;boutLen];
 Table       = [cell2table(TableLabels) array2table(TableInfo)];
 %writetable(Table,'boutAnalysis_nose.csv');
 %clear all
-
-

@@ -2,10 +2,11 @@ clear
 clc
 close all
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Miami/temp
-load('Miami_190125_nidaq.mat')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/190425
+load('nidaq.mat')
 
-vn='Miami_190125_depth.mp4';
+cd ./proc
+vn='results_00.mp4';
 raw_video=VideoReader(vn);
 
 final_video = VideoWriter([vn(1:end-4) '_FP_Labeled.avi']);

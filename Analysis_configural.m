@@ -37,15 +37,15 @@ clc
 cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
-radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
+% radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Redwall/Luke/190228
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/06
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
 flen = length(filelist);
-cd Analyzed_Data;
+cd Analyzed_Data_4obj;
 
 if isfile('Arena_Obj_Pos_4obj.mat')
     load('Arena_Obj_Pos_4obj.mat', 'obj_center', 'obj', 'arena');
@@ -69,7 +69,6 @@ for fiter =1:flen
 end
 flen = length(filelist);
 
-tic;
 
 for fiter =1:flen%%%%%
     vn = filelist(fiter).name;
@@ -99,8 +98,8 @@ for fiter =1:flen%%%%%
     %***********************************************************
 
     % Calculate head position
-    Labels(:,14)=(Labels(:,2)+Labels(:,11))./2; %Labels(:,5)+Labels(:,8))./3;
-    Labels(:,15)=(Labels(:,3)+Labels(:,12))./2; %Labels(:,6)+Labels(:,9))./3;
+    Labels(:,14)=Labels(:,2); %Labels(:,5)+Labels(:,8))./3;
+    Labels(:,15)=Labels(:,3); %Labels(:,6)+Labels(:,9))./3;
     %Labels(:,16)=(Labels(:,4)+Labels(:,7)+Labels(:,10))./3;
 
     % head distance from object center
@@ -198,14 +197,17 @@ for fiter =1:flen%%%%%
     %                       arena(fiter,3)-arena(fiter,1),...
     %                       arena(fiter,4)-arena(fiter,2)])
 
-
+    
     % Plot trajectory
     Trafigure=figure('visible','off');
-    scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),20);
-    rectangle('Position',[arena(fiter,1),arena(fiter,2),arena(fiter,3)-arena(fiter,1),arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',4)
-    for numOfObj = 1:4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),8,'filled');
+    rectangle('Position',[arena(fiter,1),arena(fiter,2),...
+                          arena(fiter,3)-arena(fiter,1),...
+                          arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',4)
+    for numOfObj = 1%:4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         rectangle('Position', [obj{fiter,numOfObj}(1), obj{fiter,numOfObj}(2), ...
-            obj{fiter,numOfObj}(3)-obj{fiter,numOfObj}(1), obj{fiter,numOfObj}(4)-obj{fiter,numOfObj}(2)],...
+                               obj{fiter,numOfObj}(3)-obj{fiter,numOfObj}(1), ...
+                               obj{fiter,numOfObj}(4)-obj{fiter,numOfObj}(2)],...
             'EdgeColor','r','linewidth',4)
     end
     
@@ -231,7 +233,7 @@ for fiter =1:flen%%%%%
     % Save
     % ***********************************************************
     % pause
-    cd Analyzed_Data
+    cd Analyzed_Data_4obj
 
 %     mkdir([vn(1:end-4) '_Plots'])
 %     cd([vn(1:end-4) '_Plots'])
@@ -250,11 +252,11 @@ for fiter =1:flen%%%%%
                       networkname_format videoname_format
 
     cd ..
-    toc;
+    
 end
 
 close all
 clear
-cd /home/alex/Programs/Novelty_analysis
+cd /home/alex/Programs/Novelty_analysis_KA
 
 disp('Done analyzing')

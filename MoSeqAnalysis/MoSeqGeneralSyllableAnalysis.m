@@ -5,26 +5,33 @@ clear
 clc
 close all
 
-setName = '7day_preexposure';
+setName = 'Capoeira_MoSeq';%'7day_preexposure';
 
-G1_Mice = 7:12; %[1 2 3 4];
-G2_Mice = 1:6;  %[5 6 7 8];
-G1_Days = 3:7;  %[3 4 5 6];
-G2_Days = 3:7;  %[3 4 5 6];
+G1_Mice = 1:3;%[2 4 6];%[1 2 3 4]; %7:12;
+G2_Mice = 4:6;%[1 3 5];%[5 6 7 8]; %1:6;
+G1_Days = [3 4 5 6]; %3:7;
+G2_Days = [3 4 5 6]; %3:7;
 
 % G3 Base line (habituation)
-G3_Mice = 1:12; %1:8;
+G3_Mice = 1:6; %1:8; %1:12;
 G3_Days = [1 2];
 
-cd /media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq
+%cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq %7day_preexposure_MoSeq
+cd /media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq
 load('MoSeqDataFrame.mat')
+%load('GeneralUsage.mat') %%%%%%%%%%%%%%
 cmap=jet(100);
 fps=30;
 Syllablebinedge=[-6,-0.5:1:99.5];
+frameCutoff = 18000;
 
-Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
+%Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/Mice_Index.m';
 %'/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
 run(Mice_Index_path);
+load('NearObj_ts.mat')
+
+disp('section 1')
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculation
@@ -49,7 +56,7 @@ for miceiter=1:length(Mice)
             end
         end
 
-        Labels=double(MoSeqDataFrame.labels{MSidindex});
+        Labels=double(MoSeqDataFrame.labels{MSidindex}(1:frameCutoff));
         labellen=length(Labels);
 
         % Calculate Empirical Bigram Transition Matrix (self transition included)
@@ -153,6 +160,8 @@ for miceiter=G2_Mice
 end
 InterG2BM=G2BM-G2BM.*diag(ones(1,100));     % subtract self transition
 PG2BM=InterG2BM./sum(sum(InterG2BM));       % Normalization
+
+disp('section 2')
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Making plots
@@ -164,15 +173,21 @@ fsize=16;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Plot_GeneralUsage=figure(1);
-plot(X,GSortedusage,'LineWidth',1.5)
+plot(X,GSortedusage,'b.-', 'LineWidth',1.5)
+hold on
+line([0 100], [0.01 0.01], 'color', 'k', 'linestyle', '--')
 title(['General Syllable Usage (sorted by usage, ', setName, ')'],'FontSize',fsize, ...
     'Interpreter', 'none')
 ylabel('Fractional usage','FontSize',fsize)
 xlabel('Syllable Number','FontSize',fsize)
 xticks(X);
 xticklabels(SyllablesX(GSortedusageindex));
+xlim([0 60])
+ylim([0 0.055])
+set(Plot_GeneralUsage, 'Position', [46 353 1870 450])
+%saveas(Plot_GeneralUsage, [setName '_generalUsage_showCutoff.tif'])
 
-% just plot top 20 most used syllables
+%% just plot top 20 most used syllables
 Plot_GeneralUsage_Top20=figure(2);
 hold on
 plot(X(1:20),GSortedusage(1:20),'LineWidth',1.5, 'Marker', 'o', 'LineStyle', '-')
@@ -227,9 +242,221 @@ xticks(X);
 xticklabels(SyllablesX(G2vsG1Sortedusageindex));
 
 
+%% MoSeq statistical analysis
+
+% step 1: identify syllables with >1% usage across all mice+days,
+%         pool with syllables that are used >1% within radius of object
+GsortedCutoff = GSortedusageindex(GSortedusage>=0.01);
+% SyllablesX(GSortedusageindex(GSortedusage>=0.01));
+
+cropFrames = 900;
+disp(['Cropped frames: ', num2str(cropFrames)])
+addLabels = [];
+for miceiter=1:length(Mice)
+    
+    for dayiter=1:length(Mice(miceiter).ExpDay)
+        disp([Mice(miceiter).name, ': ', Mice(miceiter).ExpDay(dayiter).date])
+        
+        % find MSid index
+        MSidindex=1;
+        for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
+            if strcmp(MoSeqDataFrame.session_uuid(indexiter,:),...
+                      Mice(miceiter).ExpDay(dayiter).MSid)
+                break
+            end
+            MSidindex=MSidindex+1;
+            if MSidindex==size(MoSeqDataFrame.session_uuid,1)+1
+                error('MSid not found');
+            end
+        end
+
+        Labels=double(MoSeqDataFrame.labels{MSidindex}(1:frameCutoff));
+        
+        %cd(['./vids/', Mice(miceiter).name])
+        cd(Mice(miceiter).name)
+        cd(Mice(miceiter).ExpDay(dayiter).date)
+        
+        sessionName = dir('session*');
+        cd(sessionName.name)
+        
+        allDepth_ts = dir('*depth_ts*');
+        
+        % load depthts
+        filename = allDepth_ts(1).name; %%%%%%%%%%
+        delimiter = ' ';
+        formatSpec = '%f%[^\n\r]';%'%*q%f%[^\n\r]';
+        fileID = fopen(filename,'r');
+        dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, ...
+            'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
+        fclose(fileID);
+        depthts = [dataArray{1}];
+        
+        nearObj_ts = Mice(miceiter).ExpDay(dayiter).NearObj_ts;
+        nearObj_index = zeros(length(nearObj_ts), 1);
+        for nearObjiter=1:length(nearObj_ts)
+            nearObj_index(nearObjiter,1)=find(depthts>nearObj_ts(nearObjiter),1);
+        end
+
+        nearObj_index = nearObj_index-cropFrames; % cropped frames during moseq-extract
+        nearObj_index(nearObj_index<=0)=[];
+        nearObj_index(nearObj_index>frameCutoff)=[];
+        if(mod(length(nearObj_index),2))
+            disp('odd nearObj_index length')
+            nearObj_index = nearObj_index(1:end-1);
+        end
+        
+        for depthiter = 1:2:length(nearObj_index)
+            toAdd = Labels(nearObj_index(depthiter):nearObj_index(depthiter+1));
+            addLabels = [addLabels toAdd];
+        end
+        
+        cd ../../..
+    end
+end
+
+
+
+addLabelsUsage=histcounts(addLabels,Syllablebinedge);
+PaddLabelsUsage=addLabelsUsage./sum(addLabelsUsage);
+
+[PaddLabelsUsageSort,PaddLabelsUsageSortIndex]=sort(PaddLabelsUsage,'descend');
+addLabelsCutoff = PaddLabelsUsageSortIndex(PaddLabelsUsageSort>=0.01);
+% SyllablesX(PaddLabelsUsageSortIndex(PaddLabelsUsageSort>=0.01));
+
+% include syllables expressed >1% of time within specified radius of obj
+GsortedCutoffCombine = unique([GsortedCutoff addLabelsCutoff]);
+
+% crop sorted vector to include only syllables >1%
+isIn = ones(length(G2vsG1Sortedusageindex),1);
+for sortediter = 1:length(G2vsG1Sortedusageindex)
+    if(isempty(find(G2vsG1Sortedusageindex(sortediter)==GsortedCutoffCombine,1)))
+        isIn(sortediter,1) = 0;
+    end
+end
+G2vsG1Sortedusageindex_crop = G2vsG1Sortedusageindex(isIn==1);
+
+%% plot usage just for syllables with >1% expression
+PGUsage_crop = PGUsage(GsortedCutoffCombine);
+[GSortedusage_crop,GSortedusageindex_crop]=sort(PGUsage_crop,'descend');
+X_crop = 0:length(GSortedusage_crop)-1;
+
+close all
+Plot_GeneralUsage=figure(1);
+plot(X_crop,GSortedusage_crop,'b.-', 'LineWidth',1.5)
+hold on
+line([0 length(GSortedusage_crop)], [0.01 0.01], 'color', 'k', 'linestyle', '--')
+title(['General Syllable Usage (syllables >1% in general or within radius, ', setName, ')'],...
+    'FontSize',fsize, 'Interpreter', 'none')
+ylabel('Fractional usage','FontSize',fsize)
+xlabel('Syllable Number','FontSize',fsize)
+xticks(X_crop);
+xticklabels(SyllablesX(GsortedCutoffCombine(GSortedusageindex_crop)));
+%xlim([0 60])
+ylim([0 0.055])
+set(Plot_GeneralUsage, 'Position', [46 353 1870 450])
+%saveas(Plot_GeneralUsage, [setName '_generalUsage_crop.tif'])
+
+%% plot syllable enrichment without errorbar
+close all
+X_cutoff = 0:length(G2vsG1Sortedusageindex_crop)-1;
+
+Plot_UsageCompare_cutoff=figure(6);
+plot(X_cutoff,PG1Usage(G2vsG1Sortedusageindex_crop),'LineWidth',1.5)
+hold on
+plot(X_cutoff,PG2Usage(G2vsG1Sortedusageindex_crop),'LineWidth',1.5)
+plot(X_cutoff,PG3Usage(G2vsG1Sortedusageindex_crop),'LineWidth',1,'Color','Black')
+
+legend({'Contextual Novelty','Stimulus Novelty','Habituation'},'FontSize',fsize)
+title(['Syllable Usage Comparison of Contextual/Stimulus Novely Mice (', setName, ...
+    ') (Sorted by stimulus novelty enrichment)'],'FontSize',fsize,'Interpreter', 'none')
+ylabel('Fractional usage','FontSize',fsize)
+xlabel('Syllables','FontSize',fsize)
+xticks(X_cutoff);
+xticklabels(SyllablesX(G2vsG1Sortedusageindex_crop));
+set(Plot_UsageCompare_cutoff, 'Position', [46 353 1870 450])
+
+%saveas(Plot_UsageCompare_cutoff, 'UsageCompare_Crop.tif')
+
+%% divide syllable usage per mouse for statistical tests (ttest2, bonferroni correction)
+G12Usage_split=zeros(length(G3_Mice),101);
+for miceiter=G3_Mice
+    for dayiter=G1_Days
+        G12Usage_split(miceiter,:) = G12Usage_split(miceiter,:) + ...
+            Mice(miceiter).ExpDay(dayiter).usage;   
+    end
+end
+PG12Usage_split=G12Usage_split./sum(G12Usage_split,2);
+
+G3Usage_split=zeros(length(G3_Mice),101);
+for miceiter=G3_Mice
+    for dayiter=G3_Days
+        G3Usage_split(miceiter,:) = G3Usage_split(miceiter,:) + ...
+            Mice(miceiter).ExpDay(dayiter).usage;   
+    end
+end
+PG3Usage_split=G3Usage_split./sum(G3Usage_split,2);
+
+GUsage_splitHN = [G3Usage_split; G12Usage_split];
+
+%test = [GUsage_splitH(1:8,2) GUsage_splitN(1:8,2)];
+%[p, tb1] = anova2(test,4);
+
+%% ttest with Bonferroni correction
+PG12Usage_split_crop = PG12Usage_split(:,G2vsG1Sortedusageindex_crop);
+
+[h, p] = ttest2(PG12Usage_split_crop(G1_Mice,:), ...
+                PG12Usage_split_crop(G2_Mice,:), ...
+                'Vartype','unequal');
+
+% simple bonferonni 
+alpha = 0.05;
+m     = length(p);
+bonf  = p<(alpha/m);
+
+[p_sorted, p_index] = sort(p);
+
+p_index_adj = SyllablesX(G2vsG1Sortedusageindex_crop(p_index));
+
+%% plot syllable enrichment (cropped) with errorbar
+mean_PG1Usage_split_crop = mean(PG12Usage_split_crop(G1_Mice,:),1);
+% equivalent to PG1Usage(G2vsG1Sortedusageindex_crop)
+std_PG1Usage_split_crop = std(PG12Usage_split_crop(G1_Mice,:),0,1);
+
+mean_PG2Usage_split_crop = mean(PG12Usage_split_crop(G2_Mice,:),1);
+std_PG2Usage_split_crop = std(PG12Usage_split_crop(G2_Mice,:),0,1);
+
+
+Plot_UsageCompare_cutoff_errorbar=figure(7);
+errorbar(X_cutoff,mean_PG1Usage_split_crop,std_PG1Usage_split_crop,'LineWidth',1.5)
+hold on
+errorbar(X_cutoff,mean_PG2Usage_split_crop,std_PG2Usage_split_crop,'LineWidth',1.5)
+plot(X_cutoff,PG3Usage(G2vsG1Sortedusageindex_crop),'LineWidth',1,'Color','Black')
+
+legend({'Contextual Novelty','Stimulus Novelty','Habituation'},'FontSize',fsize)
+title(['Syllable Usage Comparison of Contextual/Stimulus Novely Mice (', setName, ...
+    ') (Sorted by stimulus novelty enrichment)'],'FontSize',fsize,'Interpreter', 'none')
+ylabel('Fractional usage','FontSize',fsize)
+xlabel('Syllables','FontSize',fsize)
+xticks(X_cutoff);
+xticklabels(SyllablesX(G2vsG1Sortedusageindex_crop));
+set(Plot_UsageCompare_cutoff_errorbar, 'Position', [46 353 1870 450])
+
+%saveas(Plot_UsageCompare_cutoff_errorbar, 'UsageCompare_Crop_wError.tif')
+
+%% random shuffling to assess significance
+[m,n] = size(GUsage_splitN_crop);
+rng('default')
+
+shufflemat = zeros(m,n);
+for permiter = 1:n
+    shufflemat(:,permiter) = randperm(8)';
+end
+b = GUsage_splitN_crop(shufflemat);
+diffMean = mean(b(G1_Mice,:))-mean(b(G2_Mice,:));
+
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Saving Datas
+% Saving Data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %pause
 close all

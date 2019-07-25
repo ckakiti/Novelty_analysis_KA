@@ -1,9 +1,9 @@
 # load in the model and the index to the extracted data
-index_file = '/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/moseq2-index.yaml'
-model_file = '/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/my_model.p'
+index_file = '/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/moseq2-index.yaml'
+model_file = '/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/my_model.p'
 
 # Save file directory
-save_directory='/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/MoSeqDataFrame.mat'
+save_directory='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/MoSeqDataFrame.mat'
 
 
 import scipy.io as sio

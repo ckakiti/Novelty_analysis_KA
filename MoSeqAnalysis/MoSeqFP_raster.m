@@ -2,16 +2,22 @@
 % Importing (1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
+
 close all
 clc
 
+Config_NovAna
+disp(['radius_cm: ' num2str(radius_cm), ' (unused)'])
+disp(['ppc: ' num2str(ppc)])
+disp(['fps: ' num2str(fps)])
+
 whichMouse = 'Vegas';
-whichSession = 'R'; %Hab2 %N1 %R
+whichDate  = '190428';
+whichSession = 'N1'; %Hab2 %N1 %R1(arm+delivery) %R2(consumption)
 whichFile = 1;
 
-cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Vegas/190428R
-%cd /media/alex/DataDrive1/MoSeqData/MSFP_Test/DataSet180922/session_20180922154525
-%cd /media/alex/DataDrive1/MoSeqData/Iku_photometry/Iku_photometry_MoSeq/Francisco/190219/session_20190219153503
+cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/' ...
+   whichMouse '/' whichDate])
 
 filelist = dir('session*');
 cd(filelist(whichFile).name)
@@ -33,7 +39,8 @@ fileID = fopen(filename,'r');
 % This call is based on the structure of the file used to generate this
 % code. If an error occurs for a different file, try regenerating the code
 % from the Import Tool.
-dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
+dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, ...
+    'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 
 % Close the text file.
 fclose(fileID);
@@ -50,65 +57,177 @@ depthts = [dataArray{1}]; %%%%%%%%%%%%%%%%%%%%%%%%%
 % get rgb_ts array as well
 filename = 'rgb_ts.txt';
 fileID = fopen(filename,'r');
-dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
+dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, ...
+    'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 fclose(fileID);
 rgbts = [dataArray{1}];
-
 
 % Clear temporary variables
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 disp('section 1')
 
-%% (2) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load('MoSeqFP.mat');
 
-%boutFile = dir('RewardResponse*');
-%pokeFile = boutFile;
-%boutFile = dir('*boutStart');
-%pokeFile = dir('*poke');
-boutFile = dir('RewardArm*');
-pokeFile = dir('RewardDelivery*');
+%% alternative section 1+2 (for Mitsuko_photometry, LED detection)
+clear
+pause(0.01)
 
-acttime=csvread(boutFile.name);
-acttime2=csvread(pokeFile.name);
+close all
+clc
 
-%acttime=load(['NoveltyResponse_' whichMouse '_Day3_boutStart']); %poke %boutStart
-%acttime=acttime+1; % labeled frame number start at 0 while depthts start at 1
-%acttime=acttime+900; % when extracting, frames were trimmed by 900
-%rescaling = length(depthts)/length(rgbts);
-%acttime = round(acttime*rescaling);
+Config_NovAna
+disp(['radius_cm: ' num2str(radius_cm), ' (unused)'])
+disp(['ppc: ' num2str(ppc)])
+disp(['fps: ' num2str(fps)])
 
-% convert depth frame number to FP frame number
-actlen=length(acttime); %size(acttime,1);
-acttime_index=zeros(actlen,1);
-acttime2_index=zeros(actlen,1);
-for actiter=1:actlen
-    acttime_index(actiter,1)=find(tstep>depthts(acttime(actiter)),1,'first');
-    acttime2_index(actiter,1)=find(tstep>depthts(acttime2(actiter)),1,'first');
-end
+whichMouse = 'Tacoma';
+whichDate  = '190616';
+whichSession = 'N1'; %Hab2 %N1 %R1(arm+delivery) %R2(consumption)
+whichFile = 1;
 
-% tic
-% veltime_ind = zeros(length(depthts)-900,1);
-% for veliter = 901:length(depthts)
-%     disp(veliter)
-%     veltime_ind(veliter-900,1) = find(tstep>depthts(veliter),1,'first');
-%     %[d, ix] = min(abs(tstep-depthts(veliter)));
-%     %veltime_ind(veliter-900,1) = ix;
-% end
-% toc
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Mitsuko_photometry_190617/' ...
+    whichMouse '/' whichDate])
 
-cd ./proc/Analyzed_Data
-posFile = dir('MoSeqPos*');
-MoSeqPos = load(posFile.name);
-vel = MoSeqPos(:,3);
-cd ../..
+disp('section 1')
+
+
+FP_dir = dir('*_FP.mat');
+load(FP_dir.name)
+ch00=cart_GCaMP;
+ch01=cart_tdTom;
+
+%poke_corrected = dir('*poke_corrected');
+%acttime_index = csvread(poke_corrected.name);
+acttime_index = pos_within_TTL;
+acttime2_index = acttime_index;
 
 disp('section 2')
 
-%% (3) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% (2) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load('MoSeqFP.mat');
+
+if(strcmp(whichSession,'N1'))
+    boutFile = dir('*boutStart'); %nose
+    pokeFile = dir('*poke'); %nose
+elseif(strcmp(whichSession,'R1'))
+    boutFile = dir('RewardArm*');
+    pokeFile = dir('RewardDelivery*');
+elseif(strcmp(whichSession,'R2'))
+    boutFile = dir('RewardResponse*');
+    pokeFile = boutFile;
+end
+
+acttime=csvread(boutFile.name);
+acttime2=csvread(pokeFile.name);
+%LEDtime=csvread('LED_on');
+
+%acttime=acttime+1; % labeled frame number start at 0 while depthts start at 1
+%acttime=acttime+900; % when extracting, frames were trimmed by 900
+
+
+
+% convert rgb/depth frame number to FP frame number
+actlen=length(acttime); %size(acttime,1);
+acttime_index=zeros(actlen,1);
+acttime2_index=zeros(actlen,1);
+
+orienttime=zeros(actlen,1); % first orientation after start of bout
+orienttime_index=zeros(actlen,1);
+
+for actiter=1:actlen
+    acttime_index(actiter,1)=find(tstep>rgbts(acttime(actiter)),1); %%%%%%%%%%%%%%%
+    acttime2_index(actiter,1)=find(tstep>rgbts(acttime2(actiter)),1); %%%%%%%%%%%%%%%
+    
+%     oriented = acttime(actiter) + find(DLCPos.Labels(acttime(actiter):end,23),1);
+%     orienttime(actiter,1) = oriented-1;
+%     orienttime_index(actiter,1)=find(tstep>rgbts(orienttime(actiter)),1); %%%%%%%%%%%%%%%
+end
+
+
+% allOrient = crossing(DLCPos.Labels(:,23)-0.5);
+% allOrientStart = allOrient(1:2:end); % find every time mice orient to object
+% allorient_index=zeros(length(allOrientStart),1);
+% for orientiter = 1:length(allOrientStart)
+%     allorient_index(orientiter,1)=find(tstep>rgbts(allOrientStart(orientiter)),1);
+% end
+% allorient_index = allorient_index(allorient_index<796200);
+
+%acttime_index=allorient_index;
+%acttime2_index=allorient_index;
+
+% convert LED_on frame number to FP frame number
+% LEDlen=length(LEDtime); %size(acttime,1);
+% LED_index=zeros(LEDlen,1);
+% for LEDiter=1:LEDlen
+%     LED_index(LEDiter,1)=find(tstep>rgbts(LEDtime(LEDiter)),1,'first');
+% end
+
+disp('section 2')
+
+%% calculate velocity and acceleration
+
+%cd ./proc/Analyzed_Data
+%posFile = dir('MoSeqPos*');
+%MoSeqPos = load(posFile.name);
+%vel = MoSeqPos(:,3);
+%cd ../..
+cd Analyzed_Data
+posFile = dir('*0000.mat');% dir('*Converted.mat');
+DLCPos = load(posFile.name);
+load('Arena_Obj_Pos.mat');
+%obj_center = [-206.9 -129.2]; % for MoSeqPos Nashville 190425R centroid_mm
+%obj_center = [0 0];           % for calculating vel/acc relative to 0
+
+cd ..
+
+if(isempty(dir('*rgb_ts')))
+    tic
+    cutoff = 9000; %60 %9000 %18000
+    veltime_ind = zeros(cutoff,1);
+    for veliter = 1:length(veltime_ind)
+        disp(veliter)
+        veltime_ind(veliter,1) = find(tstep>rgbts(veliter),1,'first'); %%%%%%%%%%%%%%%%
+        %[d, ix] = min(abs(tstep-depthts(veliter)));
+        %veltime_ind(veliter-900,1) = ix;
+    end
+    toc
+else
+    rgbts_file = dir('*rgb_ts');
+    veltime_file = load(rgbts_file.name);
+    veltime_crop = veltime_file(:,1);
+    veltime_ind = veltime_file(:,2);
+    
+    cutoff = length(veltime_crop);
+end
+
+
+xPos_body = DLCPos.Labels(veltime_crop,2);%14);
+yPos_body = DLCPos.Labels(veltime_crop,3);%15);
+xPos_smooth = smooth(xPos_body,30);
+yPos_smooth = smooth(yPos_body,30);
+xyPos_smooth = sqrt((obj_center(1,1)-xPos_smooth).^2 + ...
+                    (obj_center(1,2)-yPos_smooth).^2)/ppc; %units = cm
+
+% first average position every 15 frames (1s) then calculate velocity
+posWin = fps;
+disp(['fps: ' num2str(fps)])
+modPos = mod(length(xyPos_smooth),posWin);
+xyPos_smooth = xyPos_smooth(1:end-modPos);
+aPos = reshape(xyPos_smooth, posWin, []);
+bPos = mean(aPos,1);
+
+% calculating velocity+acceleration from averaged xyPos
+vel = diff(bPos); %units = cm/s
+vel_smooth = smooth(vel, 4);
+
+acc = diff(vel_smooth); %units = cm/s^2
+acc_smooth = smooth(acc, 4);
+
+disp('calculated vel/acc')
+
+%% (3) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Processing
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 GCaMP=ch00;
 tdTom=ch01;
 
@@ -210,6 +329,7 @@ disp('section 4')
 plotWin = -5000:5000;
 
 plotind = repmat(plotWin,length(acttime_index),1)+acttime_index;
+%plotind = repmat(plotWin,length(allorient_index),1)+allorient_index;%orienttime_index;
 plotind(plotind<=0)=1;
 rawTrace = GCaMP(plotind);
 R_rawTrace = tdTom(plotind);
@@ -225,13 +345,15 @@ R_rawTrace2 = tdTom(plotind2);
 %   Fsubtr: baseline signal for each trial - avg 1s from beginning of trial (diff for each trial)
 %   Fdiv: mean of first sec of all trials
 
-Fdiv    = mean(mean(rawTrace(:,1:1000)));
-Fsubtr  = mean(rawTrace(:,1001:2000),2);        % using this time window in plotwin for baseline
+baseShift = 0; %0=regular; 1000=shift 1sec closer to boutStart
+
+Fdiv    = mean(mean(rawTrace(:,(1:1000)+baseShift)));
+Fsubtr  = mean(rawTrace(:,(1001:2000)+baseShift),2); %%%%%%%%      % using this time window in plotwin for baseline
 deltaF  = ((rawTrace-Fsubtr)/Fdiv)*100;
 deltaF2 = ((rawTrace2-Fsubtr)/Fdiv)*100;
 
-R_Fdiv    = mean(mean(R_rawTrace(:,1:1000)));
-R_Fsubtr  = mean(R_rawTrace(:,1001:2000),2);    % using this time window in plotwin for baseline
+R_Fdiv    = mean(mean(R_rawTrace(:,(1:1000)+baseShift)));
+R_Fsubtr  = mean(R_rawTrace(:,(1001:2000)+baseShift),2);    % using this time window in plotwin for baseline
 R_deltaF  = ((R_rawTrace-R_Fsubtr)/R_Fdiv)*100;
 R_deltaF2 = ((R_rawTrace2-R_Fsubtr)/R_Fdiv)*100;
 
@@ -247,6 +369,7 @@ R_deltaF2 = ((R_rawTrace2-R_Fsubtr)/R_Fdiv)*100;
 % rawTrace(27,:) = [];
 % R_rawTrace(27,:) = [];
 
+disp(['F sub/div shift: ' num2str(baseShift) 'ms'])
 disp('section 5')
 
 %% plot (6)
@@ -262,8 +385,51 @@ s_plot2 = std(deltaF2)/sqrt(length(acttime2_index));
 R_m_plot2 = mean(R_deltaF2);
 R_s_plot2 = std(R_deltaF2)/sqrt(length(acttime2_index));
 
-
+disp('section 6')
+%%
 close all
+
+if(strcmp(whichSession,'N1') || strcmp(whichSession,'H2'))
+    title_dFF_1 = 'GCaMP signals during approach';
+    xlabel_dFF_1 = 'time - point of bout start (ms)';
+    
+    title_dFF_2 = 'GCaMP signals during poke'; %retreat'
+    xlabel_dFF_2 = 'time - point of poke (ms)'; %retreat (ms)'
+    
+    xlabel_raster_1 = 'time - approach (s)';
+    xlabel_raster_2 = 'time - point of poke (s)'; %retreat (s)';
+     
+%     title_dFF_1 = 'GCaMP signals during orientation';
+%     xlabel_dFF_1 = 'time - point of orientation (ms)';
+%     
+%     title_dFF_2 = 'GCaMP signals during orientation'; %retreat'
+%     xlabel_dFF_2 = 'time - point of orientation (ms)'; %retreat (ms)'
+%     
+%     xlabel_raster_1 = 'time - point of orientation (s)';
+%     xlabel_raster_2 = 'time - point of orientation (s)'; %retreat (s)';
+    
+elseif(strcmp(whichSession,'R1'))
+    title_dFF_1 = 'GCaMP signals to arm reaching in';
+    xlabel_dFF_1 = 'time - point of arm reaching in (ms)';
+    
+    title_dFF_2 = 'GCaMP signals to reward delivery';
+    xlabel_dFF_2 = 'time - point of reward delivery (ms)';
+    
+    xlabel_raster_1 = 'time - point of arm reaching in (s)';
+    xlabel_raster_2 = 'time - point of reward delivery (s)';
+    
+elseif(strcmp(whichSession,'R2'))
+    title_dFF_1 = 'GCaMP signals to reward consumption';
+    xlabel_dFF_1 = 'time - point of consumption (ms)';
+    
+    title_dFF_2 = 'GCaMP signals to reward consumption';
+    xlabel_dFF_2 = 'time - point of consumption (ms)';
+    
+    xlabel_raster_1 = 'time - reward consumption (s)';
+    xlabel_raster_2 = 'time - reward consumption (s)';
+end
+
+% average GCaMP activity aligned to event (poke, bout start, reward delivery, etc.)
 fig1 = figure(1);
 suptitle(whichMouse)
 set(gcf, 'Position', [217 511 1089 518])
@@ -271,48 +437,223 @@ set(gcf, 'Position', [217 511 1089 518])
 fig_1 = subplot(1,2,1);
 errorbar_patch(plotWin,m_plot,s_plot,[0 1 0]);
 errorbar_patch(plotWin,R_m_plot,R_s_plot,[1 0 0]);
-title('GCaMP signals during arm reaching in') %approach') %to reward')
+title(title_dFF_1)
 legend('GCaMP','tdTom')
-xlabel('time - point of arm reaching in') %approach (ms)') %approach %retreat %consumption
+xlabel(xlabel_dFF_1)
 ylabel('dF/F (%)')
+ylim([-4 4])
 
 fig_2 = subplot(1,2,2);
 errorbar_patch(plotWin,m_plot2,s_plot2,[0 1 0]);
 errorbar_patch(plotWin,R_m_plot2,R_s_plot2,[1 0 0]);
-title('GCaMP signals during reward delivery') %retreat')
+title(title_dFF_2)
 legend('GCaMP','tdTom')
-xlabel('time - point of reward delivery') %retreat (ms)') %approach %retreat %consumption
+xlabel(xlabel_dFF_2)
 ylabel('dF/F (%)')
 fig_2.YLim = fig_1.YLim;
 
-% raster plot (10ms window average)
+
+% GCaMP raster plot (10ms window average)
 rasterWin = 10;
-a = reshape(deltaF2(:,1:(length(plotWin)-1)), length(acttime_index), rasterWin, []);
-%a = reshape(R_deltaF(:,1:(length(plotWin)-1)), length(acttime_index), rasterWin, []); %tdTom
-b = squeeze(mean(a,2));
+a1 = reshape(deltaF(:,1:(length(plotWin)-1)), length(acttime_index), rasterWin, []);
+b1 = squeeze(mean(a1,2));
+a2 = reshape(deltaF2(:,1:(length(plotWin)-1)), length(acttime_index), rasterWin, []);
+b2 = squeeze(mean(a2,2));
+
+a3 = reshape(R_deltaF(:,1:(length(plotWin)-1)), length(acttime_index), rasterWin, []); %tdTom
+b3 = squeeze(mean(a3,2));
+a4 = reshape(R_deltaF2(:,1:(length(plotWin)-1)), length(acttime_index), rasterWin, []); %tdTom
+b4 = squeeze(mean(a4,2));
+
+c = plotWin(1:1000:end)/1000;
+
 
 fig2 = figure(2);
-imagesc(b)
-title(['Raster (' num2str(rasterWin) 'ms bin): ' whichMouse])
-c = plotWin(1:1000:end)/1000;
-fig2.CurrentAxes.XTickLabel = c(2:end);
-fig2.CurrentAxes.XLabel.String = 'time - point of reward delivery'; %retreat (s)';
-%fig2.CurrentAxes.XLabel.String = 'time - point of arm reaching in';
-fig2.CurrentAxes.YLabel.String = 'trial';
+%suptitle(whichMouse)
+set(gcf, 'Position', [200 300 1400 500])
 
-%cutoff = 25000;
-%fig3 = figure(3);
-%scatter(vel(1:cutoff), GCaMP(veltime_ind(1:25000)), 'k.')
-%xlabel('Velocity')
-%ylabel('GCaMP')
+fig2_1 = subplot(1,2,1);
+imagesc(b1, [-4 4])
+title(['GCaMP raster (' num2str(rasterWin) 'ms bin): ' whichMouse])
+
+fig2_1.XTick = 0:100:1000;
+fig2_1.XTickLabel = c;
+fig2_1.XLabel.String = xlabel_raster_1;
+fig2_1.YLabel.String = 'trial';
+colorbar
+axis square
+
+fig2_2 = subplot(1,2,2);
+imagesc(b2, [-4 4])
+title(['GCaMP raster (' num2str(rasterWin) 'ms bin): ' whichMouse])
+fig2_2.XTick = 0:100:1000;
+fig2_2.XTickLabel = c;
+fig2_2.XLabel.String = xlabel_raster_2;
+fig2_2.YLabel.String = 'trial';
+colorbar
+axis square
+
+
+% tdTom raster plot (10ms window average)
+fig3 = figure(3);
+%suptitle(whichMouse)
+set(gcf, 'Position', [200 100 1400 500])
+
+fig3_1 = subplot(1,2,1);
+imagesc(b3, [-4 4])
+title(['tdTom raster (' num2str(rasterWin) 'ms bin): ' whichMouse])
+fig3_1.XTick = 0:100:1000;
+fig3_1.XTickLabel = c;
+fig3_1.XLabel.String = xlabel_raster_1;
+fig3_1.YLabel.String = 'trial';
+colorbar
+axis square
+
+fig3_2 = subplot(1,2,2);
+imagesc(b4, [-4 4])
+title(['tdTom raster (' num2str(rasterWin) 'ms bin): ' whichMouse])
+fig3_2.XTick = 0:100:1000;
+fig3_2.XTickLabel = c;
+fig3_2.XLabel.String = xlabel_raster_2;
+fig3_2.YLabel.String = 'trial';
+colorbar
+axis square
+
+% save
+wantToSave = input('Save? 0/1: ');
+if(wantToSave)
+%cd ./proc/Analyzed_Data
+cd ./Analyzed_Data
+saveas(fig1, ['FP_' whichMouse '_' whichSession '_DLC(r' num2str(radius_cm) ')_baseShift:'...
+    num2str(baseShift) '.tif'])
+saveas(fig2, ['FP_raster_GCaMP_' whichMouse '_' whichSession '_poke_DLC_baseShift:'...
+    num2str(baseShift) '.tif'])
+saveas(fig3, ['FP_raster_tdTom_' whichMouse '_' whichSession '_poke_DLC_baseShift:'...
+    num2str(baseShift) '.tif'])
+close all
+end
+
+%% plot GCaMP activity as a function of position, velocity, and acceleration
+GCaMP_curr = GCaMP(veltime_ind);
+GCaMP_ind  = 1:posWin:cutoff;
+
+% round velocities to fall into 1 of 6 (or more) discrete bins
+bin = (max(GCaMP_curr)-min(GCaMP_curr))/50; 
+roundTargets = min(GCaMP_curr):bin:max(GCaMP_curr);
+dataPosRound = interp1(roundTargets, roundTargets, GCaMP_curr, 'nearest');
+z0 = zeros(size(veltime_ind));
+col = dataPosRound';
+
+close all
+intervalXfps = 1:cutoff/2;
+fig3 = figure(3);
+set(gcf, 'Position', [45 366 1873 505])
+suptitle([whichMouse ': ' whichSession])
+subplot(1,3,1)
+surface([xPos_smooth(intervalXfps),xPos_smooth(intervalXfps)]/ppc', ...
+        [yPos_smooth(intervalXfps),yPos_smooth(intervalXfps)]/ppc', ...
+        [z0(intervalXfps),z0(intervalXfps)], [col(intervalXfps);col(intervalXfps)]',...
+    'marker', '.','markersize',2,'markerfacecol',[0 0 0],'edgecol','interp');
+axis square
+colorbar
+colormap cool
+%caxis([-4 4])
+
+subplot(1,3,2)
+%scatter(vel_smooth(1:(cutoff/posWin)), GCaMP_curr(1:posWin:cutoff), 'b.')
+GCaMP_curr_vel = GCaMP_curr(GCaMP_ind(1:end-2));
+scatter(vel_smooth(GCaMP_curr_vel>0), GCaMP_curr_vel(GCaMP_curr_vel>0), 'b.')
+xlabel('Velocity (cm/s)')
+ylabel('GCaMP (raw)')
+%ylim([0.9 1.3])
+
+subplot(1,3,3)
+GCaMP_curr_acc = GCaMP_curr(GCaMP_ind(1:end-3));
+scatter(acc_smooth(GCaMP_curr_acc>0), GCaMP_curr_acc(GCaMP_curr_acc>0), 'r.')
+xlabel('Acceleration (cm/s^2)')
+ylabel('GCaMP (raw)')
+%ylim([0.9 1.3])
+
+if(0)
+cd('./proc/Analyzed_Data')
+saveas(fig3, ['MoSeqFP_posVelAccGCaMP_' whichMouse '_' whichSession '_DLC.tif'])
+cd ../..
+end
+
+%% plot x, y position, velocity, and acceleration over first 10 min
+intervalXfps = 1:cutoff;
+timeMin = (1:cutoff)/fps/60;
+
+close all
+fig5 = figure(5);
+set(gcf, 'Position', [45 350 1873 505])
+title([whichMouse ': ' whichSession])
+hold on
+plot(timeMin, xPos_smooth(intervalXfps)/ppc')
+plot(timeMin, yPos_smooth(intervalXfps)/ppc')
+xlabel('Time (min)')
+ylabel('Position (cm); smoothed, relative to (0,0)')
+legend({'x-position', 'y-position'})
+
+fig6 = figure(6);
+set(gcf, 'Position', [45 250 1873 505])
+title([whichMouse ': ' whichSession])
+hold on
+plot((1:cutoff/fps)/60, vel_smooth(1:cutoff/fps))
+xlabel('Time (min)')
+ylabel('Velocity (cm/s); smoothed, relative to object')
+
+fig7 = figure(7);
+set(gcf, 'Position', [45 150 1873 505])
+title([whichMouse ': ' whichSession])
+hold on
+plot((1:cutoff/fps)/60, acc_smooth(1:cutoff/fps))
+xlabel('Time (min)')
+ylabel('Acceleration (cm/s^2); smoothed, relative to object')
+
+
+if(0)
+cd('./proc/Analyzed_Data')
+saveas(fig5, ['MoSeqFP_posXY_' whichMouse '_' whichSession '_DLC.tif'])
+saveas(fig6, ['MoSeqFP_vel_' whichMouse '_' whichSession '_DLC.tif'])
+saveas(fig7, ['MoSeqFP_acc_' whichMouse '_' whichSession '_DLC.tif'])
+cd ../..
+end
+
+%% plot bout trajectories and color code nose position based on GCaMP activity
+xPos_nose = xPos_smooth;%MoSeqPos(:,1); %DLCPos.Labels(:,2)/ppc;
+yPos_nose = yPos_smooth;%MoSeqPos(:,2); %DLCPos.Labels(:,3)/ppc;
+fig4 = figure(4);
+hold on
+for iter = 1:length(acttime)
+    currInt = acttime(iter):(acttime2(iter)+100);
+    
+    surface([xPos_nose(currInt),xPos_nose(currInt)]', ...
+        [yPos_nose(currInt),yPos_nose(currInt)]', ...
+        [z0(currInt),z0(currInt)]', [col(currInt);col(currInt)],...
+        'marker', '.','markersize',2,'markerfacecol',[0 0 0],'edgecol','interp');
+end
+%plot(obj_center(1)/ppc, obj_center(2)/ppc, 'r*')
+plot(obj_center(1), obj_center(2), 'r*')
+set(gca, 'YDir', 'reverse')
+axis square
+colorbar
 
 %% save (7)
 cd ./proc/Analyzed_Data
+saveas(fig1, ['MoSeqFP_' whichMouse '_' whichSession '_DLC(r' num2str(radius_cm) ').tif'])
+saveas(fig2, ['MoSeqFP_raster_GCaMP_' whichMouse '_poke_DLC.tif'])
+saveas(fig3, ['MoSeqFP_raster_tdTom_' whichMouse '_poke_DLC.tif'])
+%saveas(fig3, ['MoSeqFP_posVelAccGCaMP_' whichMouse '_' whichSession '_DLC.tif'])
+%saveas(fig4, ['MoSeqFP_boutTraceNoseGCaMP_' whichMouse '_' whichSession '_DLC.tif'])
+
+
 %saveas(fig1, ['MoSeqFP_' whichMouse '_' whichSession '_MoSeq.tif'])
-saveas(fig1, ['MoSeqFP_' whichMouse '_ArmReachRewDelivery_MoSeq.tif'])
+%saveas(fig1, ['MoSeqFP_' whichMouse '_ArmReachRewDelivery_MoSeq.tif'])
 %saveas(fig2, ['MoSeqFP_raster_' whichMouse '_' whichSession '_MoSeq.tif'])
-saveas(fig2, ['MoSeqFP_raster_' whichMouse '_ArmReach_MoSeq.tif'])%RewardDelivery_MoSeq.tif'])
-saveas(fig3, ['MoSeqFP_velGCaMP_' whichMouse '_' whichSession '_MoSeq.tif'])
+%saveas(fig2, ['MoSeqFP_raster_' whichMouse '_ArmReachRewDelivery_MoSeq.tif'])%RewardDelivery_MoSeq.tif'])
+%saveas(fig3, ['MoSeqFP_posVelAccGCaMP_' whichMouse '_' whichSession '_MoSeq.tif'])
+close all
 
 %% sanity check for pokes (not part of rest of analysis)
 close all
@@ -357,36 +698,6 @@ ylim([-6 13])
 %    event  rgb_frame  depth_frame  FP_frame  rgb_ts             depth_ts           tstep
 %    on     434        510          18620     63691196802.64810  63691196805.48410  63691196805.47710
 %    off    630        742          26750     63691196809.31710  63691196813.58610  63691196813.60710
-
-if(0)
-LEDtest(1).eventname='on1';
-LEDtest(2).eventname='on2';
-LEDtest(3).eventname='on3';
-LEDtest(4).eventname='on4';
-LEDtest(1).rgbonframe = 66;
-LEDtest(2).rgbonframe = 170;
-LEDtest(3).rgbonframe = 22660;
-LEDtest(4).rgbonframe = 22764;
-LEDtest(1).depthonframe = 134;
-LEDtest(2).depthonframe = 342;
-LEDtest(3).depthonframe = 45158;
-LEDtest(4).depthonframe = 45369;
-LEDtest(1).rgbonTstepIdx = 6399;
-LEDtest(2).rgbonTstepIdx = 13599;
-LEDtest(3).rgbonTstepIdx = 1557188;
-LEDtest(4).rgbonTstepIdx = 1564115;
-LEDtest(1).depthonTstepIdx = 6399;
-LEDtest(2).depthonTstepIdx = 13531;
-LEDtest(3).depthonTstepIdx = 1556721;
-LEDtest(4).depthonTstepIdx = 1563889;
-
-% mouse in = 220; 
-
-% LED on
-cross_where = crossing(zscore(ch02));
-LED_on      = cross_where(1:2:end); % FP index
-LED_off     = cross_where(2:2:end); % FP index
-end
 
 %% sample 60Hz filter for generated sine wave
 close all

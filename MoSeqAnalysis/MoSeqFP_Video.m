@@ -5,10 +5,11 @@ clear
 clc
 close all
 
-startAgain = 692;
+startAgain = 35;
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp
-filename = 'Francisco_190220_depth_ts.txt';
+cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/
+cd ./190425/session_20190425162005
+filename = 'depth_ts.txt';
 
 delimiter = ' ';
 
@@ -43,13 +44,13 @@ depthts = [dataArray{1:end-1}];
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load('Francisco_190220_nidaq.mat');
-%load('MoSeqFP.mat');
-acttime=csvread('Francisco_190220_rgbDeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000.csv',...
-    3, 0);
-acttime=acttime(:,1);
-%acttime=csvread('NoveltyResponse.csv');
-acttime=acttime+1; % labeled frame number start at 0 while depthts start at 1
+%load('nidaq.mat');
+load('MoSeqFP.mat');
+% acttime=csvread('Francisco_190220_rgbDeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000.csv',...
+%     3, 0);
+% acttime=acttime(:,1);
+% %acttime=csvread('NoveltyResponse.csv');
+% acttime=acttime+1; % labeled frame number start at 0 while depthts start at 1
 
 GCaMP=ch00;
 tdTom=ch01;
@@ -68,7 +69,7 @@ GCaMP = filtered_GCaMP;
 filtered_tdTom = filtfilt(d,tdTom);
 tdTom = filtered_tdTom;
 
-if(0)
+
 % remove sudden rise noise
 
 diff_GCaMP = diff(GCaMP);
@@ -107,7 +108,35 @@ tdTom = normR;
 
 GCaMP=GCaMP-mean(GCaMP);
 tdTom=tdTom-mean(tdTom);
+
+
+
+% calculating dF/F %%%%%%%%%%%%%%%%%%%%
+if(0) 
+plotWin = -5000:5000;
+
+plotind = repmat(plotWin,length(acttime_index),1)+acttime_index;
+%plotind = repmat(plotWin,length(allorient_index),1)+allorient_index;%orienttime_index;
+plotind(plotind<=0)=1;
+rawTrace = GCaMP(plotind);
+R_rawTrace = tdTom(plotind);
+
+plotind2 = repmat(plotWin,length(acttime2_index),1)+acttime2_index;
+plotind2(plotind2<=0)=1;
+rawTrace2 = GCaMP(plotind2);
+R_rawTrace2 = tdTom(plotind2);
+
+% deltaF/F = [(rawTrace - Fsubtr) / Fdiv] * 100
+%   rawTrace: rows = trials, columns = FP signal centered around event
+%   Fsubtr: baseline signal for each trial - avg 1s from beginning of trial (diff for each trial)
+%   Fdiv: mean of first sec of all trials
+
+Fdiv    = mean(mean(rawTrace(:,1:1000)));
+Fsubtr  = mean(rawTrace(:,1001:2000),2); %%%%%%%%      % using this time window in plotwin for baseline
+deltaF  = ((rawTrace-Fsubtr)/Fdiv)*100;
+deltaF2 = ((rawTrace2-Fsubtr)/Fdiv)*100;
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 len=length(tstep);
 deplen=length(depthts);
@@ -150,11 +179,12 @@ for iter=1:deplen
     end
 end
 
+cd ./temp
 % legend('GCaMP','tdTom');
-y_bound=[0.9 1.3];%[0.7 1.1];%[0.3,0.7]; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+y_bound=[-0.5 1.5];%[0.7 1.1];%[0.3,0.7]; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 mywaitbar = waitbar(0,[num2str(round(100*0/deplen)) '%' '    |    ' num2str(0) '/' num2str(deplen)]);
 figure('Position',[0 0 300 100],'visible','off');
-for plotiter = startAgain:deplen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for plotiter = startAgain:startAgain+100%deplen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     plot(m_time(plotiter,:),m_sg1(plotiter,:),'Color','g')
     hold on
     plot(m_time(plotiter,:),m_sg2(plotiter,:),'Color','r')
@@ -162,8 +192,8 @@ for plotiter = startAgain:deplen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     plot([nor_depthts(plotiter),nor_depthts(plotiter)],[y_bound(1),y_bound(2)],'Color','m','LineWidth',1.5);
     axis([nor_depthts(plotiter)-plot_window_t nor_depthts(plotiter)+plot_window_t y_bound(1) y_bound(2)]);
     drawnow limitrate
-    %saveas(gcf,['/Users/yuxie/Downloads/Temp/fig_' num2str(plotiter) '.jpg']);
-    saveas(gcf,['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp/jpgs/fig_' num2str(plotiter) '.jpg']);
+    saveas(gcf,['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/190425/session_20190425162005/temp/fig_' num2str(plotiter) '.jpg']);
+    %saveas(gcf,['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry_DLC/Francisco/temp/jpgs/fig_' num2str(plotiter) '.jpg']);
     clf
     waitbar(plotiter/deplen,mywaitbar,[num2str(round(100*plotiter/deplen)) '%' '    |    ' num2str(plotiter) '/' num2str(deplen)]);
 end
