@@ -40,7 +40,7 @@ Config_NovAna;
 % radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/06
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Chess_DLC/Rook
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
