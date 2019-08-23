@@ -1,13 +1,21 @@
 # Novelty_analysis
-Hello world!
 
 Matlab code for novelty behavior analysis
 
 ## Workflow
-0. MoveFromDir.m
+0. MoveFromDir.m (usually do this manually)
 1. MarkObjPos.m
 2. Analysis.m
 3. VideoLabeling.m
+
+# Script details
+1. MarkObjPos.m
+Manually select arena boundaries and object position for all sessions
+Has option to select LED position and extrapolate object positions for other 3 corners of arena (4obj)
+Information saved as Arena_Obj_Pos.m and Arena_Obj_Pos_4obj.m
+
+2. Analysis.m
+
 
 # Sample commands for using DeepLabCut and MoSeq
 
