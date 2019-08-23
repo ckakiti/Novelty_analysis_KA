@@ -4,7 +4,7 @@ Matlab code for novelty behavior analysis
 
 ## Workflow
 0. MoveFromDir.m (usually do this manually)
-1. MarkObjPos.m
+1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
 2. Analysis.m
 3. TimeStatistic
 4. VideoLabeling.m
