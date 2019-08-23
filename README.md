@@ -6,8 +6,9 @@ Matlab code for novelty behavior analysis
 0. MoveFromDir.m (usually do this manually)
 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
 2. [Analysis.m](https://github.com/ckakiti/Novelty_analysis_KA#2-analysism)
-3. [TimeStatistic](https://github.com/ckakiti/Novelty_analysis_KA#3-timestatisticm)
-4. [VideoLabeling.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/VideoLabeling.m)
+3. [TimeStatistic.m](https://github.com/ckakiti/Novelty_analysis_KA#3-timestatisticm)
+4. bout_analysis.m
+5. [VideoLabeling.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/VideoLabeling.m)
 
 ## Script details
 ### 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MarkObjPos.m)
@@ -29,6 +30,12 @@ Matlab code for novelty behavior analysis
 - Input: Config_NovAna, .mat files from Analysis.m
 - Output: TimeStatistic.csv, TimeStatistic_body_periph, TimeStatistic_nose_totalDistCut
 
+
+### 4. [bout_analysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/bout_analysis.m)
+- similar to TimeStatistic, create summary array of number of bouts and average bout length across sessions and days
+- can also create structure containing frame numbers for each poke and approach (needed for MoSeqEventAlignedAnalysis.m)
+- Input: Config_NovAna, MiceIndex, .mat files from Analysis.m
+- Output: boutAnalysis_nose.csv, PokesApproaches
 
 # Sample commands for using DeepLabCut and MoSeq
 
