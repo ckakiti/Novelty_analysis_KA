@@ -3,7 +3,7 @@
 Matlab code for novelty behavior analysis
 
 ## Workflow
-0. Config_NovAna.m
+0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-config_novanam)
 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
 2. [Analysis.m](https://github.com/ckakiti/Novelty_analysis_KA#2-analysism)
 3. [TimeStatistic.m](https://github.com/ckakiti/Novelty_analysis_KA#3-timestatisticm)
