@@ -3,7 +3,7 @@
 Matlab code for novelty behavior analysis
 
 ## Workflow
-0. MoveFromDir.m (usually do this manually)
+0. Config_NovAna.m
 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
 2. [Analysis.m](https://github.com/ckakiti/Novelty_analysis_KA#2-analysism)
 3. [TimeStatistic.m](https://github.com/ckakiti/Novelty_analysis_KA#3-timestatisticm)
@@ -11,6 +11,12 @@ Matlab code for novelty behavior analysis
 5. [VideoLabeling.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/VideoLabeling.m)
 
 ## Script details
+### 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Config_NovAna.m)
+- basic information for current dataset including name of network used to run DeepLabCut, video file format (.mp4 or .avi), vid length and width, fps, radius_cm, and angle radius
+- Input: manual editing of file
+- Output: parameters saved in .m file to be loaded in later scripts
+
+
 ### 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MarkObjPos.m)
 - Manually select arena boundaries and object position for all sessions
 - Has option to select LED position and extrapolate object positions for other 3 corners of arena (4obj)
