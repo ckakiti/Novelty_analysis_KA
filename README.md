@@ -10,14 +10,10 @@ Matlab code for novelty behavior analysis
 
 ## Script details
 1. MarkObjPos.m
-
-Manually select arena boundaries and object position for all sessions
-
-Has option to select LED position and extrapolate object positions for other 3 corners of arena (4obj)
-
-Input: Config_NovAna, .csv output files from DLC
-
-Output: Arena_Obj_Pos.m and/or Arena_Obj_Pos_4obj.m
+- Manually select arena boundaries and object position for all sessions
+- Has option to select LED position and extrapolate object positions for other 3 corners of arena (4obj)
+- Input: Config_NovAna, .csv output files from DLC
+- Output: Arena_Obj_Pos.m and/or Arena_Obj_Pos_4obj.m
 
 2. Analysis.m
 Extracting DLC-based information - amount of time spent near object, angle relative to object, velocity, etc.
