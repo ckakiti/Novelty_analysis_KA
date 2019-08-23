@@ -15,10 +15,11 @@ Matlab code for novelty behavior analysis
 - Input: Config_NovAna, .csv output files from DLC
 - Output: Arena_Obj_Pos.m and/or Arena_Obj_Pos_4obj.m
 
+
 2. Analysis.m
-Extracting DLC-based information - amount of time spent near object, angle relative to object, velocity, etc.
-Input: Config_NovAna, Arena_Obj_Pos.mat
-Output: Trajectories and Heatmap from first 10 min of each session, .mat file containing Labels and radius_cm
+- Extracting DLC-based information - amount of time spent near object, angle relative to object, velocity, etc.
+- Input: Config_NovAna, Arena_Obj_Pos.mat
+- Output: Trajectories and Heatmap from first 10 min of each session, .mat file containing Labels and radius_cm
 
 # Sample commands for using DeepLabCut and MoSeq
 
