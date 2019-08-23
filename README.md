@@ -7,8 +7,8 @@ Matlab code for novelty behavior analysis
 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
 2. [Analysis.m](https://github.com/ckakiti/Novelty_analysis_KA#2-analysism)
 3. [TimeStatistic.m](https://github.com/ckakiti/Novelty_analysis_KA#3-timestatisticm)
-4. MiceIndex.m
-5. Plot_compare.m
+4. [MiceIndex.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-miceindexm)
+5. [Plot_compare.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#5-plot_comparem)
 6. [bout_analysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-bout_analysism)
 7. [VideoLabeling.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/VideoLabeling.m)
 
