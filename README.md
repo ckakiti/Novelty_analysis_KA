@@ -13,6 +13,7 @@ Matlab code for novelty behavior analysis
 ## Script details
 ### 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Config_NovAna.m)
 - basic information for current dataset including name of network used to run DeepLabCut, video file format (.mp4 or .avi), vid length and width, fps, radius_cm, and angle radius
+- IMPORTANT: info is different for each dataset, double check before running other analysis scripts
 - Input: manual editing of file
 - Output: parameters saved in .m file to be loaded in later scripts
 
