@@ -56,7 +56,7 @@ Matlab code for novelty behavior analysis
 - similar to TimeStatistic, create summary array of number of bouts and average bout length across sessions and days
 - can also create structure containing frame numbers for each poke and approach (needed for MoSeqEventAlignedAnalysis.m)
 - Input: Config_NovAna, MiceIndex, .mat files from Analysis.m
-- Output: boutAnalysis_nose.csv, PokesApproaches.mat
+- Output: boutAnalysis_nose.csv, PokesApproaches.mat, DatasetName_poke_labels_N1.csv
 
 # Sample commands for using DeepLabCut and MoSeq
 
