@@ -77,3 +77,11 @@ ssh username@login.rc.fas.harvard.edu
 ```
 srun --pty --mem=500 -n 8 -N 1 -p test,shared -t 0-1:00 bash
 ```
+3. load necessary modules (anaconda, cuda)
+```
+module load Anaconda3/5.0.1-fasrc01
+module load cuda/8.0.61-fasrc01 cudnn/6.0_cuda8.0-fasrc01
+```
+to list loaded modules: ``` module list ```
+
+4. navigate to folder with data and environment yml file
