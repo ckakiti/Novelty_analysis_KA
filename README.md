@@ -70,5 +70,7 @@ Matlab code for novelty behavior analysis
 # Running MoSeq on the cluster
 
 1. Connect to cluster
+```
 ssh username@login.rc.fas.harvard.edu
+```
 2. start interactive session
