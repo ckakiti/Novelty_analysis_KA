@@ -66,3 +66,9 @@ Matlab code for novelty behavior analysis
 [Training a New Network for DeepLabCut](https://github.com/Rxie9596/Novelty_analysis/blob/master/Docs/Training_a_new_network.md)
 
 [MoSeq Sample Commands](https://github.com/Rxie9596/Novelty_analysis/blob/master/Docs/MoSeq_Example_Command.md)
+
+# Running MoSeq on the cluster
+
+1. Connect to cluster
+ssh username@login.rc.fas.harvard.edu
+2. start interactive session
