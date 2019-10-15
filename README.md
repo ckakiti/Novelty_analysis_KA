@@ -88,7 +88,18 @@ to list loaded modules: ``` module list ```
 ```
 cd /net/uchidafs1/uchidafs1/share_root/Lab/kakiti
 ```
-5. create moseq environment
+5. create and activate moseq environment
 ```
 conda env create -f moseq_cluster.yml
+source activate moseq_cluster
 ```
+OR
+```
+conda create --name moseq_cluster2 --file moseq_cluster2.txt
+source activate moseq_cluster2
+```
+6. navigate to folder with data
+```
+cd Dataset_20191007
+```
+
