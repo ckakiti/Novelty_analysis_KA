@@ -84,4 +84,11 @@ module load cuda/8.0.61-fasrc01 cudnn/6.0_cuda8.0-fasrc01
 ```
 to list loaded modules: ``` module list ```
 
-4. navigate to folder with data and environment yml file
+4. navigate to folder with yml file containing moseq environment instructions
+```
+cd /net/uchidafs1/uchidafs1/share_root/Lab/kakiti
+```
+5. create moseq environment
+```
+conda env create -f moseq_cluster.yml
+```
