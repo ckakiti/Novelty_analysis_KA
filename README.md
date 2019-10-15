@@ -74,4 +74,6 @@ Matlab code for novelty behavior analysis
 ssh username@login.rc.fas.harvard.edu
 ```
 2. start interactive session
-``` srun --pty --mem=50G -n 20 -N 1 -p test,shared -t 60 bash ```
+```
+srun --pty --mem=500 -n 8 -N 1 -p test,shared -t 0-60:00 bash
+```
