@@ -75,5 +75,5 @@ ssh username@login.rc.fas.harvard.edu
 ```
 2. start interactive session
 ```
-srun --pty --mem=500 -n 8 -N 1 -p test,shared -t 0-60:00 bash
+srun --pty --mem=500 -n 8 -N 1 -p test,shared -t 0-1:00 bash
 ```
