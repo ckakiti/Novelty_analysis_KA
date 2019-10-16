@@ -21,9 +21,9 @@ fsize=24;
 load('MoSeqDataFrame.mat');
 %Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Mice_Index_auto.m';
 %Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
-Mice_Index_path='../MiceIndex/MiceIndex_Chess.m';%'./Mice_Index.m';
+Mice_Index_path='../MiceIndex/MiceIndex_Hikin.m';%'./Mice_Index.m';
 run(Mice_Index_path);
-cd ../MoSeq/Chess_MoSeq
+cd ../MoSeq/Capoeira_MoSeq
 %load('test_NearObj_ts.mat')
 
 AnalysisDay=3;      % 3 = first novelty day
@@ -36,7 +36,7 @@ disp(['whichMouse: ' num2str(whichMouse)])
 
 trim_frame_start=899;
 % AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
-AllAct=csvread('Chess_poke_labels_N1.csv',0,0);         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+AllAct=csvread('Capoeira_poke_labels_N1.csv',0,0);         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 AllActLabels=AllAct(:,3);
 AllActLabels=AllActLabels-trim_frame_start;
 %AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;

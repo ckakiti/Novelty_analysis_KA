@@ -80,12 +80,12 @@ disp(['radius_cm: ' num2str(radius_cm), ' (unused)'])
 disp(['ppc: ' num2str(ppc)])
 disp(['fps: ' num2str(fps)])
 
-whichMouse = 'Tacoma';
-whichDate  = '190616';
+whichMouse = 'Nashville';
+whichDate  = '190425';
 whichSession = 'N1'; %Hab2 %N1 %R1(arm+delivery) %R2(consumption)
 whichFile = 1;
 
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Mitsuko_photometry_190617/' ...
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry2_DLC/' ...
     whichMouse '/' whichDate])
 
 disp('section 1')
@@ -96,10 +96,30 @@ load(FP_dir.name)
 ch00=cart_GCaMP;
 ch01=cart_tdTom;
 
-%poke_corrected = dir('*poke_corrected');
-%acttime_index = csvread(poke_corrected.name);
-acttime_index = pos_within_TTL;
-acttime2_index = acttime_index;
+rgbts_file = dir('*rgb_ts');
+rgbts = csvread(rgbts_file.name);
+
+poke_file = dir('*poke');
+approach_file = dir('*boutStart');
+acttime = csvread(poke_file.name);
+acttime2 = csvread(approach_file.name);
+
+% convert rgb/depth frame number to FP frame number
+actlen=length(acttime); %size(acttime,1);
+acttime_index=zeros(actlen,1);
+acttime2_index=zeros(actlen,1);
+for actiter=1:actlen
+    acttime_curr = find(rgbts(:,1)==acttime(actiter));
+    acttime2_curr = find(rgbts(:,1)==acttime2(actiter));
+    
+    if(~isempty(acttime_curr) && ~isempty(acttime2_curr))
+        acttime_index(actiter,1) = rgbts(acttime_curr,2);
+        acttime2_index(actiter,1) = rgbts(acttime2_curr,2);
+    end
+end
+
+% acttime_index = pos_within_TTL;
+% acttime2_index = acttime_index;
 
 disp('section 2')
 
@@ -171,8 +191,8 @@ disp('section 2')
 %MoSeqPos = load(posFile.name);
 %vel = MoSeqPos(:,3);
 %cd ../..
-cd Analyzed_Data
-posFile = dir('*0000.mat');% dir('*Converted.mat');
+cd Analyzed_Data_1obj %%%%%%%
+posFile = dir('*Converted.mat');% dir('*0000.mat'); % dir('*Converted.mat');
 DLCPos = load(posFile.name);
 load('Arena_Obj_Pos.mat');
 %obj_center = [-206.9 -129.2]; % for MoSeqPos Nashville 190425R centroid_mm
@@ -200,28 +220,34 @@ else
     cutoff = length(veltime_crop);
 end
 
-
+% smooth x and y positions
 xPos_body = DLCPos.Labels(veltime_crop,2);%14);
 yPos_body = DLCPos.Labels(veltime_crop,3);%15);
 xPos_smooth = smooth(xPos_body,30);
 yPos_smooth = smooth(yPos_body,30);
-xyPos_smooth = sqrt((obj_center(1,1)-xPos_smooth).^2 + ...
-                    (obj_center(1,2)-yPos_smooth).^2)/ppc; %units = cm
 
-% first average position every 15 frames (1s) then calculate velocity
+% first average x and y position every 15 frames (1s)
+%  then calculate velocity (difference in distance / dt)
 posWin = fps;
 disp(['fps: ' num2str(fps)])
-modPos = mod(length(xyPos_smooth),posWin);
-xyPos_smooth = xyPos_smooth(1:end-modPos);
-aPos = reshape(xyPos_smooth, posWin, []);
-bPos = mean(aPos,1);
+modPos = mod(length(xPos_smooth),posWin);
+xPos_smooth_cut = xPos_smooth(1:end-modPos);
+yPos_smooth_cut = yPos_smooth(1:end-modPos);
 
-% calculating velocity+acceleration from averaged xyPos
-vel = diff(bPos); %units = cm/s
+reshape_xPos = reshape(xPos_smooth_cut, posWin, []);
+reshape_yPos = reshape(yPos_smooth_cut, posWin, []);
+avg_xPos = mean(reshape_xPos,1);
+avg_yPos = mean(reshape_yPos,1);
+
+% calculating velocity+acceleration from averaged xPos/yPos
+diff_xPos = diff(avg_xPos);
+diff_yPos = diff(avg_yPos);
+dt = posWin/fps;
+vel = sqrt( (diff_xPos .* diff_xPos) + (diff_yPos .* diff_yPos) )/(dt*ppc); %units = cm/s
+
 vel_smooth = smooth(vel, 4);
-
 acc = diff(vel_smooth); %units = cm/s^2
-acc_smooth = smooth(acc, 4);
+% acc_smooth = smooth(acc, 4);
 
 disp('calculated vel/acc')
 
@@ -389,7 +415,7 @@ disp('section 6')
 %%
 close all
 
-if(strcmp(whichSession,'N1') || strcmp(whichSession,'H2'))
+if(strcmp(whichSession,'N1') || strcmp(whichSession,'N2') || strcmp(whichSession,'H2'))
     title_dFF_1 = 'GCaMP signals during approach';
     xlabel_dFF_1 = 'time - point of bout start (ms)';
     
@@ -431,7 +457,7 @@ end
 
 % average GCaMP activity aligned to event (poke, bout start, reward delivery, etc.)
 fig1 = figure(1);
-suptitle(whichMouse)
+suptitle([whichMouse, '-' whichDate])
 set(gcf, 'Position', [217 511 1089 518])
 
 fig_1 = subplot(1,2,1);
@@ -523,7 +549,7 @@ axis square
 wantToSave = input('Save? 0/1: ');
 if(wantToSave)
 %cd ./proc/Analyzed_Data
-cd ./Analyzed_Data
+cd ./Analyzed_Data_1obj
 saveas(fig1, ['FP_' whichMouse '_' whichSession '_DLC(r' num2str(radius_cm) ')_baseShift:'...
     num2str(baseShift) '.tif'])
 saveas(fig2, ['FP_raster_GCaMP_' whichMouse '_' whichSession '_poke_DLC_baseShift:'...
@@ -569,14 +595,14 @@ ylabel('GCaMP (raw)')
 
 subplot(1,3,3)
 GCaMP_curr_acc = GCaMP_curr(GCaMP_ind(1:end-3));
-scatter(acc_smooth(GCaMP_curr_acc>0), GCaMP_curr_acc(GCaMP_curr_acc>0), 'r.')
+scatter(acc(GCaMP_curr_acc>0), GCaMP_curr_acc(GCaMP_curr_acc>0), 'r.')
 xlabel('Acceleration (cm/s^2)')
 ylabel('GCaMP (raw)')
 %ylim([0.9 1.3])
 
 if(0)
 cd('./proc/Analyzed_Data')
-saveas(fig3, ['MoSeqFP_posVelAccGCaMP_' whichMouse '_' whichSession '_DLC.tif'])
+saveas(fig3, ['FP_posVelAccGCaMP_' whichMouse '_' whichSession '_DLC.tif'])
 cd ../..
 end
 
@@ -607,7 +633,7 @@ fig7 = figure(7);
 set(gcf, 'Position', [45 150 1873 505])
 title([whichMouse ': ' whichSession])
 hold on
-plot((1:cutoff/fps)/60, acc_smooth(1:cutoff/fps))
+plot((1:cutoff/fps)/60, acc(1:cutoff/fps))
 xlabel('Time (min)')
 ylabel('Acceleration (cm/s^2); smoothed, relative to object')
 

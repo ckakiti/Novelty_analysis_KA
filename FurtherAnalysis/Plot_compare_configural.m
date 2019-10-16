@@ -5,8 +5,11 @@ clc
 Config_NovAna
 % radius_cm = 10; %8; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-group_name = {'Chess_DLC'};
-mouse_name = {'Bishop', 'King', 'Knight', 'Pawn', 'Queen', 'Rook'};
+group_name = {'Rim_KO_DLC'};
+mouse_name = {'01', '02', '03', '04', '05', '06'};
+%    {'Au', 'Esquiva', 'Ginga', 'MeiaLua', 'Negativa', 'Queixada'};
+%    {'Appalachian', 'Arizona', 'Continental', 'JohnMuir', 'Long', 'Pacific'};
+%    {'Bishop', 'King', 'Knight', 'Pawn', 'Queen', 'Rook'};
 %    {'01', '02', '03', '04', '05', '06'};
 %    {'Luke', 'Martin', 'Matthias', 'Mattimeo'};
 %    {'Strange', 'Up', 'Arya', 'Jon'};
@@ -63,12 +66,14 @@ legend('Pos 1', 'Pos 2', 'Pos 3', 'Pos 4')
 xlim([0 X(end)+1])
 xticks(X);
 xticklabels(XTick);
-ylim([0 0.35])
+ylim([0 0.45])
 
 if(0)
     cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name{1} '/' ...
         mouse_name{currMouse} '/Analyzed_Data_4obj'])
     saveas(disPosFig,['timeNearPos_' mouse_name{currMouse} '.tif'])
+    close all
+    disp('saved')
 end
 
 %% normalize time spent around object by time spent in other 3 corners
@@ -79,17 +84,23 @@ for mouseiter = 1:size(timeStat_all,3)
     timeDistNorm(mouseiter,:) = currNorm';
 end
 
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name{1}])
-csvwrite('TimeStatistic_norm', timeDistNorm)
+if(0)
+    DisLabel = repmat({'Dist_norm'},length(mouse_name),1);
+    Table    = table(mouse_name',DisLabel,timeDistNorm);
+    
+    cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' group_name{1}])
+    writetable(Table, 'TimeStatistic_norm.csv');
+end
 
+%% plot normalized time spent around object
 close all
 timeDistFig=figure(1);
 set(timeDistFig, 'Position', [600 600 1200 450])
 
 hold on
-% for plotAll = 1:size(timeStat_all,3)
-    plot(X, timeDistNorm, 'Marker', '*', 'LineStyle', '-')
-% end
+for plotAll = 1:size(timeStat_all,3)
+    plot(X, timeDistNorm(plotAll,:), 'Marker', '*', 'LineStyle', '-')
+end
 
 title(['Time spent around objs (' ...
     num2str(round(Dis_te_frame/fps/60))  'min); Rad = ' num2str(radius_cm) 'cm'])

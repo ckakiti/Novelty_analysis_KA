@@ -5,10 +5,22 @@ clear
 clc
 close all
 
+% setName = 'Standard_CapoeiraHikingChess';
 setName = 'Capoeira_MoSeq';%'7day_preexposure';
 
-G1_Mice = 1:3;%[2 4 6];%[1 2 3 4]; %7:12;
-G2_Mice = 4:6;%[1 3 5];%[5 6 7 8]; %1:6;
+
+% Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+% Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
+% Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/Mice_Index.m';
+Mice_Index_path = '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_Capoeira.m';
+run(Mice_Index_path);
+
+detectCond = cat(1, Mice.novelty);
+cond2 = find(detectCond=='C');
+cond1 = find(detectCond=='S');
+
+G1_Mice = cond2';%1:3;%[2 4 6];%[1 2 3 4]; %7:12;
+G2_Mice = cond1';%4:6;%[1 3 5];%[5 6 7 8]; %1:6;
 G1_Days = [3 4 5 6]; %3:7;
 G2_Days = [3 4 5 6]; %3:7;
 
@@ -17,7 +29,8 @@ G3_Mice = 1:6; %1:8; %1:12;
 G3_Days = [1 2];
 
 %cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq %7day_preexposure_MoSeq
-cd /media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq
+% cd /media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
 load('MoSeqDataFrame.mat')
 %load('GeneralUsage.mat') %%%%%%%%%%%%%%
 cmap=jet(100);
@@ -25,11 +38,9 @@ fps=30;
 Syllablebinedge=[-6,-0.5:1:99.5];
 frameCutoff = 18000;
 
-%Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
-Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/Mice_Index.m';
-%'/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
-run(Mice_Index_path);
-load('NearObj_ts.mat')
+
+% load('NearObj_ts.mat')
+
 
 disp('section 1')
 %%
@@ -171,7 +182,7 @@ X=0:100;
 SyllablesX=-1:99;
 fsize=16;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Plot_GeneralUsage=figure(1);
 plot(X,GSortedusage,'b.-', 'LineWidth',1.5)
 hold on
@@ -240,7 +251,7 @@ ylabel('Fractional usage','FontSize',fsize)
 xlabel('Syllables','FontSize',fsize)
 xticks(X);
 xticklabels(SyllablesX(G2vsG1Sortedusageindex));
-
+%saveas(Plot_UsageCompare_sorted, [setName '_UsageCompare_sorted.tif'])
 
 %% MoSeq statistical analysis
 
@@ -273,6 +284,7 @@ for miceiter=1:length(Mice)
         Labels=double(MoSeqDataFrame.labels{MSidindex}(1:frameCutoff));
         
         %cd(['./vids/', Mice(miceiter).name])
+        cd('./Capoeira_MoSeq')
         cd(Mice(miceiter).name)
         cd(Mice(miceiter).ExpDay(dayiter).date)
         
@@ -310,7 +322,7 @@ for miceiter=1:length(Mice)
             addLabels = [addLabels toAdd];
         end
         
-        cd ../../..
+        cd ../../../..
     end
 end
 

@@ -1,35 +1,45 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear
+clc
+close all
+
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
+
 load('MoSeqDataFrame.mat')
 Syllablebinedge=[-6,-0.5:1:99.5];
 
-Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+MouseSet = 'Capoeira';
+% Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_' MouseSet '.m'];
 run(Mice_Index_path);
 
-cmap=cool(12);
-
 mksize=80;
-fsize=16;
+fsize=20;
 
 fps=30;
-starttime=0;         % in minute  Pending: in the future, this should depend on the starting frame of each experiments
-timeseg=0:5:30;      % in minute
+starttime=0;         % in minutes  Pending: in the future, this should depend on the starting frame of each experiments
+timeseg=0:2:10;      % in minutes
 timeseg=starttime+timeseg;
 frameseg=timeseg.*60.*fps;
 
-Analysis_Mice=1:8;
-Analysis_Day=1:6;     % first novelty day
-Plot_SingleDay=3;
-Plot_MultiDay=3:6;
+Analysis_Mice=1:length(Mice);
+Analysis_Day=1:6;     
+Plot_SingleDay=3;    % first novelty day
+Plot_MultiDay=3:6;   % all novelty days
+cmap=cool(2*length(Plot_MultiDay));
 
-IntSyl=70;          % Interesting Syllable
+IntSyl=9;            % Interesting Syllable
 
-Cnum=4;
-Snum=4;
+detectCond = cat(1, Mice.novelty);
+Cnum = find(detectCond=='C');
+Snum = find(detectCond=='S');
+cond2Color = [0.5 0.0 0.5];
+cond1Color = [1.0 0.5 0.0];
 
 CVSXTick={'Contextual' 'Stimulus'};
-CVSX=1:2;
+CVSX=1:2;            % number of novelty conditions
 
 for segiter=1:length(timeseg)-1
     IntersessionXTick{segiter}=[num2str(timeseg(segiter)) '-' num2str(timeseg(segiter+1))];
@@ -71,6 +81,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plotting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd(['/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/' MouseSet '_MoSeq'])
+
 syltime_total=zeros(length(Mice),1,length(Mice(1).ExpDay));
 syltime_per_minute=zeros(length(Mice),length(timeseg)-1,length(Mice(1).ExpDay));
 for miceiter=Analysis_Mice
@@ -80,87 +92,111 @@ for miceiter=Analysis_Mice
     end
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('section 1')
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% bar plot of total syllable usage (s) for each mouse, divided by novelty condition
+close all
 Plot_total_interaction_time=figure;
 
 Plotdata=syltime_total(:,:,Plot_SingleDay);
-csavg=[mean(Plotdata(1:Cnum,:)) mean(Plotdata(Cnum+1:Cnum+Snum,:))];
-csstd=[std(Plotdata(1:Cnum,:)) std(Plotdata(Cnum+1:Cnum+Snum,:))];
+csavg=[mean(Plotdata(Cnum,:)) mean(Plotdata(Snum,:))];
+csstd=[std(Plotdata(Cnum,:)) std(Plotdata(Snum,:))];
 
-bar(CVSX,csavg);
+b = bar(CVSX,csavg);
+b.FaceColor  = 'Flat';
+b.CData(1,:) = cond2Color;
+b.CData(2,:) = cond1Color; 
 hold on
 errorbar(CVSX,csavg,csstd,'.','LineWidth',2,'Color','black')
 hold on
+ 
+% for miceiter=1:length(Mice)
+%     if Mice(miceiter).novelty == 'C'
+%         scatter(1,Plotdata(miceiter),mksize,'filled','d')
+%         hold on 
+%     elseif Mice(miceiter).novelty == 'S'
+%         scatter(2,Plotdata(miceiter),mksize,'filled','d')
+%         hold on
+%     else
+%         error('Novelty class not defined');
+%     end
+% end
 
-for miceiter=1:length(Mice)
-    if Mice(miceiter).novelty == 'C'
-        scatter(1,Plotdata(miceiter),mksize,'filled','d')
-        hold on 
-    elseif Mice(miceiter).novelty == 'S'
-        scatter(2,Plotdata(miceiter),mksize,'filled','d')
-        hold on
-    else
-        error('Novelty class not defined');
-    end
-end
-
-legend('C vs S','SD','C4','C5','C6','C7','S4','S5','Mal','Wash')
+% legend(['C vs S','SD',{Mice.name}])
 set(Plot_total_interaction_time, 'position', [0 0 500 800]);
+set(gca,'FontSize',fsize)
 % ylim([0 50])
-title(['Syllable ' num2str(IntSyl) ' on novelty day 1 (CvsS_180831)'],'FontSize',fsize)
-ylabel(['Syllable ' num2str(IntSyl) ' Usage Time (s)'],'FontSize',fsize)
+%title(['Average syllable ' num2str(IntSyl) ' usage'])%on N1 (' MouseSet ')'])
+title({'Average syllable usage:','cautious approach'})
+ylabel(['Syllable Usage (s)'])
 xticks(CVSX);
 xticklabels(CVSXTick);
+xtickangle(45)
+ylim([0 50])
+set(gca,'YTick',[0 15 30 45])
 
+% saveas(Plot_total_interaction_time, [MouseSet '_MoSeq_avgUsage_syl', num2str(IntSyl), '.tif'])
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% plot syllable usage across time bins within 1 day, divide by novelty condition
+close all
 
 Plot_interaction_time=figure;
+set(Plot_interaction_time,'position',[680 495 710 455])
 
 Plotdata=syltime_per_minute(:,:,Plot_SingleDay);
 
-intersessioncavg=mean(Plotdata(1:Cnum,:));
-intersessioncstd=std(Plotdata(1:Cnum,:));
+intersessioncavg=mean(Plotdata(Cnum,:));
+intersessioncstd=std(Plotdata(Cnum,:));
 
-intersessionsavg=mean(Plotdata(Cnum+1:Cnum+Snum,:));
-intersessionsstd=std(Plotdata(Cnum+1:Cnum+Snum,:));
+intersessionsavg=mean(Plotdata(Snum,:));
+intersessionsstd=std(Plotdata(Snum,:));
 
-errorbar(IntersessionX,intersessioncavg,intersessioncstd,'LineWidth',1.5)
+errorbar(IntersessionX,intersessioncavg,intersessioncstd,'Color',cond2Color,'LineWidth',2)
 hold on
-errorbar(IntersessionX,intersessionsavg,intersessionsstd,'LineWidth',1.5)
+errorbar(IntersessionX,intersessionsavg,intersessionsstd,'Color',cond1Color,'LineWidth',2)
 hold on
 
-for miceiter=1:length(Mice)
-    if Mice(miceiter).novelty == 'C'
-        scatter(IntersessionX,Plotdata(miceiter,:),'Marker','o','MarkerFaceColor','b','LineWidth',1)
-        hold on
-    elseif Mice(miceiter).novelty == 'S'
-        scatter(IntersessionX,Plotdata(miceiter,:),'Marker','o','MarkerFaceColor','r','LineWidth',1)
-        hold on
-    else
-        error('Novelty class not defined');
-    end
-end
+% for miceiter=1:length(Mice)
+%     if Mice(miceiter).novelty == 'C'
+%         scatter(IntersessionX,Plotdata(miceiter,:),'Marker','o','MarkerFaceColor','b','LineWidth',1)
+%         hold on
+%     elseif Mice(miceiter).novelty == 'S'
+%         scatter(IntersessionX,Plotdata(miceiter,:),'Marker','o','MarkerFaceColor','r','LineWidth',1)
+%         hold on
+%     else
+%         error('Novelty class not defined');
+%     end
+% end
 xlim([0.5 length(timeseg)-0.5]);
 
-
-title(['Syllable ' num2str(IntSyl) ' per minute novelty day 1 (CvsS_180831)'],'FontSize',fsize)
-legend('Contextual','Stimulus','C4','C5','C6','C7','S4','S5','Mal','Wash')
-xlabel('Time Segments (min)','FontSize',fsize)
-ylabel(['Syllable ' num2str(IntSyl) ' Usage Time (s)'],'FontSize',fsize)
+set(gca,'FontSize',fsize)
+% title(['Syllable ' num2str(IntSyl) ' per minute N1 (' MouseSet ')'])
+%title(['Time course of syllable ' num2str(IntSyl) ' usage'])
+title({'Time course of syllable usage:','cautious approach'})
+legend(['Contextual','Stimulus',{Mice.name}])
+xlabel('Time Segments (min)')
+%ylabel(['Syllable ' num2str(IntSyl) ' Usage (s)'])
+ylabel('Syllable Usage (s)')
 xticks(IntersessionX);
 xticklabels(IntersessionXTick);
+set(gca,'YTick',[0 2 4 6])
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% saveas(Plot_interaction_time, [MouseSet '_MoSeq_usageAcrossSession_syl', num2str(IntSyl), '.tif'])
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% plot average syllable usage per novelty condition across novelty days
+
 Plot_interaction_time_multiday=figure;
 
 Plotdata=syltime_per_minute(:,:,Plot_MultiDay);
 
-intersessioncavg=mean(Plotdata(1:Cnum,:,:),1);
-intersessioncstd=std(Plotdata(1:Cnum,:,:),1);
+intersessioncavg=mean(Plotdata(Cnum,:,:),1);
+intersessioncstd=std(Plotdata(Cnum,:,:),1);
 
-intersessionsavg=mean(Plotdata(Cnum+1:Cnum+Snum,:,:),1);
-intersessionsstd=std(Plotdata(Cnum+1:Cnum+Snum,:,:),1);
+intersessionsavg=mean(Plotdata(Snum,:,:),1);
+intersessionsstd=std(Plotdata(Snum,:,:),1);
 
 for dayiter=1:length(Plot_MultiDay)
     plot(IntersessionX,intersessioncavg(:,:,dayiter),'LineWidth',1.5,'Color',cmap(dayiter,:))
@@ -176,4 +212,7 @@ xticks(IntersessionX);
 xticklabels(IntersessionXTick);
 xlabel('Time Segments (min)','FontSize',fsize)
 ylabel(['Syllable ' num2str(IntSyl) ' Usage Time (s)'],'FontSize',fsize)
-title(['Syllable ' num2str(IntSyl) ' per minute on all novelty days (CvsS_180831)'],'FontSize',fsize)
+title(['Syllable ' num2str(IntSyl) ' per min on all novelty days (Capoeira)'],'FontSize',fsize)
+
+% saveas(Plot_interaction_time_multiday, [MouseSet '_MoSeq_usageAcrossDays_syl', num2str(IntSyl), '.tif'])
+

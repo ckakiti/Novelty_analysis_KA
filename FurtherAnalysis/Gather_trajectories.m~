@@ -5,7 +5,7 @@ close all
 clc
 
 
-currMouse = 'temp';
+currMouse = 'IncPlane';
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/'])
 
@@ -17,15 +17,15 @@ names = {Mice.name};
 
 cd(currMouse);%, '/190305/'])
 % cd allFiles
-% cd Analyzed_Data_1obj/;
+cd Analyzed_Data_1obj/;
 
-trajs = dir('*Trajectory*.tif'); % dir('Heatmap*.tif');
+trajs = dir('Trajectory*.tif'); % dir('Heatmap*.tif');
 %sessionNames = {'1' '2' '3' '4' '5' '6' '7' '8' 'N1' 'N2' 'N3' 'N4'};
-% sessionNames = {'H1' 'H2' 'N1' 'N2' 'N3' 'N4' 'N5' 'N6' 'N7' 'N8' 'N9' 'N10'};
-sessionNames = [names(cond2) names(cond1)];
+sessionNames = {'H1' 'H2' 'N1' 'N2' 'N3' 'N4' 'N5' 'N6' 'N7' 'N8' 'N9' 'N10'};
+% sessionNames = [names(cond2) names(cond1)];
 
 fig1 = figure(1);
-% suptitle(currMouse)
+suptitle(currMouse)
 set(fig1, 'Position', [200 1 1500 900]);
 
 % suptitle([currMouse(1:2), ' ' currMouse(4:end)])
@@ -39,11 +39,11 @@ for i = 1:length(trajs)
 %     imageCropped = imcrop(image, [550 150 1150 950]);
     
     if(i<=2)
-        subplot(2, 3, i)
+        subplot(3, 3, i)
         imshow(imageCropped, 'InitialMagnification', 60)
         title(sessionNames(i))
     else
-        subplot(2, 3, i) %i+1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        subplot(3, 3, i+1) %i+1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         imshow(imageCropped, 'InitialMagnification', 50)
         title(sessionNames(i))
     end

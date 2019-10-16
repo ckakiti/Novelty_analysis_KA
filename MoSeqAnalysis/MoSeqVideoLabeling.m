@@ -3,23 +3,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Labeling_mice=[2]
+clear
+close all
+clc
+
+Labeling_mice=[1]
 Labeling_days=[3]
 BarHeight=30;
-Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+% Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_Hiking.m';
 run(Mice_Index_path);
 
 tic
+cd '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq'
 load('MoSeqDataFrame.mat');
-cd('Videos');
+% cd('Videos');
+cd Hiking_MoSeq
 
-% for miceiter=1:length(Mice)
-for miceiter=Labeling_mice
+ for miceiter=1:length(Mice)
+% for miceiter=Labeling_mice
     cd(Mice(miceiter).name);
 
     % for dayiter=1:length(Mice(miceiter).ExpDay)
     for dayiter=Labeling_days
         cd(Mice(miceiter).ExpDay(dayiter).date)
+        sessionName = dir('session*');
+        cd(sessionName.name)
+        cd proc
+        
         % find MSid index
         MSidindex=1;
         for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
@@ -138,6 +149,17 @@ for miceiter=Labeling_mice
         cd ..
     end
 
-    cd ..
+    cd ../../..
 end
  cd ..
+ 
+%%
+pokes = csvread('Hiking_poke_labels_N1.csv',0,0);
+pokes_Curr = pokes(pokes(:,1)==1,:);
+
+pokes_curr_depth = pokes_Curr(:,3);
+pokes_too_early = find((pokes_curr_depth-899)<0,1,'last');
+pokes_curr_syl_MoSeq = Labels(pokes_curr_depth(pokes_too_early+1:end)-899)';
+pokes_curr_syl_manual = pokes_Curr(pokes_too_early+1:end,4);
+
+mismatch = find(pokes_curr_syl_MoSeq~=pokes_curr_syl_manual);

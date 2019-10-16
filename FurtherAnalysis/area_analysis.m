@@ -5,7 +5,7 @@ close all
 clc
 
 Config_NovAna
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/')
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/')
 run('MiceIndex')
 
 % only analyze first 10 minutes of video
@@ -24,8 +24,8 @@ files    = dir;
 whichDir = [files.isdir];
 nameDir  = files(whichDir);
 nameDir  = {nameDir.name};
-nameDir(ismember(nameDir,{'.','..','Retrain_Sep17'})) = [];
-days     = 4;
+nameDir(ismember(nameDir,{'.','..','Retrain_Sep17','temp'})) = [];
+days     = 6;
 
 % time spent in periphery, within center circle, or different quadrants
 periphTime = zeros(length(nameDir),days);
@@ -36,10 +36,10 @@ quad3Time  = zeros(length(nameDir),days);
 quad4Time  = zeros(length(nameDir),days);
 
 for mousei = 1:length(nameDir)
-    cd([nameDir{1,mousei}, '/Analyzed_Data'])
+    cd([nameDir{1,mousei}, '/Analyzed_Data_1obj'])
     load('Arena_Obj_Pos.mat','arena')
     
-    matFiles = dir('*rgb.mat');
+    matFiles = dir('*rgb_Converted.mat');
     matFiles = cat(1, matFiles.name);
     
     arenaCenterPos = [(arena(1,1)+arena(1,3))/2 (arena(1,2)+arena(1,4))/2];

@@ -4,10 +4,10 @@ clear
 close all
 clc
 
-Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/Mice_Index.m';
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_Chess.m';
 run(Mice_Index_path);
 
-currSet = 'Capoeira_DLC';
+currSet = 'Chess_DLC';
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/', ...
     currSet, '/'])
@@ -18,8 +18,8 @@ for miceiter = 1:length(Mice)
     
     allRGBts = dir('*rgb_ts*');
     for fileiter = 1:length(allRGBts)
-        cd 'Analyzed_Data'
-        currFiles = dir('*Converted.mat');
+        cd 'Analyzed_Data_1obj'
+        currFiles = dir('*rgb.mat');%'*Converted.mat');
         currLabels = load(currFiles(fileiter).name, 'Labels');
         temp = currLabels.Labels;
         temp2 = temp(:,21);

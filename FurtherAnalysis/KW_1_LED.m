@@ -3,8 +3,8 @@ clear
 close all
 clc
 
-currMouse = 'Tacoma';
-currDate  = '190618';
+currMouse = 'Queens';
+currDate  = '190617';
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Mitsuko_photometry_190617/' ...
     currMouse, '/' currDate])
 %cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/FP_Test/FP_Test_190422/
@@ -23,7 +23,7 @@ for i = 1:1
 end
 
 % import LED position (from MarkObjPos.m)
-cd Analyzed_Data
+cd Analyzed_Data_1obj
 load('Arena_Obj_Pos.mat')
 cd ..
 
@@ -42,7 +42,7 @@ disp('start')
 save_time = [5000:5000:numberOfFrames-1 numberOfFrames];
 %sync_light = zeros(1,numberOfFrames);
 %sync_light = csvread('save_42000');
-for frame = 38410%:numberOfFrames %3000
+for frame = 1:numberOfFrames %3000
     disp(frame)
     
     % Extract one frame and make it grayscale
@@ -78,7 +78,7 @@ disp('end')
 %middle = (max(sync_norm)-min(sync_norm))/2;
 %crosses = crossing(sync_norm, [], middle);
 sync_norm = double(sync_light);
-middle = 35;
+middle = 25;
 crosses = crossing(sync_norm, [], middle);
 
 disp(['middle= ' num2str(middle)])

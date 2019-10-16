@@ -4,12 +4,12 @@ close all
 
 Config_NovAna;
 
-currSet = 'Rim_KO_DLC'; %%%
-currMouse = '06';
-% currDate  = '190618'; %190702
-timeShift = 4605;%901-900; 
+currSet = 'Machines_DLC'; %%%
+currMouse = 'Wheel';
+% currDate  = 'allFiles'; %190702
+timeShift = 225;%901-900; 
 
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse]) %'/' currDate]) %%
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse])% '/' currDate]) %%
 %cd(['/media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq/' currSet '/' currMouse])% '/' currDate]) %%%
 
 %currSessionName = dir('session*'); %%%
@@ -21,10 +21,10 @@ PathRoot=[path '/'];
 %vn = vn.name; %%%
 %flen=1; %%%
 
-filelist=dir([PathRoot,'*.mp4']);%'*.csv']); %%
+filelist=dir([PathRoot,'*.csv']); %%
 flen = length(filelist); %%
 fn = filelist(flen).name; %%
-vn=filelist(end).name;%[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
 % Labels = csvread(fn,3,0); %%
 
 video=VideoReader(vn);
@@ -46,7 +46,7 @@ end
 for fi =flen:-1:1
     
     fn = filelist(fi).name; %%
-    vn=fn;%[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
+    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
 %     Labels = csvread(fn,3,0); %%
     
     video=VideoReader(vn);
@@ -93,11 +93,11 @@ for fi =flen:-1:1
                 cur_obj{objNum}(1,2) + cur_obj{objNum}(1,4)];
             obj_center(fi,objNum) = {cur_obj_center};
         end
-    
+        
         close all
         
     end
-    
+
 end
 
 video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
@@ -125,13 +125,13 @@ save('Arena_Obj_Pos.mat')
 cd ..
 cd /home/alex/Programs/Novelty_analysis_KA
 
-
+%%
 fourObj = input('Create 4obj file? 0/1: ');
 if(fourObj==1)
 % modify Arena_Obj_Pos.mat (when only 1 obj in arena, add 3 pseudo-positions at each corner)
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' ...
-    currSet '/' currMouse '/Analyzed_Data'])
+    currSet '/' currMouse '/Analyzed_Data_1obj'])
 
 if isfile('Arena_Obj_Pos_4obj.mat')
     error('this code has already been run')
@@ -147,7 +147,8 @@ copyfile Arena_Obj_Pos.mat Arena_Obj_Pos_4obj.mat
 load('Arena_Obj_Pos.mat')
 
 path=cd;
-PathRoot=path(1:end-13);%[path '/'];
+% PathRoot=path(1:end-13);%[path '/'];
+PathRoot=path(1:end-18);
 filelist=dir([PathRoot,'*.csv']);
 flen = length(filelist);
 number_of_obj = 4;

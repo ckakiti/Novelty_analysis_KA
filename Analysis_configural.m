@@ -40,7 +40,7 @@ Config_NovAna;
 % radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Chess_DLC/Rook
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/03
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
@@ -69,7 +69,7 @@ for fiter =1:flen
 end
 flen = length(filelist);
 
-
+%%
 for fiter =1:flen%%%%%
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];

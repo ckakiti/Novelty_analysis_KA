@@ -1,0 +1,50 @@
+%%
+clear
+close all
+clc
+
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/
+
+run('MiceIndex')
+detectCond = cat(1, Mice.novelty);
+cond2 = find(detectCond=='C');
+cond1 = find(detectCond=='S');
+reorder = [cond2; cond1];
+
+files    = dir;
+whichDir = [files.isdir];
+nameDir  = files(whichDir);
+nameDir  = {nameDir.name};
+nameDir(ismember(nameDir,{'.','..','temp'})) = [];
+
+timeNearN1 = [];
+
+for fileiter = 1:length(reorder) %1:length(nameDir)
+    cd(nameDir{reorder(fileiter)})
+    disp(nameDir{reorder(fileiter)})
+    cd Analyzed_Data_1obj
+    
+    conv = dir('*Converted.mat');
+    load(conv(3).name)
+    isNear = Labels(1:27000,21);
+    timeNearN1 = [timeNearN1 isNear];
+    
+    cd ../..
+end
+
+timeNearN1_cumul = cumsum(timeNearN1)/15;
+xaxis_s          = (1:27000)/15;
+timeNearN1_x     = repmat(xaxis_s',1,6);
+
+%%
+close all
+
+plot(timeNearN1_x, timeNearN1_cumul)
+legend(nameDir(reorder),'location','Northwest')
+title('Time spent near obj: N1')
+xlabel('Time in session (s)')
+ylabel('Cumulative time spent near obj (s)')
+
+if(0)
+    saveas(gca, 'timeNearN1_cumulative.tif')
+end

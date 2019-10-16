@@ -8,19 +8,21 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Holidays/')
 
-start_min=0.5;
-end_min=start_min+10;
-startframe=uint16(750);%start_min.*60.*fps;
-endframe=uint16(end_min.*60.*fps);
+% start_min=0.5;
+% end_min=start_min+10;
+% startframe=uint16(start_min.*60.*fps);
+% endframe=uint16(end_min.*60.*fps);
+startframe = Dis_ts_frame;
+endframe   = Dis_te_frame;
 
 folderpath = cd;
 folderd = dir(folderpath);
 isub = [folderd(:).isdir];
 foldernames = {folderd(isub).name}'; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-foldernames(ismember(foldernames,{'.','..','Retrain_Sep17'})) = []; %%%%%%%%%%%%%%%%%%%%%%%
+foldernames(ismember(foldernames,{'.','..','Retrain_Sep17','temp'})) = []; %%%%%%%%%%%%%%%%%%%%%%%
 folderlen=length(foldernames);
 
 % for orientation analysis (smoothing)
@@ -29,28 +31,81 @@ Swindow=40;
 %%
 for folderi=1:folderlen
     cd(foldernames{folderi});
-    cd Analyzed_Data
+%     poke_file = dir('*poke');
+%     disp(poke_file.name)
+%     pokes = csvread(poke_file.name);
+    
+    cd Analyzed_Data_1obj
     load('Arena_Obj_Pos.mat','arena')
     %cd ./body %%%%%%%%%%%%%%%%
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir(['*rgb.mat']); % 'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) %%%%%%%%%%%%%%%%%%
+    filelist=dir(['*rgb_Converted.mat']); % 'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) %%%%%%%%%%%%%%%%%%
     flen = length(filelist);
 
     for filei = 1:flen
         filename = filelist(filei).name;
         load(filename)
-        
         LabelsCut=Labels(startframe:endframe,:);
-                    
+        
+        
         % Analyze time spent near obj (within specified radius)
         Time_distance(filei) = sum(LabelsCut(:,21));
+        
         
         % Analyze time spent oriented to obj (after smoothing)
         orientSmooth = smoothdata(LabelsCut(:,22),'rloess',Swindow);
         isOrient = intersect(find(orientSmooth<=angle_radius), find(orientSmooth>=(-angle_radius)));
         Time_angle(filei) = length(isOrient);
+        
+%         % sanity orientation histogram
+%         histCurr = figure(1);
+%         histogram(abs(orientSmooth), 0:15:180)
+%         title([foldernames{folderi} ': Day' num2str(filei)])
+%         xlabel('abs(angle)')
+%         ylim([0 2500])
+%         saveas(histCurr,['OrientHist_' [foldernames{folderi} '_Day' num2str(filei)] '.tif'])
+        
+
+%         % scatter plot of body length as a function of distance to object
+        bodyLen = sqrt( (LabelsCut(:,11)-LabelsCut(:,2)).^2 + ...
+                        (LabelsCut(:,12)-LabelsCut(:,3)).^2 )/ppc;
+% 
+%         bodyLenFigure=figure(3);
+%         scatter(LabelsCut(:,17), bodyLen, 20,'filled');
+%         title(['Len vs Dist ' foldernames{folderi}, ': Day', num2str(filei)],...
+%             'Interpreter', 'none');
+%         ylim([0 15])
+%         xlabel('Distance to object (cm)')
+%         ylabel('Body length')
+%         set(bodyLenFigure, 'position', [0 0 1200 900]);
+
+        
+%         % plot body length aligned to each poke
+%         pokeMat = zeros(length(pokes), fps*2);
+%         for pokeiter = 1:length(pokes)
+%             pokeMat(pokeiter,:) = bodyLen(pokes(pokeiter)-fps:pokes(pokeiter)+(fps-1));
+%         end
+        
+%         close all        
+%         bodyLenPokeFigure=figure(4);
+%         hold on
+%         plot(pokeMat', 'Color', [0.8 0.8 0.8])
+%         plot(mean(pokeMat,1), 'k')
+%         
+%         title(['Body length aligned to pokes (' foldernames{folderi}, ': Day', num2str(filei) ')'],...
+%             'Interpreter', 'none');
+%         xlabel('Time (s)')
+%         ylabel('Body length (cm)')
+%         ylim([0 15])
+%         curr_xtick = get(gca, 'xtick');
+%         new_xtick = arrayfun(@num2str, curr_xtick-fps, 'Uniform', false);
+%         set(gca,'xticklabel', new_xtick)
+%         set(gca, 'FontSize', 16)
+%         set(bodyLenPokeFigure, 'position', [0 0 800 700]);
+%         saveas(bodyLenPokeFigure,['BodyLenPoke_' [foldernames{folderi} '_Day' num2str(filei)] '.tif'])
+        
         
         % Analyze time spent in periphery
         arenaCorners = [arena(filei,1) arena(filei,3) arena(filei,3) arena(filei,1) arena(filei,1); ...
@@ -81,7 +136,7 @@ for folderi=1:folderlen
         
         Swindow=40;
         SDis=smoothdata(centerCalc,'rloess',Swindow);
-        SDis_pix=smoothdata([centerCalcX centerCalcY],'rloess',Swindow);
+%         SDis_pix=smoothdata([centerCalcX centerCalcY],'rloess',Swindow);
         
         cumDist = [0; cumsum( sqrt( diff(SDis(:,1)).^2+diff(SDis(:,2)).^2 ) )];
         totalDistCut(filei) = cumDist(end); % cm

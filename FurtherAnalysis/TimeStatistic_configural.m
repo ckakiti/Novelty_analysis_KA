@@ -4,12 +4,12 @@ clc
 
 Config_NovAna % ppc = 42/6.3;
 
-currMouse = '06';
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/' currMouse '/'])
+currMouse = 'Queixada';
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/' currMouse '/'])
 
 start_min=(10/60);
 end_min=start_min+10;
-fps=25;
+fps=15; %%%%%%%%%%%%%%%%%%%%%%
 startframe=start_min.*60.*fps;
 endframe=end_min.*60.*fps;
 
@@ -17,7 +17,8 @@ folderpath = cd;
 folderd = dir(folderpath);
 isub = [folderd(:).isdir];
 foldernames = {folderd(isub).name}';
-foldernames(ismember(foldernames,{'.','..','Analyzed_Data','RetrainSep17','temp'})) = [];
+foldernames(ismember(foldernames,{'.','..',...
+    'Analyzed_Data','Analyzed_Data_1obj','RetrainSep17','temp'})) = [];
 folderlen=length(foldernames);
 
 % squareSize = 4; % must be a factor of both vidWidth and vidHeight
@@ -29,7 +30,7 @@ folderlen=length(foldernames);
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir([PathRoot, '*rgb.mat']); %[currMouse '*.mat']]); %foldernames{folderi}, '*.mat']);
+    filelist=dir([PathRoot, '*rgb_Converted.mat']); %[currMouse '*.mat']]); %foldernames{folderi}, '*.mat']);
     flen = length(filelist);
 
     for filei = 1:flen

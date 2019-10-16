@@ -41,10 +41,10 @@ clc
 cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/06
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/Wheel/
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-cd Analyzed_Data;
+cd Analyzed_Data_1obj;
 load('Arena_Obj_Pos.mat');
 cd ..
 pathname = cd;
@@ -53,14 +53,17 @@ filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
 flen = length(filelist);
 
 for fiter =1:flen
-    if ~isempty(strfind(filelist(fiter).name,'abeled'))
-        filelist(fiter)=[];
+    if(flen<=length(filelist))
+        if ~isempty(strfind(filelist(fiter).name,'abeled'))
+            filelist(fiter)=[];
+            fiter=fiter-1;
+        end
     end
 end
 flen = length(filelist);
 
 tic;
-for fiter =1:flen %%%%%%%% 
+for fiter = 1:flen %%%%%%%% 
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];
     disp(['Analyzing: ' fn]);
@@ -68,14 +71,16 @@ for fiter =1:flen %%%%%%%%
     Labels = csvread(fn,3,0);
     len = length(Labels(:,1));
     Labels = [Labels zeros(len,14)];
+    Dis_te_frame = min(Dis_te_frame, size(Labels,1));
+    Ang_te_frame = min(Ang_te_frame, size(Labels,1));
 
     %***********************************************************
     % Parameters
     %***********************************************************
     vspace=3;      % average frame space to calculate the velocity Must be a odd intiger
     % Plot parameters
-    plot_fs = 1;      % Distance/Orientation plot start and end frame
-    plot_fe = fpm*10; %10 %8
+    plot_fs = Dis_ts_frame;      % Distance/Orientation plot start and end frame
+    plot_fe = Dis_te_frame;%min(fpm*10, size(Labels,1));
 
     x_length=video_xlen;   % Heatmap x and y axis length (pixels)
     y_length=video_ywid;
@@ -195,13 +200,15 @@ for fiter =1:flen %%%%%%%%
 
     % Plot trajectory
     Trafigure=figure('visible','off');
-    scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),8,'filled');
+%     Trafigure=figure('visible','on');
+    scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),6,'filled');
+%     plot(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),'k')
     rectangle('Position',[arena(fiter,1),arena(fiter,2),...
                           arena(fiter,3)-arena(fiter,1),...
-                          arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',4)
+                          arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',8)
     rectangle('Position',[obj(fiter,1),obj(fiter,2),...
                           obj(fiter,3)-obj(fiter,1),obj(fiter,4)-obj(fiter,2)],...
-                          'EdgeColor','r','linewidth',4)
+                          'EdgeColor','r','linewidth',2)
     
     hold on
     th = 0:pi/50:2*pi;
@@ -209,7 +216,7 @@ for fiter =1:flen %%%%%%%%
     y  = obj_center(fiter,2);
     xunit = radius * cos(th) + x;
     yunit = radius * sin(th) + y;
-    plot(xunit, yunit)
+    plot(xunit, yunit,'r--','linewidth',3)
     
     set(gca,'ydir','reverse')
     title(['Trajectory ' vn(1:end-8) ': '...
@@ -223,7 +230,7 @@ for fiter =1:flen %%%%%%%%
     % Save
     % ***********************************************************
     % pause
-    cd Analyzed_Data
+    cd Analyzed_Data_1obj
 
 %     mkdir([vn(1:end-4) '_Plots'])
 %     cd([vn(1:end-4) '_Plots'])
