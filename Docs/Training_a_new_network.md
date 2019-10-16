@@ -19,19 +19,27 @@ python3 Step1_SelectRandomFrames_fromVideos.py
  - File > Import > Image Sequence
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.38.43.png)
  - within pop-up window navigate to folder with images to be labeled (Generating_a_Training_Set -> data-YOUR_NETWORK)
+ ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.41.15.png)
  - click first image, then click open
  - you will see window pop up named "Sequence Options"
+ ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.41.37.png)
  - Make sure 2 boxes are checked: "Sort names numerically" and "Use virtual stack"
  - window will pop up with all your images in stack (scroll bar at bottom)
  - in tool bar (with File, Edit, etc), click Multi-point button (to right of angle button and to left of wand button)
      - you may see this botton as "point tool" (single star). if this happens, right click and change to be multi-point
+  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.42.48.png)
+  ![alt_text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.43.04.png)
  - click on paws/fingers in EXACT order for every image (if a point can't be determined, click in the top left corner of the image, so that X and Y positions are less than 50 pixels)
+ ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.46.30.png)
+  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.48.13.png)
  - once you get through all frames, go to Analyze -> Measure
+ ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.48.36.png)
  - window will pop up: "Results"
      - the points you labeled will appear in rows, with each column representing a different feature of that point
      - make sure that the number of rows corresponds to N x BP where N = number of frames and BP = number of body parts you label in each frame
+ ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.49.40.png)
  - save Results window as "Results.csv" in same folder as the images you're labeling
-
+![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.50.13.png)
 
 3. Formatting the data I:
 ```
