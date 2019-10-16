@@ -17,6 +17,7 @@ python3 Step1_SelectRandomFrames_fromVideos.py
 
  - open ImageJ or Fiji
  - File > Import > Image Sequence
+ ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.38.43.png)
  - within pop-up window navigate to folder with images to be labeled (Generating_a_Training_Set -> data-YOUR_NETWORK)
  - click first image, then click open
  - you will see window pop up named "Sequence Options"
