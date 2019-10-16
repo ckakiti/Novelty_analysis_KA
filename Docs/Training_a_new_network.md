@@ -22,6 +22,7 @@ python3 Step1_SelectRandomFrames_fromVideos.py
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.41.15.png)
  - click first image, then click open
  - you will see window pop up named "Sequence Options"
+ 
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.41.37.png)
  - Make sure 2 boxes are checked: "Sort names numerically" and "Use virtual stack"
  - window will pop up with all your images in stack (scroll bar at bottom)
