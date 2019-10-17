@@ -5,15 +5,15 @@ docker start yuxie_GPU1
 docker exec -it yuxie_GPU1 /bin/bash
 ```
 #### Starting the docker environment
-0. Configuration of your project:
+##### 0. Configuration of your project:
 
 Edit `myconfig.py`
-1. Selecting data to label:
+##### 1. Selecting data to label:
 ```
 cd Generating_a_Training_Set
 python3 Step1_SelectRandomFrames_fromVideos.py
 ```
-2. Label the frames:
+##### 2. Label the frames:
 
  - open ImageJ or Fiji
  - File > Import > Image Sequence
@@ -45,19 +45,19 @@ python3 Step1_SelectRandomFrames_fromVideos.py
  - save Results window as "Results.csv" in same folder as the images you're labeling
 ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.50.13.png)
 
-3. Formatting the data I:
+##### 3. Formatting the data I:
 ```
 python3 Step2_ConvertingLabels2DataFrame.py
 ```
-4. Checking the formatted data:
+##### 4. Checking the formatted data:
 ```
 python3 Step3_CheckLabels.py
 ```
-5. Formatting the data II:
+##### 5. Formatting the data II:
 ```
 python3 Step4_GenerateTrainingFileFromLabelledData.py
 ```
-6. Training the deep neural network:
+##### 6. Training the deep neural network:
 
 If using for the first time, download a pretrained network:
 ```
@@ -74,7 +74,7 @@ Start training
 cd pose-tensorflow/models/data_set_name/train
 TF_CUDNN_USE_AUTOTUNE=0 CUDA_VISIBLE_DEVICES=0 python3 ../../../train.py 
 ```
-7. Evaluate your network:
+##### 7. Evaluate your network:
 ```
 CUDA_VISIBLE_DEVICES=0 python3 Step1_EvaluateModelonDataset.py #to evaluate your model [needs TensorFlow]
 python3 Step2_AnalysisofResults.py  #to compute test & train errors for your trained model
