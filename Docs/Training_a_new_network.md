@@ -30,7 +30,7 @@ python3 Step1_SelectRandomFrames_fromVideos.py
      - you may see this botton as "point tool" (single star). if this happens, right click and change to be multi-point
   ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.42.48.png)
   ![alt_text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.43.04.png)
- - click on body features in EXACT order for every image
+ - click on body features in EXACT order for every image (order specified in myconfig.py - Step 2, bodyparts variable)
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.46.30.png)
  
     (if a point can't be determined, click in the top left corner of the image, so that X and Y positions are less than 50 pixels)
