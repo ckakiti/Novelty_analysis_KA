@@ -60,12 +60,12 @@ Matlab code for novelty behavior analysis
 
 # Sample commands for using DeepLabCut and MoSeq
 
-[Running an existing network (Korleki)](https://github.com/Rxie9596/Novelty_analysis/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
+[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
 
 
-[Training a New Network for DeepLabCut](https://github.com/Rxie9596/Novelty_analysis/blob/master/Docs/Training_a_new_network.md)
+[Training a New Network for DeepLabCut](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
 
-[MoSeq Sample Commands](https://github.com/Rxie9596/Novelty_analysis/blob/master/Docs/MoSeq_Example_Command.md)
+[MoSeq Sample Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
 
 # Running MoSeq on the cluster
 
