@@ -1,5 +1,5 @@
 # Applying already trained network to new videos (for Korleki, Working Locally)
-#### 1. Srating docker: 
+#### 1. Starting docker: 
 Login the local computer, open a new terminal window check out if the docker container is running or not
 ```
 docker ps
