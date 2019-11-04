@@ -8,7 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Predators_DLC/
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Holidays/')
 
 % start_min=0.5;

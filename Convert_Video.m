@@ -4,7 +4,7 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Prey_DLC/
 
 files    = dir;
 whichDir = [files.isdir];
@@ -23,7 +23,7 @@ for mouseiter=1:length(mouseList)
     nameDir  = {nameDir.name};
     nameDir(ismember(nameDir,{'.','..','25fps','temp'})) = [];
     dateList = nameDir;
-    for dateiter = 6:length(dateList)
+    for dateiter = 1:length(dateList)
         cd(dateList{dateiter})
         
         filelist = dir('*.mp4');

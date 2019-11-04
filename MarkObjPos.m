@@ -4,8 +4,8 @@ close all
 
 Config_NovAna;
 
-currSet = 'Machines_DLC'; %%%
-currMouse = 'Wheel';
+currSet = 'Predators_DLC'; %%%
+currMouse = 'Wolf';
 % currDate  = 'allFiles'; %190702
 timeShift = 225;%901-900; 
 
@@ -125,7 +125,7 @@ save('Arena_Obj_Pos.mat')
 cd ..
 cd /home/alex/Programs/Novelty_analysis_KA
 
-%%
+% %
 fourObj = input('Create 4obj file? 0/1: ');
 if(fourObj==1)
 % modify Arena_Obj_Pos.mat (when only 1 obj in arena, add 3 pseudo-positions at each corner)

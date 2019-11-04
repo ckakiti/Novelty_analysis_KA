@@ -4,8 +4,8 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine
-run('MiceIndex_combine4')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Predators_DLC
+run('MiceIndex')
 
 oneStat = 0;
 
@@ -24,7 +24,7 @@ if(oneStat)
     Y_ang = Y_dis;
 else
     % two different statistics to plot (e.g. timeNearObj/orient or boutNum/boutLen
-    timeStat = readtable('TimeStatistic_combine4.csv');%_10min_old.csv');
+    timeStat = readtable('TimeStatistic.csv');%_10min_old.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
     timeStat2 = timeStat{:,3:end};
