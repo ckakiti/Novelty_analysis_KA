@@ -2,7 +2,7 @@
 
 Matlab code for novelty behavior analysis
 
-## Workflow
+## DLC Workflow
 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-config_novanam)
 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
 2. [Analysis.m](https://github.com/ckakiti/Novelty_analysis_KA#2-analysism)
@@ -11,7 +11,7 @@ Matlab code for novelty behavior analysis
 5. [Plot_compare.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#5-plot_comparem)
 6. [bout_analysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-bout_analysism)
 
-## Script details
+## DLC Script Details
 ### 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Config_NovAna.m)
 - basic information for current dataset including name of network used to run DeepLabCut, video file format (.mp4 or .avi), vid length and width, fps, radius_cm, and angle radius
 - IMPORTANT: info is different for each dataset, double check before running other analysis scripts
@@ -57,6 +57,20 @@ Matlab code for novelty behavior analysis
 - can also create structure containing frame numbers for each poke and approach (needed for MoSeqEventAlignedAnalysis.m)
 - Input: Config_NovAna, MiceIndex, .mat files from Analysis.m
 - Output: boutAnalysis_nose.csv, PokesApproaches.mat, DatasetName_poke_labels_N1.csv
+
+
+## MoSeq Workflow
+0. Shell_Script.sh
+1. ModelDataTransfer.py
+
+## MoSeq Script Details
+### 0. Shell_Script.sh
+- contains moseq2-extract, moseq2-pca, moseq2-model, and moseq2-viz
+
+
+### 1. ModelDataTransfer.py
+- creates MoSeqDataFrame.mat
+- Input: moseq2-index.yaml, my_model.p
 
 # Sample commands for using DeepLabCut and MoSeq
 
