@@ -69,8 +69,8 @@ Matlab code for novelty behavior analysis
 
 
 ### 1. ModelDataTransfer.py
-- creates MoSeqDataFrame.mat
 - Input: moseq2-index.yaml, my_model.p
+- Output: MoSeqDataFrame.mat
 
 # Sample commands for using DeepLabCut and MoSeq
 
