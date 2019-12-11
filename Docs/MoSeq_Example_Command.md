@@ -1,7 +1,7 @@
 # MoSeq Example Commands
-1. Activate conda environment for MoSeq
+1. Activate conda environment for MoSeq (old: moseq2, updated: moseq_1.2)
 ```
-source activate moseq2
+source activate moseq_1.2
 ```
 2. Use MoSeq extract
 
@@ -56,7 +56,7 @@ moseq2-pca train-pca -c 6 -n 1
 moseq2-pca train-pca -c 6 -n 1 --missing-data
 ```
 
-4. Aplly PCA
+4. Apply PCA
 ```
 moseq2-pca apply-pca -c 6 -n 1
 ```
