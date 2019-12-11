@@ -119,7 +119,7 @@ You can also add the group information by editing the `group` field in the `mose
 
 * to quickly extract uuids from moseq2-index.yaml:
 - open moseq2-index.yaml in visual studio
-- CTRL F (find), enter this expression into box:
+- CTRL F, enter this expression into box:
 ```
 (path:\r?$)|(.*00.h5)|(.*yaml)|(\s uuid.*)
 ```
