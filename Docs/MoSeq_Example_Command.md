@@ -120,9 +120,9 @@ You can also add the group information by editing the `group` field in the `mose
 * to quickly extract uuids from moseq2-index.yaml:
   - open moseq2-index.yaml in visual studio
   - CTRL F, enter this expression into box:
-```
-(path:\r?$)|(.*00.h5)|(.*yaml)|(\s uuid.*)
-```
+  ```
+  (path:\r?$)|(.*00.h5)|(.*yaml)|(\s uuid.*)
+  ```
   - CTRL + SHIFT + L to select all occurrances found
   - CTRL + C, CTRL + V into new file
   - run extract_uuid matlab script
