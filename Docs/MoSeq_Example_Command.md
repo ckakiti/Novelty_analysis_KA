@@ -42,9 +42,14 @@ Try out the defaults first.  If they don't work, the only filter you may want to
 
 `--tail-filter-size 5, 5`
 
+* to quickly find paths to all .dat files nested within folder
+```
+find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
+```
+
 3. Training PCA
 
-First, go to the folder containing all your data. `moseq2-pca` analyze all your data inside the folder recursively
+First, go to the folder containing all your data. `moseq2-pca` analyzes all your data inside the folder recursively
 
 Specify the number of workers and cores to use.
 * Without cable
@@ -54,6 +59,14 @@ moseq2-pca train-pca -c 6 -n 1
 * use this when doing fiber photometry
 ```
 moseq2-pca train-pca -c 6 -n 1 --missing-data
+```
+* for larger datasets, increase memory allowance to 20-25GB
+```
+moseq2-pca train-pca -c 6 -n 1 -m 25GB
+```
+* to save output in file (including total number of frames)
+```
+moseq2-pca train-pca -c 6 -n 1 &> train-pca_output
 ```
 
 4. Apply PCA
@@ -67,9 +80,17 @@ moseq2-pca compute-changepoints -c 6 -n 1
 6. Model learning
 
 use`--save-model`to save the model parameters
-* Set kappa to the total number of frames in your traning data set
+* Set kappa to the total number of frames in your traning data set (displayed during train-pca step)
 ```
 moseq2-model learn-model --kappa 108843 --save-model _pca/pca_scores.h5 my_model.p
+```
+* for larger datasets
+```
+moseq2-model learn-model --kappa 108843 --save-model _pca/pca_scores.h5 my_model.p --whiten each
+```
+* save output
+```
+moseq2-model learn-model --kappa 108843 --save-model _pca/pca_scores.h5 my_model.p &> learn-model_output
 ```
 
 7. Use built-in visualization
