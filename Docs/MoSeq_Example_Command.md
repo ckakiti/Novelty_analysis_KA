@@ -118,14 +118,14 @@ If you have another group (eg. group name "group2"), please use this command aga
 You can also add the group information by editing the `group` field in the `moseq2-index.yaml` file directly.
 
 * to quickly extract uuids from moseq2-index.yaml:
-- open moseq2-index.yaml in visual studio
-- CTRL F, enter this expression into box:
+  - open moseq2-index.yaml in visual studio
+  - CTRL F, enter this expression into box:
 ```
 (path:\r?$)|(.*00.h5)|(.*yaml)|(\s uuid.*)
 ```
-- CTRL + SHIFT + L to select all occurrances found
-- CTRL + C, CTRL + V into new file
-- run extract_uuid matlab script
+  - CTRL + SHIFT + L to select all occurrances found
+  - CTRL + C, CTRL + V into new file
+  - run extract_uuid matlab script
 
 * plot the syllable usages for each group, for example, if you want to plot the usage for group1 and group2, please use the following command,
 ```
