@@ -96,6 +96,12 @@ moseq2-model learn-model --kappa 108843 --save-model _pca/pca_scores.h5 my_model
 moseq2-model learn-model --kappa 108843 --save-model _pca/pca_scores.h5 my_model.p &> learn-model_output
 ```
 
+* Try to use the following options when training fails.
+```
+--whiten each
+--robust
+```
+
 7. Use built-in visualization
 ```
 moseq2-viz generate-index 
