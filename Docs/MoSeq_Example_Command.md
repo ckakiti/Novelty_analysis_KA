@@ -42,6 +42,9 @@ Try out the defaults first.  If they don't work, the only filter you may want to
 
 `--tail-filter-size 5, 5`
 
+* When some mice in the experiments don't move very much during the entire trial, use this option to prevent it is excluded as background.
+`--use-plane-bground`
+
 * to quickly find paths to all .dat files nested within folder
 ```
 find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
