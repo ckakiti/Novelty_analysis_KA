@@ -10,6 +10,7 @@ docker exec -it yuxie_GPU1 /bin/bash
 Edit `myconfig.py`
 ##### 1. Selecting data to label:
 ```
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut
 cd Generating_a_Training_Set
 python3 Step1_SelectRandomFrames_fromVideos.py
 ```
