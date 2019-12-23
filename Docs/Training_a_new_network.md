@@ -35,7 +35,7 @@ python3 Step1_SelectRandomFrames_fromVideos.py
  
    ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.46.30.png)
  
-   (if a point can't be determined, click in the top left corner of the image, so that X and Y positions are less than 20 pixels -> determined by variable "invisibleboundary" in myconfig.py)
+   (if a point can't be determined, click in the top left corner of the image, so that X and Y positions are less than 20 pixels -> determined by "invisibleboundary" variable in myconfig.py)
    ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.48.13.png)
  - once you get through all frames, go to Analyze -> Measure
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.48.36.png)
