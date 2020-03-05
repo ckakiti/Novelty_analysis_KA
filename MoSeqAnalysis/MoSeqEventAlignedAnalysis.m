@@ -9,7 +9,7 @@ clc
 
 %cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
 %cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/
-cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
+cd /media/alex/DataDrive1/MoSeqData/Planets/Planets_MoSeq
 % cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/Backup from Capoeira_MoSeq')
 
 fps=30;
@@ -21,9 +21,10 @@ fsize=24;
 load('MoSeqDataFrame.mat');
 %Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Mice_Index_auto.m';
 %Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
-Mice_Index_path='../MiceIndex/MiceIndex_Chess.m';%'./Mice_Index.m';
-run(Mice_Index_path);
-cd ../MoSeq/Chess_MoSeq
+% Mice_Index_path='./MiceIndex.m';%'../MiceIndex/MiceIndex.m';
+% run(Mice_Index_path);
+run('MiceIndex.m')
+%cd ../MoSeq/DRILLS_MoSeq
 %load('test_NearObj_ts.mat')
 
 AnalysisDay=3;      % 3 = first novelty day
@@ -36,7 +37,7 @@ disp(['whichMouse: ' num2str(whichMouse)])
 
 trim_frame_start=899;
 % AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
-AllAct=csvread('Chess_poke_labels_N1.csv',0,0);         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+AllAct=csvread('Planets_poke_labels_N1.csv',0,0);
 AllActLabels=AllAct(:,3);
 AllActLabels=AllActLabels-trim_frame_start;
 %AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;
@@ -54,7 +55,8 @@ for miceiter=2:length(Mice)
 end
 
 if endindex ~= length(AllActLabels)+1
-    error('index calculation error');
+    disp('index calculation error');
+%     error('index calculation error');
 end
 
 for miceiter=1:length(Mice)
@@ -271,8 +273,8 @@ set(gca,'YTick',[0 0.5 1])
 
 %% plots of individual syllables for statistical analysis
 close all
-currSyl = 94; %39
-currWinLen = 180;
+currSyl = 53; %58 %71 %39 94 15
+currWinLen = 80;
 currWin = middle_x-currWinLen:middle_x+currWinLen;
 PG1AASU_currSyl = PG1AASU(currSyl,currWin);
 PG1AASU_currSyl = smooth(PG1AASU_currSyl,10);
@@ -284,7 +286,7 @@ set(fig1, 'Position', [46 345 1875 390])
 hold on
 group1 = plot(currWin-middle_x, PG1AASU_currSyl,'r');
 group2 = plot(currWin-middle_x, PG2AASU_currSyl,'b');
-ylim([0 0.02])
+ylim([0 1])
 title(['Syllable ', num2str(currSyl)])
 legend([group1, group2], {'Contextual' 'Stimulus'})
 

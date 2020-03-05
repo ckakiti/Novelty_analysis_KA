@@ -5,7 +5,7 @@ close all
 Config_NovAna;
 
 currSet = 'Planets_DLC'; %%%
-currMouse = 'Venus';
+currMouse = 'Earth';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900;%6000;%901-900; 
 

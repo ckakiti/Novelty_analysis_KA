@@ -249,7 +249,7 @@ clc
 % cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/Capoeira_MoSeq')
 % poke_labels=csvread('Capoeira_poke_labels_N1.csv',1,3);
 
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_DLC/')
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/_DLC/')
 load('PokesApproaches.mat')
 
 files    = dir;
@@ -264,13 +264,12 @@ for mousei=1:length(Mice)
     
     cd(nameDir{mousei})
     
-    rgbts_file   = dir('*200102_01_rgb_ts.txt');
-    depthts_file = dir('*200102_depth_ts.txt');
+    rgbts_file   = dir('*190906_rgb_ts.txt');
+    depthts_file = dir('*190906_depth_ts.txt');
     % Capoeira: 190413
     % Hiking: 190622
     % Chess: 190712
     % Machines: 190906
-    % Planets: 200102
     
     rgbts   = load(rgbts_file.name);
     depthts = load(depthts_file.name);

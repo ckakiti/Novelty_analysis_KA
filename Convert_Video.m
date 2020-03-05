@@ -4,7 +4,7 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Prey_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_temp/
 
 files    = dir;
 whichDir = [files.isdir];
@@ -13,7 +13,7 @@ nameDir  = {nameDir.name};
 nameDir(ismember(nameDir,{'.','..','temp'})) = [];
 mouseList = nameDir;
 
-for mouseiter=1:length(mouseList)
+for mouseiter=1%1:length(mouseList)
     cd(mouseList{mouseiter})
     disp(['Mouse: ' mouseList{mouseiter}])
     
@@ -23,7 +23,8 @@ for mouseiter=1:length(mouseList)
     nameDir  = {nameDir.name};
     nameDir(ismember(nameDir,{'.','..','25fps','temp'})) = [];
     dateList = nameDir;
-    for dateiter = 1:length(dateList)
+    
+    for dateiter = 1:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
         cd(dateList{dateiter})
         
         filelist = dir('*.mp4');

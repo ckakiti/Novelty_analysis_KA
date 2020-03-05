@@ -4,8 +4,8 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine
-run('MiceIndex_combine3')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_DLC
+run('MiceIndex')
 
 oneStat = 0;
 
@@ -24,7 +24,8 @@ if(oneStat)
     Y_ang = Y_dis;
 else
     % two different statistics to plot (e.g. timeNearObj/orient or boutNum/boutLen
-    timeStat = readtable('TimeStatistic_combine3.csv');%_10min_old.csv');
+%     timeStat = readtable('TimeStatistic.csv');%_10min_old.csv');
+    timeStat = readtable('TimeStatistic_12cm_tail.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
     timeStat2 = timeStat{:,3:end};
@@ -36,16 +37,19 @@ else
 end
 
 XTick = {'H1' 'H2' 'N1' 'N2' 'N3' 'N4' 'N5' 'N6' 'N7' 'N8' 'N9' 'N10'};
+% XTick = {'0-2','2-4','4-6','6-8','8-10'};
+% XTick = {'0-6','7-12','13-18','19-24','25-30'};
 
-cond2name = 'cont';%'GroupB';%'cont';%'6OHDA';
-cond1name = 'stim';%'GroupA';%'stim';%'saline';
+
+cond2name = 'cont';%'lego@5min';%'GroupB';%'cont';%'6OHDA';
+cond1name = 'stim';%'lego@0min';%'GroupA';%'stim';%'saline';
 
 detectCond = cat(1, Mice.novelty);
 cond2 = find(detectCond=='C');
 cond1 = find(detectCond=='S');
 disp(['cond1: ' num2str(cond1')])
 disp(['cond2: ' num2str(cond2')])
-cond2Color = [0.5 0.0 0.5]; %[0.5 0.0 0.5]; [0.5 0.0 0.5]};
+cond2Color = [0.5 0.0 0.5];%[0.5 0.0 0.5]; %[0.5 0.0 0.5]; [0.5 0.0 0.5]};
 cond1Color = [1.0 0.5 0.0]; %[1.0 0.5 0.0]; [1.0 0.5 0.0]};
 % cond2Color = {[0.3 0.0 0.3]; [0.5 0.0 0.5]; [0.8 0.0 0.5]};
 % cond1Color = {[1.0 0.1 0.0]; [1.0 0.5 0.0]; [1.0 0.7 0.0]};
@@ -64,14 +68,20 @@ conastd=std(Y_ang(cond2,:));
 stuastd=std(Y_ang(cond1,:));
 
 %% for plotting time around object and orientation to object
-Y_dis_title = ['Time spent at obj (' num2str(round(Dis_te_frame/fps/60))  ...
+totalTime = 2;
+Dis_te_frame = 15*60*totalTime+500;
+radius_cm = 12; %12 %8
+disp(['Total time: ' num2str(round(Dis_te_frame/fps/60)) 'min'])
+disp(['Radius: ' num2str(radius_cm) 'cm'])
+
+
+Y_dis_title = ['Time spent at obj (', num2str(round(Dis_te_frame/fps/60))  ...
     'min); Rad = ' num2str(radius_cm) 'cm'];
-Y_ang_title = ['Orientation to obj (' num2str(round(Dis_te_frame/fps/60)) ...
+Y_ang_title = ['Orientation to obj (', num2str(round(Dis_te_frame/fps/60)) ...
     'min); Deg = +-' num2str(angle_radius) char(176)];
-% Y_dis_ylabel = 'Fraction of time near obj';
 Y_dis_ylabel = 'Time near object (frac)';
-% Y_ang_ylabel = 'Fraction of time oriented to obj';
 Y_ang_ylabel = 'Orientation to object (frac)';
+x_label = 'Time within session (min)';%'Training day';%
 
 close all 
 
@@ -90,14 +100,14 @@ d2 = plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', 'Color', cond1Color, 'M
 title(Y_dis_title)
 set(gca, 'FontSize', 14)
 % set(gca, 'FontSize', 18)
-xlabel('Training day')
+xlabel(x_label)
 ylabel(Y_dis_ylabel)
 % legend([names(cond2) names(cond1)])
 % legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([d1(1) d2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
-    [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
+   [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
-ylim([0 0.45])
+ylim([0 0.6])
 % ylim([0 1])
 ylimDis = disfig.CurrentAxes.YLim;
 xticks(X);
@@ -111,10 +121,10 @@ errorbar(X,studavg,studstd, 'Color', cond1Color, 'LineWidth',2)
 title(Y_dis_title)
 set(gca, 'FontSize', 14)
 % set(gca, 'FontSize', 18)
-xlabel('Training day')
+xlabel(x_label)
 ylabel(Y_dis_ylabel)
 legend([cond2name ' (n=' num2str(length(cond2)) ')'], ...
-    [cond1name ' (n=' num2str(length(cond1)) ')'])
+   [cond1name ' (n=' num2str(length(cond1)) ')'])
 xlim([0 X(end)+1])
 ylim(ylimDis)
 xticks(X);
@@ -137,15 +147,14 @@ a2 = plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', 'Color', cond1Color, 'M
 title(Y_ang_title)
 set(gca, 'FontSize', 14)
 % set(gca, 'FontSize', 18)
-xlabel('Training day')
+xlabel(x_label)
 ylabel(Y_ang_ylabel)
 % legend([names(cond2) names(cond1)])
 % legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([a1(1) a2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
-    [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
+   [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
-ylim([0 0.225])
-% ylim([0 1])
+ylim([0 0.3])%25]) %4])
 ylimAng = angfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -158,10 +167,10 @@ errorbar(X,stuaavg,stuastd, 'Color', cond1Color, 'LineWidth',2)
 title(Y_ang_title)
 set(gca, 'FontSize', 14)
 % set(gca, 'FontSize', 18)
-xlabel('Training day')
+xlabel(x_label)
 ylabel(Y_ang_ylabel)
 legend([cond2name ' (n=' num2str(length(cond2)) ')'], ...
-    [cond1name ' (n=' num2str(length(cond1)) ')'])
+   [cond1name ' (n=' num2str(length(cond1)) ')'])
 xlim([0 X(end)+1])
 ylim(ylimAng)
 xticks(X);
@@ -171,7 +180,6 @@ xticklabels(XTick);
 if(0)
     saveas(disfig,'timeNearObj_10min.tif')
     saveas(angfig,'orientToObj_10min.tif')
-    saveas(disfig,'timeNearObj_10min_norm.tif')
     %ranksum(Y_dis(cond1,3), Y_dis(cond2,3))
     %signrank(Y_dis(cond1,2), Y_dis(cond1,3))
 end
@@ -336,18 +344,45 @@ end
 %% box plot of time near + orient for single day
 currday = 3;
 
+% currYdis_cond1 = Y_dis(cond1,currday);
+% currYdis_cond2 = Y_dis(cond2,currday);
+%%currYdis_cond2 = Y_dis(:,currday);
+%%currYdis_cond1 = Y_dis(:,2);
+%%currYdis_cond3 = Y_dis(:,8);
+% currTitle      = ['Time near object: Day ' num2str(currday) ' (tail)'];
+% currYlim       = [0 0.6];
+
+cond2 = [2 8 9];
+cond3 = [3 5 6];
+
+currYdis_cond1 = Y_dis(cond1,currday)-Y_dis(cond1,2);
+currYdis_cond2 = Y_dis(cond2,currday)-Y_dis(cond2,2);
+currYdis_cond3 = Y_dis(cond3,currday)-Y_dis(cond3,2);
+% currYdis_cond1 = Y_dis(:,currday)-Y_dis(:,2);
+% currYdis_cond2 = Y_dis(:,8)-Y_dis(:,2);
+currTitle      = ['Time near object: Day ' num2str(currday) ' (tail; norm.)'];
+currYlim       = [-0.4 0.4];
+
+
 close all
 boxPlot_oneDay = figure(1);
-boxplot([Y_dis(cond1,currday) Y_dis(cond2,currday)])
-set(boxPlot_oneDay,'FontSize',16)
-set(boxPlot_oneDay,'XTickLabel',{'Stim','Cont'})
-title(['Time near object: Day ' num2str(currday)])
-xlabel('Novelty Condition')
+boxplot([currYdis_cond1; currYdis_cond2; currYdis_cond3], ...
+    [zeros(1,length(currYdis_cond1)), ones(1,length(currYdis_cond2)), repmat(2, l])
+%boxplot(currYdis_cond1)
+set(gca,'FontSize',16)
+% set(gca,'XTickLabel',{'Stim','Cont'})
+set(gca,'XTickLabel',{cond1name,cond2name})
+% set(gca, 'XTickLabel', {'N1','N6'})
+title(currTitle)
+xlabel('Condition')
 ylabel('Time spent near object (frac)')
-ylim([0 0.5])
+ylim(currYlim)
 
 if(0)
-    saveas(boxPlot_oneDay,'timeNe_10min_nose.tif')
+    saveas(boxPlot_oneDay,'timeNearObj_10min_box_combine.tif')
+
+    
+    saveas(boxPlot_oneDay, ['timeNearObj_10min_tail_box_N' num2str(currday-2) '_norm.tif'])
 end
 
 %% cumulative histogram of bouts over one session

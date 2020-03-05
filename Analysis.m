@@ -6,7 +6,7 @@
 % Labels(:,27) Delta Velosity angle (degree/s)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% All the information are saved as folowing
+% All the information are saved as following
 % Labels(:,2) Nose x (pixel)
 % Labels(:,3) Nose y (pixel)
 % Labels(:,5) Leftear x (pixel)
@@ -41,16 +41,55 @@ clc
 cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Predators_DLC/Wolf/
-%cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/'
+durTotal = 10; % duration of analysis (min)
+disp(['Duration of analysis: ' num2str(durTotal) 'min'])
+
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Prey_DLC/Sheep/
+%cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-cd Analyzed_Data_1obj;
+whichFolder = 'Analyzed_Data_1obj_12cm_tail';        %%%%%%%%%%%%
+cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
 flen = length(filelist);
+
+shift_time = input('Exclude first 5 min? 0/1: ');
+if(shift_time==1)
+    timeShift = 5000;
+    disp(['start analysis at ' num2str(timeShift) ' frames'])
+        
+    Dis_ts_frame=500+timeShift;
+    Dis_te_frame=durTotal.*60.*fps+Dis_ts_frame;
+    
+    Ang_ts_frame=500+timeShift;
+    Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
+    
+    radius_cm = 12;
+    disp(['radius_cm: ' num2str(radius_cm)])
+else
+    Dis_ts_frame=500;
+    Dis_te_frame=durTotal.*60.*fps+Dis_ts_frame;
+    
+    Ang_ts_frame=500;
+    Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
+    
+    radius_cm = 12; %%%%%%%%%%%%
+    disp(['radius_cm: ' num2str(radius_cm)])
+end
+
+% choose to analyze nose, tail, head, or body
+x_curr = 11; %2=nose; 2+5+8=head; 11=tail;          %%%%%%%%%%%%%%%
+y_curr = 12; %3=nose; 3+6+9=head; 12=tail;          %%%%%%%%%%%%%%%
+if(x_curr == 2 && y_curr == 3)
+    disp('analyze nose')
+elseif(x_curr == 11 && y_curr == 12)
+    disp('analyze tail')
+else
+    disp('analyse head')
+end
 
 for fiter =1:flen
     if(flen<=length(filelist))
@@ -63,7 +102,11 @@ end
 flen = length(filelist);
 
 tic;
-for fiter = 1:flen %%%%%%%% 
+
+
+
+
+for fiter = 1:flen %%%%%%%%%%%
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];
     disp(['Analyzing: ' fn]);
@@ -89,10 +132,25 @@ for fiter = 1:flen %%%%%%%%
     % Calculation
     %***********************************************************
 
-    % Calculate head or body position
-    Labels(:,14)=(Labels(:,2));%+Labels(:,5)+Labels(:,8))./3; %Labels(:,11))./2;
-    Labels(:,15)=(Labels(:,3));%+Labels(:,6)+Labels(:,9))./3; %Labels(:,12))./2;
-%    Labels(:,16)=(Labels(:,4)+Labels(:,7)+Labels(:,10))./3;
+    % Calculate head or body position    
+    Labels(:,14)=Labels(:,x_curr);
+    Labels(:,15)=Labels(:,y_curr);
+%    Labels(:,16);
+
+    % Correct labeling errors (jumps)
+    diffCurr = sqrt(diff(Labels(:,2)).^2 + diff(Labels(:,3)).^2);
+    findJump = find(diffCurr>50);
+
+    for i=1:length(findJump)
+        Labels(findJump(i)+1,14)=Labels(findJump(i),14);
+        Labels(findJump(i)+1,15)=Labels(findJump(i),15);
+    end
+    
+    diffNew = sqrt(diff(Labels(:,14)).^2 + diff(Labels(:,15)).^2);
+    findNewJump = find(diffNew>50);
+    Labels(findNewJump,14) = nan;
+    Labels(findNewJump,15) = nan;
+    
 
     % head distance from object center
     Labels(:,17)=sqrt((obj_center(fiter,1)-Labels(:,14)).^2+(obj_center(fiter,2)-Labels(:,15)).^2)/ppc;
@@ -181,7 +239,7 @@ for fiter = 1:flen %%%%%%%%
 
 
     %pooling method 1
-    pool_size=50;
+    pool_size=5; %5-10 %og=50
     pooled_map=zeros(x_length-pool_size+1,y_length-pool_size+1);
 
     for i=1:x_length-pool_size+1
@@ -201,8 +259,8 @@ for fiter = 1:flen %%%%%%%%
     % Plot trajectory
     Trafigure=figure('visible','off');
 %     Trafigure=figure('visible','on');
-    scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),6,'filled');
-%     plot(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),'k')
+%     scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),6,'filled');
+    plot(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),'k')
     rectangle('Position',[arena(fiter,1),arena(fiter,2),...
                           arena(fiter,3)-arena(fiter,1),...
                           arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',8)
@@ -214,8 +272,8 @@ for fiter = 1:flen %%%%%%%%
     th = 0:pi/50:2*pi;
     x  = obj_center(fiter,1);
     y  = obj_center(fiter,2);
-    xunit = radius * cos(th) + x;
-    yunit = radius * sin(th) + y;
+    xunit = radius_cm * ppc * cos(th) + x;
+    yunit = radius_cm * ppc * sin(th) + y;
     plot(xunit, yunit,'r--','linewidth',3)
     
     set(gca,'ydir','reverse')
@@ -230,27 +288,24 @@ for fiter = 1:flen %%%%%%%%
     % Save
     % ***********************************************************
     % pause
-    cd Analyzed_Data_1obj
+    cd(['./' whichFolder])
 
 %     mkdir([vn(1:end-4) '_Plots'])
 %     cd([vn(1:end-4) '_Plots'])
-
 %     saveas(Disfigure,['Distance_' vn(1:end-4) '.png'])
 %     saveas(Angfigure,['Orientation_' vn(1:end-4) '.png'])
-    %cd('./body') %%%
-    saveas(Hmfigure,['Heatmap_' vn(1:end-4) '.tif'])
-    saveas(Trafigure,['Trajectory_' vn(1:end-4) '.tif'])
-
-%     cd ..
-
-    save(vn(1:end-4),'Labels','Dis_t_obj','Ang_t_obj', 'radius', 'radius_cm');
     
-    %cd .. %%%
+%     cd('divide_sessions') %%%
+    saveas(Hmfigure,['Heatmap_' vn(1:end-4), num2str(durTotal) 'min.tif'])                  %%%%%%%%%%%%%%%%%
+    saveas(Trafigure,['Trajectory_' vn(1:end-4), num2str(durTotal) 'min.tif'])              %%%%%%%%%%%%%%%%%
+%     cd ..
+    
+    save(vn(1:end-4),'Labels','Dis_t_obj','Ang_t_obj', 'radius', 'radius_cm');              %%%%%%%%%%%%%%%%%
     
     close all
     clearvars -except arena obj obj_center filelist fiter fpm fps ppc radius radius_cm angle_radius...
                       Dis_ts_frame Dis_te_frame Ang_ts_frame Ang_te_frame video_xlen video_ywid...
-                      networkname_format videoname_format
+                      networkname_format videoname_format durTotal whichFolder x_curr y_curr
 
     cd ..
     toc;

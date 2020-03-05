@@ -8,15 +8,21 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Predators_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_DLC/
 %cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Holidays/')
 
 % start_min=0.5;
 % end_min=start_min+10;
 % startframe=uint16(start_min.*60.*fps);
 % endframe=uint16(end_min.*60.*fps);
-startframe = Dis_ts_frame;
-endframe   = Dis_te_frame;
+
+durTotal = 30; % duration of analysis (min)
+disp(['Duration of analysis: ' num2str(durTotal) 'min'])
+
+Dis_ts_frame=500;
+Dis_te_frame=durTotal.*60.*fps+Dis_ts_frame;
+startframe  = Dis_ts_frame;
+endframe    = Dis_te_frame;
 
 folderpath = cd;
 folderd = dir(folderpath);
@@ -28,27 +34,49 @@ folderlen=length(foldernames);
 % for orientation analysis (smoothing)
 Swindow=40;
 
+disp('next')
+
 %%
+shift_time = input('Exclude first 5 min for some mice? 0/1: ');
+if(shift_time==1)
+    whichFiles_shift = [4 5 6];
+    disp(['Mice where lego is placed in arena at 5min: ' num2str(whichFiles_shift)])
+end
+
 for folderi=1:folderlen
     cd(foldernames{folderi});
+    disp(foldernames{folderi})
 %     poke_file = dir('*poke');
 %     disp(poke_file.name)
 %     pokes = csvread(poke_file.name);
     
-    cd Analyzed_Data_1obj
+    cd Analyzed_Data_1obj_12cm_tail
     load('Arena_Obj_Pos.mat','arena')
-    %cd ./body %%%%%%%%%%%%%%%%
+%     cd ./tail %%%%%%%%%%%%%%%%
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir(['*rgb_Converted.mat']); % 'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) %%%%%%%%%%%%%%%%%%
+    filelist=dir('*rgb_Converted.mat'); %*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) %%%%%%%%%%%%%%%%%%
     flen = length(filelist);
-
+    
     for filei = 1:flen
         filename = filelist(filei).name;
         load(filename)
-        LabelsCut=Labels(startframe:endframe,:);
         
+        % exclude first 5 min of recording (if lego is placed in arena after 5 min)
+        if(shift_time==1 && any(folderi==whichFiles_shift))
+            timeShift = 5000;
+            disp(folderi)
+            disp(timeShift)
+            
+            startframe = Dis_ts_frame+timeShift;
+            endframe   = min(Dis_te_frame+timeShift, size(Labels,1));
+        else
+            startframe = Dis_ts_frame;
+            endframe   = min(Dis_te_frame, size(Labels,1));
+        end
+
+        LabelsCut=Labels(startframe:endframe,:);
         
         % Analyze time spent near obj (within specified radius)
         Time_distance(filei) = sum(LabelsCut(:,21));
@@ -171,7 +199,7 @@ for folderi=1:folderlen
 %     FracArea_all(folderi,:)=fracArea;
     clearvars Time_angle Time_distance Time_periphery totalDistCut fracArea
     cd ..
-    %cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
     DisOrAng{folderi,1}='Distance';
     DisOrAng{folderlen+folderi,1}='Angle';

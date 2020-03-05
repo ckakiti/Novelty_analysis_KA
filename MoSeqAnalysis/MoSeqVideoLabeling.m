@@ -10,18 +10,16 @@ clc
 Labeling_mice=[1]
 Labeling_days=[3]
 BarHeight=30;
-% Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
-Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_Hiking.m';
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/DRILLS/DRILLS_MoSeq/MiceIndex.m';
 run(Mice_Index_path);
 
 tic
-cd '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq'
+cd '/media/alex/DataDrive1/MoSeqData/DRILLS/DRILLS_MoSeq'
 load('MoSeqDataFrame.mat');
 % cd('Videos');
-cd Hiking_MoSeq
 
- for miceiter=1:length(Mice)
-% for miceiter=Labeling_mice
+%  for miceiter=1:length(Mice)
+for miceiter=Labeling_mice
     cd(Mice(miceiter).name);
 
     % for dayiter=1:length(Mice(miceiter).ExpDay)
