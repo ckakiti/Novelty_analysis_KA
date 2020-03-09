@@ -61,7 +61,7 @@ Matlab code for novelty behavior analysis
 
 ## MoSeq Workflow
 0. [Shell_Script.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-shell_scriptsh)
-1. ModelDataTransfer.py
+1. [ModelDataTransfer.py](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-modeldatatransferpy)
 2. MiceIndex_blank.m
 3. extract_uuid
 4. MoSeqEventBasedAnalysis.m
