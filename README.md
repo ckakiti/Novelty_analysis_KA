@@ -81,7 +81,7 @@ Matlab code for novelty behavior analysis
 
 ### 3. extract_uuid
 - automated way to extract all uuids from moseq2-index.yaml file
-- follow directions in header before running code
+- follow directions in header before running code (need to use visual studio)
 - Inputs: MiceIndex_blank.m, moseq2-index_extract
 - Output: MiceIndex.mat
 
