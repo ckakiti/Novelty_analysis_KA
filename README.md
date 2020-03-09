@@ -65,7 +65,7 @@ Matlab code for novelty behavior analysis
 2. [MiceIndex_blank.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#2-miceindex_blankm)
 3. [extract_uuid](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#3-extract_uuid)
 4. [MoSeqEventAlignedAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-moseqeventalignedanalysism)
-5. MoSeqEventBasedAnalysis.m
+5. [MoSeqEventBasedAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#5-moseqeventbasedanalysism)
 
 ## MoSeq Script Details
 ### 0. Shell_Script.sh
