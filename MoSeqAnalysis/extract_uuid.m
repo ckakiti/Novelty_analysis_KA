@@ -1,9 +1,17 @@
-%% extract all uuids from moseq2-index.yaml file
+%% DO THIS BEFORE RUNNING CODE BELOW
+% automated way to extract all uuids from moseq2-index.yaml file
+
+% open moseq2-index.yaml in Visual Studio
+% CTRL F, enter this into box (path:\r?$)|(.*00.h5)|(.*yaml)|(\s uuid.*)
+% CTRL + SHIFT + L to select all occurrances found
+% CTRL + C --> CTRL + V into new file and name it moseq2-index_extract
+% run below code
+%%
 clear
 close all
 clc
 
-cd /media/alex/DataDrive1/MoSeqData/Planets/Planets_MoSeq
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
 run('MiceIndex_blank')
 
 % identify basic information (name, date, uuid) within file
@@ -24,8 +32,8 @@ for extractiter = 1:length(extract_reshape)
     where_slash = strfind(curr_string, '/');
     
     % change curr_name depending on path format
-%     curr_name = curr_string(where_slash(1)+1:where_slash(2)-1); 
-    curr_name = curr_string(5:where_slash(1)-1);
+    curr_name = curr_string(where_slash(1)+1:where_slash(2)-1); %%%%%%%%%%%%
+%     curr_name = curr_string(5:where_slash(1)-1);                %%%%%%%%%%%%
     
     extract_separate(extractiter,1) = {curr_name};
     

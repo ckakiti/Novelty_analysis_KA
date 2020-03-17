@@ -23,7 +23,7 @@ radius = radius_cm.*ppc;% Time spent around the obj radius (pixels)
 angle_radius = 15;      % Time orient towards the obj radius (degree)
 
 % Calculation Parameters
-Dis_ts_frame=500; % Time spent around the obf start and end frame
+Dis_ts_frame=500; % Time spent around the obj start and end frame
 Dis_te_frame=10.*60.*fps+Dis_ts_frame;
 
 Ang_ts_frame=500; % Time orient towards the obj start and end frame

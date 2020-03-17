@@ -9,8 +9,8 @@ clc
 
 %cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
 %cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/
-cd /media/alex/DataDrive1/MoSeqData/Planets/Planets_MoSeq
-% cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/Backup from Capoeira_MoSeq')
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data
+% cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq')
 
 fps=30;
 PlotWidth=200;%500;
@@ -19,11 +19,9 @@ cmap=jet(100);
 fsize=24;
 
 load('MoSeqDataFrame.mat');
-%Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Mice_Index_auto.m';
-%Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
 % Mice_Index_path='./MiceIndex.m';%'../MiceIndex/MiceIndex.m';
 % run(Mice_Index_path);
-run('MiceIndex.m')
+load('MiceIndex.mat') % to get this, need to run extract_uuid.m
 %cd ../MoSeq/DRILLS_MoSeq
 %load('test_NearObj_ts.mat')
 
@@ -35,14 +33,15 @@ G2_Mice=find(detectCond=='S')';%[5 6 7 8];
 whichMouse = 3;           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(['whichMouse: ' num2str(whichMouse)])
 
+frameCutoff = 18000;
+
 trim_frame_start=899;
 % AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
-AllAct=csvread('Planets_poke_labels_N1.csv',0,0);
+AllAct_file = dir('*poke_labels_N1.csv');
+AllAct=csvread(AllAct_file.name,0,0);
 AllActLabels=AllAct(:,3);
 AllActLabels=AllActLabels-trim_frame_start;
-%AllActLabels(:,4)=(AllActLabels(:,3)-AllActLabels(:,1))./fps;
-%cd ./190425/session_20190425162005
-%AllActLabels=load('AllActLabels_MoSeq_Nashville_N1_poke');
+
 
 for miceiter=1:length(Mice)
     Mice(miceiter).datanum = length(find(AllAct(:,1)==miceiter));
@@ -65,6 +64,64 @@ end
 
 disp('section 1')
 
+%% get labels for all days
+
+for miceiter=1:length(Mice)
+    disp(Mice(miceiter).name)
+    
+    for day_iter = 1:length(Mice(miceiter).ExpDay)
+        disp(day_iter)
+        
+        % find MSid index
+        MSidindex=1;
+        for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
+            if strcmp(MoSeqDataFrame.session_uuid(indexiter,:),Mice(miceiter).ExpDay(day_iter).MSid)
+                break
+            end
+            MSidindex=MSidindex+1;
+            if MSidindex==size(MoSeqDataFrame.session_uuid,1)+1
+                error('MSid not found');
+            end
+        end
+        
+        Labels=double(MoSeqDataFrame.labels{MSidindex});
+        Mice(miceiter).ExpDay(day_iter).labels = Labels;
+    end
+
+end
+if(0)
+    save('Mice_wLabels', 'Mice')
+end
+
+
+allLabels = []; % cropped by 10 min
+allSyls   = [];
+
+for miceiter = 1:length(Mice)
+    for dayiter = 3 %3:length(Mice(miceiter).ExpDay)   %%%%%%%%%%%%%%%%%%%%%%%
+        currLabels = cat(1, Mice(miceiter).ExpDay(dayiter).labels);
+        allSyls = [allSyls currLabels];
+        
+%         frameCutoff = length(currLabels);              %%%%%%%%%%%%%%%%%%%%%%%
+        [counts, centers] = hist(currLabels(1:frameCutoff),[-1 1:99]);
+        freq = counts./sum(counts);
+        allLabels = [allLabels; freq];
+    end
+end
+disp(['Frame cutoff: ' num2str(frameCutoff)])
+allLabels_S = allLabels(G2_Mice,:);
+allLabels_C = allLabels(G1_Mice,:);
+
+if(0)
+    csvwrite('Dataset_20191007_sylExpr_allN_stim_30min.csv', allLabels_S)
+    
+    csvwrite('Dataset_20191007_sylExpr_N1.csv', allLabels)
+    csvwrite('Dataset_20191007_sylExpr_N1_stim_30min.csv', allLabels_S)
+    csvwrite('Dataset_20191007_sylExpr_N1_stim_10min.csv', allLabels_S)
+end
+
+disp('end')
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -86,6 +143,7 @@ for miceiter=1:length(Mice)
     end
 
     Labels=double(MoSeqDataFrame.labels{MSidindex});
+    Mice(miceiter).ExpDay(AnalysisDay).labels = Labels;
     labellen=length(Labels);
 
     Mice(miceiter).ExpDay(AnalysisDay).rasterimage=uint8(255.*ones(20,PlotWidth,3));
@@ -214,8 +272,8 @@ PG2AASU=G2AASU./size(G2actalignedusage,1);
 
 disp('section 2')
 
-%% save variables for future analysis
-save(['ActAlignedPercentage_Day' num2str(AnalysisDay)], 'middle_x', 'PG1AASU', 'PG2AASU')
+% save variables for future analysis
+%save(['ActAlignedPercentage_Day' num2str(AnalysisDay)], 'middle_x', 'PG1AASU', 'PG2AASU')
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Making plots
@@ -244,7 +302,7 @@ ylabel('Syllable Usage (%)','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
 set(gca,'YTick',[0 0.5 1])
 
-% saveas(Plot_G1actalignedusage,'Capoeira_syllableUsage_cont.tif')
+% saveas(Plot_G1actalignedusage,'Planets_syllableUsage_cont.tif')
 % saveas(Plot_G1actalignedusage,['Capoeira_' Mice(G1_Mice(whichMouse)).name '_syllableUsage_cont.tif'])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -260,7 +318,7 @@ ylabel('Syllable Usage (%)','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
 set(gca,'YTick',[0 0.5 1])
 
-% saveas(Plot_G2actalignedusage,'Capoeira_syllableUsage_stim.tif')
+% saveas(Plot_G2actalignedusage,'Planets_syllableUsage_stim.tif')
 % saveas(Plot_G2actalignedusage,['Capoeira_' Mice(G2_Mice(whichMouse)).name '_syllableUsage_stim.tif'])
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -271,9 +329,11 @@ set(gca,'YTick',[0 0.5 1])
 % end
 % areahandle(101).FaceColor=[0 0 0];
 
+disp('plotted')
+
 %% plots of individual syllables for statistical analysis
 close all
-currSyl = 53; %58 %71 %39 94 15
+currSyl = 60; %58 %71 %39 94 15
 currWinLen = 80;
 currWin = middle_x-currWinLen:middle_x+currWinLen;
 PG1AASU_currSyl = PG1AASU(currSyl,currWin);

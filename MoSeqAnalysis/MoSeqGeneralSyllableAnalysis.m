@@ -6,14 +6,15 @@ clc
 close all
 
 % setName = 'Standard_CapoeiraHikingChess';
-setName = 'Capoeira_MoSeq';%'7day_preexposure';
+setName = 'Dataset_20190723';%'7day_preexposure';
 
 
 % Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
 % Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
 % Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/Mice_Index.m';
-Mice_Index_path = '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_Capoeira.m';
-run(Mice_Index_path);
+Mice_Index_path = '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex.mat';
+% run(Mice_Index_path);
+load(Mice_Index_path)
 
 detectCond = cat(1, Mice.novelty);
 cond2 = find(detectCond=='C');
@@ -25,7 +26,7 @@ G1_Days = [3 4 5 6]; %3:7;
 G2_Days = [3 4 5 6]; %3:7;
 
 % G3 Base line (habituation)
-G3_Mice = 1:6; %1:8; %1:12;
+G3_Mice = 1:length(Mice);
 G3_Days = [1 2];
 
 %cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq %7day_preexposure_MoSeq
@@ -38,9 +39,7 @@ fps=30;
 Syllablebinedge=[-6,-0.5:1:99.5];
 frameCutoff = 18000;
 
-
 % load('NearObj_ts.mat')
-
 
 disp('section 1')
 %%
@@ -66,7 +65,8 @@ for miceiter=1:length(Mice)
                 error('MSid not found');
             end
         end
-
+        frameCutoff = length(MoSeqDataFrame.labels{MSidindex}); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        disp(frameCutoff)
         Labels=double(MoSeqDataFrame.labels{MSidindex}(1:frameCutoff));
         labellen=length(Labels);
 
@@ -117,7 +117,7 @@ end
 G1Usage=zeros(1,101);
 for miceiter=G1_Mice
     for dayiter=G1_Days
-        G1Usage = G1Usage + Mice(miceiter).ExpDay(dayiter).usage;   
+        G1Usage = G1Usage + Mice(miceiter).ExpDay(dayiter).usage; 
     end
 end
 PG1Usage=G1Usage./sum(G1Usage);
@@ -125,7 +125,11 @@ PG1Usage=G1Usage./sum(G1Usage);
 G2Usage=zeros(1,101);
 for miceiter=G2_Mice
     for dayiter=G2_Days
-        G2Usage = G2Usage + Mice(miceiter).ExpDay(dayiter).usage;
+        if(dayiter>length(Mice(miceiter).ExpDay))
+            continue
+        else
+            G2Usage = G2Usage + Mice(miceiter).ExpDay(dayiter).usage;
+        end
     end
 end
 PG2Usage=G2Usage./sum(G2Usage);
@@ -148,7 +152,7 @@ for miceiter=1:length(Mice)
         GBM = GBM + Mice(miceiter).ExpDay(dayiter).BiMatrix;
     end
 end
-InterGBM=GBM-GBM.*diag(ones(1,100));     % subtract self transition 
+InterGBM=GBM-GBM.*diag(ones(1,100));     % subtract self transition
 PGBM=InterGBM./sum(sum(InterGBM));       % Normalization
 
 
@@ -166,13 +170,22 @@ PG1BM=InterG1BM./sum(sum(InterG1BM));       % Normalization
 G2BM=zeros(100,100);
 for miceiter=G2_Mice
     for dayiter=G2_Days
-        G2BM = G2BM + Mice(miceiter).ExpDay(dayiter).BiMatrix;
+        if(dayiter>length(Mice(miceiter).ExpDay))
+            continue
+        else
+            G2BM = G2BM + Mice(miceiter).ExpDay(dayiter).BiMatrix;
+        end
     end
 end
 InterG2BM=G2BM-G2BM.*diag(ones(1,100));     % subtract self transition
 PG2BM=InterG2BM./sum(sum(InterG2BM));       % Normalization
 
 disp('section 2')
+
+if(0)
+    save('GeneralAnalysis_Dataset_20191007_30min')
+end
+
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Making plots
@@ -281,6 +294,7 @@ for miceiter=1:length(Mice)
             end
         end
 
+        frameCutoff = length(MoSeqDataFrame.labels{MSidindex}); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Labels=double(MoSeqDataFrame.labels{MSidindex}(1:frameCutoff));
         
         %cd(['./vids/', Mice(miceiter).name])
@@ -336,7 +350,8 @@ addLabelsCutoff = PaddLabelsUsageSortIndex(PaddLabelsUsageSort>=0.01);
 % SyllablesX(PaddLabelsUsageSortIndex(PaddLabelsUsageSort>=0.01));
 
 % include syllables expressed >1% of time within specified radius of obj
-GsortedCutoffCombine = unique([GsortedCutoff addLabelsCutoff]);
+% GsortedCutoffCombine = unique([GsortedCutoff addLabelsCutoff]);
+GsortedCutoffCombine = GsortedCutoff; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % crop sorted vector to include only syllables >1%
 isIn = ones(length(G2vsG1Sortedusageindex),1);
@@ -387,14 +402,18 @@ xticks(X_cutoff);
 xticklabels(SyllablesX(G2vsG1Sortedusageindex_crop));
 set(Plot_UsageCompare_cutoff, 'Position', [46 353 1870 450])
 
-%saveas(Plot_UsageCompare_cutoff, 'UsageCompare_Crop.tif')
+%saveas(Plot_UsageCompare_cutoff, [setName '_UsageCompare_Crop.tif'])
 
 %% divide syllable usage per mouse for statistical tests (ttest2, bonferroni correction)
 G12Usage_split=zeros(length(G3_Mice),101);
 for miceiter=G3_Mice
     for dayiter=G1_Days
-        G12Usage_split(miceiter,:) = G12Usage_split(miceiter,:) + ...
-            Mice(miceiter).ExpDay(dayiter).usage;   
+        if(dayiter>length(Mice(miceiter).ExpDay))
+            continue
+        else
+            G12Usage_split(miceiter,:) = G12Usage_split(miceiter,:) + ...
+                Mice(miceiter).ExpDay(dayiter).usage; 
+        end
     end
 end
 PG12Usage_split=G12Usage_split./sum(G12Usage_split,2);
@@ -402,8 +421,12 @@ PG12Usage_split=G12Usage_split./sum(G12Usage_split,2);
 G3Usage_split=zeros(length(G3_Mice),101);
 for miceiter=G3_Mice
     for dayiter=G3_Days
-        G3Usage_split(miceiter,:) = G3Usage_split(miceiter,:) + ...
-            Mice(miceiter).ExpDay(dayiter).usage;   
+        if(dayiter>length(Mice(miceiter).ExpDay))
+            continue
+        else
+            G3Usage_split(miceiter,:) = G3Usage_split(miceiter,:) + ...
+                Mice(miceiter).ExpDay(dayiter).usage;
+        end
     end
 end
 PG3Usage_split=G3Usage_split./sum(G3Usage_split,2);
@@ -430,6 +453,9 @@ bonf  = p<(alpha/m);
 p_index_adj = SyllablesX(G2vsG1Sortedusageindex_crop(p_index));
 
 %% plot syllable enrichment (cropped) with errorbar
+close all
+X_cutoff = 0:length(G2vsG1Sortedusageindex_crop)-1;
+
 mean_PG1Usage_split_crop = mean(PG12Usage_split_crop(G1_Mice,:),1);
 % equivalent to PG1Usage(G2vsG1Sortedusageindex_crop)
 std_PG1Usage_split_crop = std(PG12Usage_split_crop(G1_Mice,:),0,1);

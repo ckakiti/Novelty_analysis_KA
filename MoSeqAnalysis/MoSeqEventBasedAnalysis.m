@@ -5,14 +5,14 @@ clear
 clc
 close all
 
-cd /media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
 
 load('MoSeqDataFrame.mat')
 Syllablebinedge=[-6,-0.5:1:99.5];
 
-MouseSet = 'Dataset_20191007';
+MouseSet = 'Dataset_20190723';
 % Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
-Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data/MiceIndex.mat'];%' MouseSet '.m'];
+Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex.mat'];%' MouseSet '.m'];
 load(Mice_Index_path);
 %run(Mice_Index_path);
 
@@ -31,7 +31,7 @@ Plot_SingleDay=3;    % first novelty day
 Plot_MultiDay=3:6;   % all novelty days
 cmap=cool(2*length(Plot_MultiDay));
 
-IntSyl=58; %28 %71 %9            % Interesting Syllable
+IntSyl=9; %28 %71 %9            % Interesting Syllable
 
 detectCond = cat(1, Mice.novelty);
 Cnum = find(detectCond=='C');
@@ -84,7 +84,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plotting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cd(['/media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data/'])%' MouseSet '_MoSeq'])
+cd(['/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/'])%' MouseSet '_MoSeq'])
 
 syltime_total=zeros(length(Mice),1,length(Mice(1).ExpDay));
 syltime_per_minute=zeros(length(Mice),length(timeseg)-1,length(Mice(1).ExpDay));
@@ -103,16 +103,27 @@ disp('section 1')
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % bar plot of total syllable usage (s) for each mouse, divided by novelty condition
 close all
+
+% CVSX=1:3;
+% CVSXTick={'6OHDA1' '6OHDA2' 'saline'};
+% Cnum1 = [2 8 9];
+% Cnum2 = [3 5 6];
+
 Plot_total_interaction_time=figure;
 
 Plotdata=syltime_total(:,:,Plot_SingleDay);
 csavg=[mean(Plotdata(Cnum,:)) mean(Plotdata(Snum,:))];
 csstd=[std(Plotdata(Cnum,:)) std(Plotdata(Snum,:))];
+% csavg=[mean(Plotdata(Cnum1,:)) mean(Plotdata(Cnum2,:)) mean(Plotdata(Snum,:))];
+% csstd=[std(Plotdata(Cnum1,:)) std(Plotdata(Cnum2,:)) std(Plotdata(Snum,:))];
 
 b = bar(CVSX,csavg);
 b.FaceColor  = 'Flat';
 b.CData(1,:) = cond2Color;
-b.CData(2,:) = cond1Color; 
+% b.CData(2,:) = cond2Color;
+% b.CData(3,:) = cond1Color;
+b.CData(2,:) = cond1Color;
+
 hold on
 errorbar(CVSX,csavg,csstd,'.','LineWidth',2,'Color','black')
 hold on
@@ -139,7 +150,7 @@ ylabel(['Syllable Usage (s)'])
 xticks(CVSX);
 xticklabels(CVSXTick);
 xtickangle(45)
-ylim([0 30])
+ylim([0 60])
 set(gca,'YTick',[0 15 30 45])
 
 % saveas(Plot_total_interaction_time, [MouseSet '_MoSeq_avgUsage_syl', num2str(IntSyl), '.tif'])
