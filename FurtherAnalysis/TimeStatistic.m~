@@ -114,8 +114,6 @@ for folderi=1:folderlen
         slows     = find(vel<5);
         sap       = intersect(stretches,slows);
         
-        sap_num = sum(diff(sap)>1);
-        
         % scatter plot of body length as a function of distance to object
 %         bodyLen = sqrt( (LabelsCut(:,11)-LabelsCut(:,2)).^2 + ...
 %                         (LabelsCut(:,12)-LabelsCut(:,3)).^2 )/ppc;

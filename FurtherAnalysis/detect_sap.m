@@ -4,12 +4,9 @@ close all
 clc
 
 Config_NovAna
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/
 
-poke_file = dir('*poke_labels_N1.csv');
-pokes     = csvread(poke_file.name);
-
-
+curr_set = 'Machines_DLC';
 curr_day = 3;  % N1
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
@@ -19,6 +16,9 @@ Dis_te_frame = durTotal.*60.*fps+Dis_ts_frame;
 startframe   = 1;    %Dis_ts_frame;
 endframe     = 9000; %Dis_te_frame;
 
+cd(curr_set)
+poke_file = dir('*poke_labels_N1.csv');
+pokes     = csvread(poke_file.name);
 
 folderpath = cd;
 folderd = dir(folderpath);
@@ -31,13 +31,18 @@ folderlen=length(foldernames);
 disp('next')
 
 %%
-close all
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
+cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' curr_set])
 
 % for smoothing
 Swindow=30;
 
-for miceiter = 1%1:folderlen
+% maximum body length (pixels), anything above counted as error
+bodyLen_cutoff = 80;
+
+for miceiter = 1:folderlen
+    close all
+    clc
+    
     cd(foldernames{miceiter})
     cd Analyzed_Data_1obj_tail
     
@@ -52,7 +57,7 @@ for miceiter = 1%1:folderlen
     curr_velY  = Labels(startframe:endframe,25);
     
     bodyLen    = sqrt( (curr_tailX-curr_headX).^2 + (curr_tailY-curr_headY).^2 ); % pixels
-    bodyLen(bodyLen>80)=0; % body lengths >80px are likely to be errors
+    bodyLen(bodyLen>bodyLen_cutoff)=0; % body lengths >80px are likely to be errors
     
     vel       = sqrt( curr_velX.^2 + curr_velY.^2 ); % head velocity, cm/s
     stretches = find(bodyLen>(mean(bodyLen)+std(bodyLen)));
@@ -62,27 +67,49 @@ for miceiter = 1%1:folderlen
     curr_pokes = find(pokes(:,1)==miceiter);
     
     % plot trajectories for nose and tail side-by-side
-    fig1 = figure(1);
-    set(gcf, 'Position', [100 300 1100 450])
-    subplot(1,2,1)
-    plot(curr_headX, curr_headY, 'k.-')
-    axis square
-    
-    subplot(1,2,2)
-    plot(curr_tailX, curr_tailY, 'k.-')
-    axis square
+%     fig1 = figure(1);
+%     set(gcf, 'Position', [100 300 1100 450])
+%     subplot(1,2,1)
+%     plot(curr_headX, curr_headY, 'k.-')
+%     axis square
+%     subplot(1,2,2)
+%     plot(curr_tailX, curr_tailY, 'k.-')
+%     axis square
     
     % plot body length (distance between nose and tail), superimpose automatically calculated poke 
-    fig2 = figure(2);
-    hold on
-    plot(bodyLen, 'k.-')
-    line([pokes(curr_pokes,2) pokes(curr_pokes,2)]', repmat([0 max(bodyLen(:))], length(curr_pokes), 1)')
+%     fig2 = figure(2);
+%     hold on
+%     plot(bodyLen, 'k.-')
+%     line([pokes(curr_pokes,2) pokes(curr_pokes,2)]', repmat([0 max(bodyLen(:))], length(curr_pokes), 1)')
     
     % histogram of body lengths (sanity check)
-    figure(3)
+    fig3 = figure(3);
+    set(gcf, 'Position', [300 500 560 420])
+    hold on
     hist(bodyLen,100)
+    sap_threshold = mean(bodyLen)+std(bodyLen);
+    line([sap_threshold sap_threshold]', (fig3.CurrentAxes.YLim)', 'Color', 'r')
+    title(['Body lengths + sap threshold: ' foldernames{miceiter} '_N1_' num2str(durTotal) 'min'], 'Interpreter', 'none')
+    set(gca, 'FontSize', 14)
+    
+    % spatial location of SAPs (superimposed on smoothed x/y position)
+    fig4 = figure(4);
+    set(gcf, 'Position', [900 500 560 420])
+    hold on
+    plot(curr_headX, curr_headY, 'k.-')
+    plot(curr_headX(sap), curr_headY(sap), 'r*')
+    title(['Location of SAP: ' foldernames{miceiter} '_N1_' num2str(durTotal) 'min'], 'Interpreter', 'none')
+    xlim([50 500])
+    ylim([0 400])
+    set(gca, 'YDir', 'reverse', 'FontSize', 14)
     
     pause
+    if(0)
+        csvwrite([curr_set '_' foldernames{miceiter} '_N1_' num2str(durTotal) 'min_sap.csv'], sap)
+        saveas(fig3, [curr_set '_' foldernames{miceiter} '_N1_' num2str(durTotal) 'min_bodyLen_hist.tif'])
+        saveas(fig4, [curr_set '_' foldernames{miceiter} '_N1_' num2str(durTotal) 'min_sapPos.tif'])
+    end
+    
     cd ../..
 end
 
