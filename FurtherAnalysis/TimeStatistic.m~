@@ -8,7 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Chess_DLC/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -120,29 +120,32 @@ for folderi=1:folderlen
         sap        = intersect(stretches,slows);
         sap_in_rad = intersect(sap, find(LabelsCut(:,21)==1));
         
+        sap_frame{filei,1}    = sap(find(diff(sap)>1));
         sap_num(filei)        = sum(diff(sap)>1); % total SAPs (any location)
         sap_num_in_rad(filei) = sum(diff(sap_in_rad)>1)/Time_distance(filei); % SAPs near object (norm)
-        sap_dist{filei,1}       = LabelsCut(sap,17);
+        sap_dist{filei,1}     = LabelsCut(diff(sap)>1,17);
+        nose_dist{filei,1}    = smooth_headX;
+        nose_dist{filei,2}    = smooth_headY;
         
-        load('Arena_Obj_Pos.mat')
-        disp(['radius: ' num2str(radius_cm)])
-        
-        % scatter plot of SAP as a function of distance
-        SAP_figure = figure(1);
-%         plot(LabelsCut(:,2), LabelsCut(:,3),'k.')
-        hold on
-        plot(LabelsCut(sap,2), LabelsCut(sap,3),'b.')
-        
-        th = 0:pi/50:2*pi;
-        x  = obj_center(filei,1);
-        y  = obj_center(filei,2);
-        xunit = radius_cm * ppc * cos(th) + x;
-        yunit = radius_cm * ppc * sin(th) + y;
-%         plot(xunit, yunit,'r-','linewidth',3)
-        xlim([50 500])
-        set(gca, 'YDir', 'reverse')
-        
-        pause(0.5)
+%         load('Arena_Obj_Pos.mat')
+%         disp(['radius: ' num2str(radius_cm)])
+%         
+%         % scatter plot of SAP as a function of distance
+%         SAP_figure = figure(1);
+% %         plot(LabelsCut(:,2), LabelsCut(:,3),'k.')
+%         hold on
+%         plot(LabelsCut(sap,2), LabelsCut(sap,3),'b.')
+%         
+%         th = 0:pi/50:2*pi;
+%         x  = obj_center(filei,1);
+%         y  = obj_center(filei,2);
+%         xunit = radius_cm * ppc * cos(th) + x;
+%         yunit = radius_cm * ppc * sin(th) + y;
+% %         plot(xunit, yunit,'r-','linewidth',3)
+%         xlim([50 500])
+%         set(gca, 'YDir', 'reverse')
+%         
+%         pause(0.5)
                 
         % scatter plot of body length as a function of distance to object
 %         bodyLen = sqrt( (LabelsCut(:,11)-LabelsCut(:,2)).^2 + ...
@@ -242,10 +245,12 @@ for folderi=1:folderlen
     TotalDistCut_all(folderi,:)   = totalDistCut;
     SAP_num_all(folderi,:)        = sap_num;
     SAP_in_rad_all(folderi,:)     = sap_num_in_rad;
+    dist_of_sap(folderi).sapFrame = sap_frame;
     dist_of_sap(folderi).sapDist  = sap_dist;
+    dist_of_sap(folderi).nosePos  = nose_dist;
 %     FracArea_all(folderi,:)=fracArea;
     clearvars Time_angle Time_distance Time_periphery totalDistCut ...
-        fracArea sap_num sap_num_in_rad sap_dist
+        fracArea sap_num sap_num_in_rad sap_frame sap_dist nose_dist
     cd ..
 %     cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
@@ -272,8 +277,7 @@ if(0)
     writetable(Table2,'TimeStatistic_body_periph.csv');
     writetable(Table3,'TimeStatistic_nose_totalDistCut.csv');
     writetable(Table4,'TimeStatistic_SAP_norm.csv');
-    
-    save(
+    save('SAP_plus_dist.mat', 'dist_of_sap')
     
     disp('saved')
 end

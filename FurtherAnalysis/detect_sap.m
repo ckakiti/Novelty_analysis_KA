@@ -128,6 +128,6 @@ for fileiter = 1:length(matFiles)
     dist_of_sap_all = [dist_of_sap_all dist_of_sap];
 end
 if(0)
-    save('SAP_plust_dist_all.mat','dist_of_sap_all')
+    save('SAP_plus_dist_all.mat','dist_of_sap_all')
 end
 

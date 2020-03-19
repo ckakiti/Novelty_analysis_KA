@@ -73,11 +73,7 @@ for miceiter = 1:length(dist_of_sap_all)
         
         [counts, centers] = hist(curr_saps,0:bin_size);
         count_cumul = cumsum(counts);
-        cumul_sap_dist = [cumul_sap_dist; count_cumul]; 
-        
-        if(max(curr_saps) > global_max)
-            global_max = max(curr_saps);
-        end
+        cumul_sap_dist = [cumul_sap_dist; count_cumul];
     end
 end
 
@@ -90,8 +86,8 @@ cont = plot(centers, cumul_sap_dist(cond2,:), 'r-');
 stim = plot(centers, cumul_sap_dist(cond1,:), 'k-');
 line([radius_cm radius_cm], [0 max(cumul_sap_dist(:))], 'LineStyle', '--')
 
-legend([cont(1) stim(1)], {'cont', 'stim'}, 'location','east') %nameDir(reorder)
-title(['Cumulative SAP distance from object (' num2str(durTotal) 'min): N1'])
+legend([cont(1) c(1)], {'6OHDA', 'saline'}, 'location','east') %nameDir(reorder)
+title(['Cumulative distance from object (' num2str(durTotal) 'min): N1'])
 xlim([0 global_max])
 xlabel('Distance from obj (cm)')
 ylabel('Cumulative time at distance from obj (s)')
@@ -101,7 +97,7 @@ set(fig1, 'Position', [200 200 700 600])
 disp('plotted')
 
 if(0)
-    saveas(gca, ['SAPnearN1_' num2str(durTotal) 'min_cumulative.tif'])
+    saveas(gca, ['timeNearN1_' num2str(durTotal) 'min_cumulative.tif'])
 end
 
 %%
