@@ -8,8 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
-%cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Holidays/')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -31,8 +30,9 @@ foldernames = {folderd(isub).name}';
 foldernames(ismember(foldernames,{'.','..','Retrain_Sep17','temp'})) = []; 
 folderlen=length(foldernames);
 
-% for orientation analysis (smoothing)
-Swindow=40;
+% for SAP+orientation analysis (smoothing)
+Swindow=30;
+Swindow_orient=40;
 
 % maximum body length (pixels), anything above counted as error
 bodyLen_cutoff = 80;
@@ -44,6 +44,8 @@ shift_time = input('Exclude first 5 min for some mice? 0/1: ');
 if(shift_time==1)
     whichFiles_shift = [4 5 6];
     disp(['Mice where lego is placed in arena at 5min: ' num2str(whichFiles_shift)])
+else
+    shift_time = 0;
 end
 
 for folderi=1:folderlen
@@ -52,17 +54,20 @@ for folderi=1:folderlen
 %     poke_file = dir('*poke');
 %     disp(poke_file.name)
 %     pokes = csvread(poke_file.name);
+    dist_of_sap(folderi).name = foldernames{folderi};
     
-    cd Analyzed_Data_1obj_tail %%%%%%%%%%%%%%%%%%%%%%%%%
+    cd Analyzed_Data_1obj_head %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
-%     cd ./tail %%%%%%%%%%%%%%%%
+%     cd ./tail
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir('*rgb_Converted.mat'); %*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) %%%%%%%%%%%%%%%%%%
+    filelist=dir('*rgb_Converted.mat'); 
+    %*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) 
     flen = length(filelist);
     
     for filei = 1:flen
+        disp(filei)
         filename = filelist(filei).name;
         load(filename)
         
@@ -86,7 +91,7 @@ for folderi=1:folderlen
         
         
         % Analyze time spent oriented to obj (after smoothing)
-        orientSmooth = smoothdata(LabelsCut(:,22),'rloess',Swindow);
+        orientSmooth = smoothdata(LabelsCut(:,22),'rloess',Swindow_orient);
         isOrient = intersect(find(orientSmooth<=angle_radius), find(orientSmooth>=(-angle_radius)));
         Time_angle(filei) = length(isOrient);
         
@@ -109,13 +114,36 @@ for folderi=1:folderlen
         bodyLen = sqrt( (smooth_tailX-smooth_headX).^2 + (smooth_tailY-smooth_headY).^2 ); % pixels
         bodyLen(bodyLen>bodyLen_cutoff)=0; % body lengths >80px are likely to be errors
 
-        vel       = sqrt( curr_velX.^2 + curr_velY.^2 ); % head velocity, cm/s
-        stretches = find(bodyLen>(mean(bodyLen)+std(bodyLen)));
-        slows     = find(vel<5);
-        sap       = intersect(stretches,slows);
+        vel        = sqrt( curr_velX.^2 + curr_velY.^2 ); % head velocity, cm/s
+        stretches  = find(bodyLen>(mean(bodyLen)+std(bodyLen)));
+        slows      = find(vel<5);
+        sap        = intersect(stretches,slows);
+        sap_in_rad = intersect(sap, find(LabelsCut(:,21)==1));
         
-        sap_num = sum(diff(sap)>1);
+        sap_num(filei)        = sum(diff(sap)>1); % total SAPs (any location)
+        sap_num_in_rad(filei) = sum(diff(sap_in_rad)>1)/Time_distance(filei); % SAPs near object (norm)
+        sap_dist{filei,1}       = LabelsCut(sap,17);
         
+        load('Arena_Obj_Pos.mat')
+        disp(['radius: ' num2str(radius_cm)])
+        
+        % scatter plot of SAP as a function of distance
+        SAP_figure = figure(1);
+%         plot(LabelsCut(:,2), LabelsCut(:,3),'k.')
+        hold on
+        plot(LabelsCut(sap,2), LabelsCut(sap,3),'b.')
+        
+        th = 0:pi/50:2*pi;
+        x  = obj_center(filei,1);
+        y  = obj_center(filei,2);
+        xunit = radius_cm * ppc * cos(th) + x;
+        yunit = radius_cm * ppc * sin(th) + y;
+%         plot(xunit, yunit,'r-','linewidth',3)
+        xlim([50 500])
+        set(gca, 'YDir', 'reverse')
+        
+        pause(0.5)
+                
         % scatter plot of body length as a function of distance to object
 %         bodyLen = sqrt( (LabelsCut(:,11)-LabelsCut(:,2)).^2 + ...
 %                         (LabelsCut(:,12)-LabelsCut(:,3)).^2 )/ppc;
@@ -175,16 +203,12 @@ for folderi=1:folderlen
         Time_periphery(filei) = numel(xq(~in))/numel(xq);
         
         
-        % Analyze total distance covered (based on nose pos - more reliable than center of mass)
-        centerCalcX = (LabelsCut(:,2));% + LabelsCut(:,5) + ...
-%                        LabelsCut(:,8) + LabelsCut(:,11))/4;
-        centerCalcY = (LabelsCut(:,3));% + LabelsCut(:,6) + ...
-%                        LabelsCut(:,9) + LabelsCut(:,12))/4;
+        % Analyze total distance covered (based on nose/tail avg)
+        centerCalcX = (LabelsCut(:,2) + LabelsCut(:,11))/2;
+        centerCalcY = (LabelsCut(:,3) + LabelsCut(:,12))/2;
         centerCalc = [centerCalcX centerCalcY]/ppc; % convert pixel to cm
         
-        Swindow=40;
         SDis=smoothdata(centerCalc,'rloess',Swindow);
-%         SDis_pix=smoothdata([centerCalcX centerCalcY],'rloess',Swindow);
         
         cumDist = [0; cumsum( sqrt( diff(SDis(:,1)).^2+diff(SDis(:,2)).^2 ) )];
         totalDistCut(filei) = cumDist(end); % cm
@@ -212,12 +236,16 @@ for folderi=1:folderlen
 %             Swindow angle_radius
     end
     
-    Time_distance_all(folderi,:)=Time_distance;
-    Time_angle_all(folderi,:)=Time_angle;
-    Time_periphery_all(folderi,:)=Time_periphery;
-    TotalDistCut_all(folderi,:)=totalDistCut;
+    Time_distance_all(folderi,:)  = Time_distance;
+    Time_angle_all(folderi,:)     = Time_angle;
+    Time_periphery_all(folderi,:) = Time_periphery;
+    TotalDistCut_all(folderi,:)   = totalDistCut;
+    SAP_num_all(folderi,:)        = sap_num;
+    SAP_in_rad_all(folderi,:)     = sap_num_in_rad;
+    dist_of_sap(folderi).sapDist  = sap_dist;
 %     FracArea_all(folderi,:)=fracArea;
-    clearvars Time_angle Time_distance Time_periphery totalDistCut fracArea
+    clearvars Time_angle Time_distance Time_periphery totalDistCut ...
+        fracArea sap_num sap_num_in_rad sap_dist
     cd ..
 %     cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
@@ -225,6 +253,8 @@ for folderi=1:folderlen
     DisOrAng{folderlen+folderi,1}='Angle';
     Periph{folderi,1}='Periphery';
     TotalDist{folderi,1}='DistanceRun';
+    SAPNumNear{folderi,1}='SAPnum';
+    SAPNumNear{folderlen+folderi,1}='SAPnear';
 %     TotalArea{folderi,1}='AreaCovered';
 
 end
@@ -235,11 +265,15 @@ Time_angle_all    = Time_angle_all./double(endframe-startframe);
 Table  = table(cat(1,foldernames,foldernames),DisOrAng,[Time_distance_all;Time_angle_all]);
 Table2 = table(cat(1,foldernames), Periph, Time_periphery_all);
 Table3 = table(cat(1,foldernames), TotalDist, TotalDistCut_all);
+Table4 = table(cat(1,foldernames,foldernames),SAPNumNear,[SAP_num_all;SAP_in_rad_all]);
 
 if(0)
     writetable(Table,'TimeStatistic.csv');
     writetable(Table2,'TimeStatistic_body_periph.csv');
     writetable(Table3,'TimeStatistic_nose_totalDistCut.csv');
+    writetable(Table4,'TimeStatistic_SAP_norm.csv');
+    save('SAP_plus_dist.mat', dist_of_sap)
+    
     disp('saved')
 end
 

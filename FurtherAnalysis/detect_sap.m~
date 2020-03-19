@@ -113,7 +113,7 @@ for miceiter = 1:folderlen
     cd ../..
 end
 
-%% concatenate structures of SAP distance from object for all mouse sets
+%% concatenate structures of SAP distances d
 clear
 close all
 clc
