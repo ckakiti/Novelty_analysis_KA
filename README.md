@@ -1,3 +1,12 @@
+# Sample commands for using DeepLabCut and MoSeq
+
+[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
+
+
+[Training a New Network for DeepLabCut](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
+
+[MoSeq Sample Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
+
 # Novelty_analysis
 
 Matlab code for novelty behavior analysis
@@ -97,14 +106,6 @@ Matlab code for novelty behavior analysis
 - Inputs: MoSeqDataFrame.mat, MiceIndex.mat, a syllable of interest to plot
 - Outputs: bar plot of total syllable usage, time course of usage within day, time course of usage across days
 
-# Sample commands for using DeepLabCut and MoSeq
-
-[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
-
-
-[Training a New Network for DeepLabCut](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
-
-[MoSeq Sample Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
 
 # Running MoSeq on the cluster
 
