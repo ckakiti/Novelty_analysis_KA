@@ -12,6 +12,8 @@ detectCond = cat(1, Mice.novelty);
 cond2 = find(detectCond=='C');
 cond1 = find(detectCond=='S');
 reorder = [cond2; cond1];
+cond2Color = [0.5 0.0 0.5];
+cond1Color = [1.0 0.5 0.0];
 
 files    = dir;
 whichDir = [files.isdir];
@@ -66,6 +68,9 @@ load('SAP_plus_dist_all.mat')
 
 bin_size = 100;
 cumul_sap_dist = [];
+sap_dist_stim  = [];
+sap_dist_cont  = [];
+sap_dist_all   = [];
 
 for miceiter = 1:length(dist_of_sap_all)
     for dayiter = curr_day %1:length(dist_of_sap_all(miceiter).sapDist)
@@ -78,6 +83,15 @@ for miceiter = 1:length(dist_of_sap_all)
         if(max(curr_saps) > global_max)
             global_max = max(curr_saps);
         end
+        
+        curr_noseX = dist_of_sap_all(miceiter).nosePos{dayiter,1};
+        curr_noseY = dist_of_sap_all(miceiter).nosePos{dayiter,2};
+        sap_dist_all = [sap_dist_all; curr_noseX curr_noseY];
+        if(ismember(miceiter,cond1))
+            sap_dist_stim = [sap_dist_stim; [curr_noseX curr_noseY]];
+        else
+            sap_dist_cont = [sap_dist_cont; [curr_noseX curr_noseY]];
+        end
     end
 end
 
@@ -86,8 +100,10 @@ clc
 
 fig1 = figure(1);
 hold on
-cont = plot(centers, cumul_sap_dist(cond2,:), 'r-');
-stim = plot(centers, cumul_sap_dist(cond1,:), 'k-');
+cont = plot(centers, cumul_sap_dist(cond2,:), ...
+    'Color', cond2Color, 'LineStyle', '-');
+stim = plot(centers, cumul_sap_dist(cond1,:), ...
+    'Color', cond1Color, 'LineStyle', '-');
 line([radius_cm radius_cm], [0 max(cumul_sap_dist(:))], 'LineStyle', '--')
 
 legend([cont(1) stim(1)], {'cont', 'stim'}, 'location','east') %nameDir(reorder)
@@ -98,10 +114,40 @@ ylabel('Cumulative time at distance from obj (s)')
 set(gca, 'FontSize', 16)
 set(fig1, 'Position', [200 200 700 600])
 
+%%
+close all
+clc
+
+fig2 = figure(2);
+set(gcf, 'Position', [330 300 1500 650])
+st = suptitle('Spatial Distribution of SAP expression');
+set(st, 'FontSize', 24)
+
+subplot(1,2,1)
+plot(sap_dist_stim(:,1), sap_dist_stim(:,2), ...
+    'Color',cond1Color,'Marker','.','LineStyle','none','LineWidth',10)
+xlim([50 500])
+ylim([0 450])
+axis square
+title('stimulus novelty')
+set(gca,'YDir','reverse','FontSize',16)
+
+subplot(1,2,2)
+plot(sap_dist_cont(:,1), sap_dist_cont(:,2), ...
+    'Color',cond2Color,'Marker','.','LineStyle','none','LineWidth',10)
+xlim([50 500])
+ylim([0 450])
+axis square
+title('contexual novelty')
+set(gca,'YDir','reverse','FontSize',16)
+%%
+
 disp('plotted')
 
 if(0)
     saveas(gca, ['SAPnearN1_' num2str(durTotal) 'min_cumulative.tif'])
+    
+    saveas(fig2, 'SAPpos.tif')
 end
 
 %%

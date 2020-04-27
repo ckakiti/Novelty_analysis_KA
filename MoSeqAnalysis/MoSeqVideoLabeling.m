@@ -7,19 +7,21 @@ clear
 close all
 clc
 
-Labeling_mice=[1]
+Labeling_mice=[7]
 Labeling_days=[3]
 BarHeight=30;
-Mice_Index_path='/media/alex/DataDrive1/MoSeqData/DRILLS/DRILLS_MoSeq/MiceIndex.m';
-run(Mice_Index_path);
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex.mat';
+%run(Mice_Index_path); %for .m file
+load(Mice_Index_path); %for .mat file
 
 tic
-cd '/media/alex/DataDrive1/MoSeqData/DRILLS/DRILLS_MoSeq'
+cd '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/'
 load('MoSeqDataFrame.mat');
 % cd('Videos');
 
 %  for miceiter=1:length(Mice)
 for miceiter=Labeling_mice
+    cd Chess_MoSeq
     cd(Mice(miceiter).name);
 
     % for dayiter=1:length(Mice(miceiter).ExpDay)

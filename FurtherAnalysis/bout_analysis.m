@@ -249,7 +249,7 @@ clc
 % cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/Capoeira_MoSeq')
 % poke_labels=csvread('Capoeira_poke_labels_N1.csv',1,3);
 
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_DLC/')
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/')
 load('PokesApproaches.mat')
 
 files    = dir;
@@ -258,15 +258,16 @@ nameDir  = files(whichDir);
 nameDir  = {nameDir.name};
 nameDir(ismember(nameDir,{'.','..','temp'})) = [];
 
-poke_labels = [];
+curr_labels = [];
 for mousei=1:length(Mice)
-    curr_pokes_rgb = Mice(mousei).Pokes_Day3'; % identify pokes for N1
+%     curr_rgb = Mice(mousei).Pokes_Day3'; % identify pokes for N1
+    curr_rgb = Mice(mousei).Approach_Day3';
     
     cd(nameDir{mousei})
     
-    rgbts_file   = dir('*200102_01_rgb_ts.txt');
-    depthts_file = dir('*200102_depth_ts.txt');
-    % Capoeira: 190413
+    rgbts_file   = dir('*190906_rgb_ts.txt');
+    depthts_file = dir('*190906_depth_ts.txt');
+    % Capoeira: 190413_01
     % Hiking: 190622
     % Chess: 190712
     % Machines: 190906
@@ -275,17 +276,17 @@ for mousei=1:length(Mice)
     rgbts   = load(rgbts_file.name);
     depthts = load(depthts_file.name);
     
-    curr_pokes_depth = zeros(length(curr_pokes_rgb),1);
-    for ts_iter = 1:length(curr_pokes_rgb)
-        curr_pokes_depth(ts_iter,1) = find(depthts>rgbts(curr_pokes_rgb(ts_iter)),1);
+    curr_depth = zeros(length(curr_rgb),1);
+    for ts_iter = 1:length(curr_rgb)
+        curr_depth(ts_iter,1) = find(depthts>rgbts(curr_rgb(ts_iter)),1);
     end
     
-    poke_AddLabel  = [repmat(mousei,length(curr_pokes_rgb),1) curr_pokes_rgb curr_pokes_depth];
-    poke_labels    = [poke_labels; poke_AddLabel];
+    curr_AddLabel  = [repmat(mousei,length(curr_rgb),1) curr_rgb curr_depth];
+    curr_labels    = [curr_labels; curr_AddLabel];
     
     cd .. 
 end
 
-% csvwrite('***_poke_labels_N1.csv', poke_labels)
+% csvwrite('***_poke_labels_N1.csv', curr_labels)
 
 

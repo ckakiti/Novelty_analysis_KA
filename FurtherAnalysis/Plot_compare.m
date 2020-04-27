@@ -28,7 +28,7 @@ else
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
     timeStat = readtable('TimeStatistic_SAP_combine4_nose_norm.csv');
-
+    
     timeStat2 = timeStat{:,3:end};
     names = timeStat{1:height(timeStat)/2,1}';
 %     names = cat(1, Mice.name);

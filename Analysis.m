@@ -44,10 +44,10 @@ Config_NovAna;
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Prey_DLC/Sheep/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/Au/
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-whichFolder = 'Analyzed_Data_1obj_12cm_tail';        %%%%%%%%%%%%
+whichFolder = 'Analyzed_Data_1obj_tail';        %%%%%%%%%%%%
 cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -138,7 +138,7 @@ for fiter = 1:flen %%%%%%%%%%%
 %    Labels(:,16);
 
     % Correct labeling errors (jumps)
-    diffCurr = sqrt(diff(Labels(:,2)).^2 + diff(Labels(:,3)).^2);
+    diffCurr = sqrt(diff(Labels(:,x_curr)).^2 + diff(Labels(:,y_curr)).^2);
     findJump = find(diffCurr>50);
 
     for i=1:length(findJump)

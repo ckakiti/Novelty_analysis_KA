@@ -1,3 +1,4 @@
+disp('test')
 load('GeneralUsage.mat')
 nodename=regexp(sprintf('%i ',0:99),'(\d+)','match');
 

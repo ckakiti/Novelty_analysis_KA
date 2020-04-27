@@ -28,7 +28,7 @@ AnalysisDay=3;      % 3 = first novelty day
 detectCond = cat(1, Mice.novelty);
 G1_Mice=find(detectCond=='C')';%[1 2 3 4];
 G2_Mice=find(detectCond=='S')';%[5 6 7 8];
-whichMouse = 9;           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+whichMouse = 2;           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(['whichMouse: ' num2str(whichMouse) ...
     ' (' Mice(G1_Mice(whichMouse)).name '/' Mice(G2_Mice(whichMouse)).name ')'])
 
@@ -398,12 +398,10 @@ set(gca,'YTick',[0 0.5 1])
 % areahandle(101).FaceColor=[0 0 0];
 
 disp('plotted')
-%if(0)
-    saveas(Plot_G1actalignedusage,['Dataset_20190723_C' num2str(whichMouse) ...
-        '_' Mice(G1_Mice(whichMouse)).name '_syllableUsage.tif'])
-    saveas(Plot_G2actalignedusage,['Dataset_20190723_S' num2str(whichMouse) ...
-        '_' Mice(G2_Mice(whichMouse)).name '_syllableUsage.tif'])
-%end
+if(0)
+    saveas(Plot_G1actalignedusage,['Dataset_20190723_' Mice(G1_Mice(whichMouse)).name '_syllableUsage.tif'])
+    saveas(Plot_G2actalignedusage,['Dataset_20190723_' Mice(G2_Mice(whichMouse)).name '_syllableUsage.tif'])
+end
 
 %% plots of individual syllables for statistical analysis
 close all
