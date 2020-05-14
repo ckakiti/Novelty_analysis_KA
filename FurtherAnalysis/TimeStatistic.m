@@ -8,7 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -30,7 +30,7 @@ foldernames = {folderd(isub).name}';
 foldernames(ismember(foldernames,{'.','..','Retrain_Sep17','temp'})) = []; 
 folderlen=length(foldernames);
 
-% for SAP+orientation analysis (smoothing)
+% smoothing window for SAP+orientation analysis
 Swindow=30;
 Swindow_orient=40;
 
@@ -56,7 +56,7 @@ for folderi=1:folderlen
 %     pokes = csvread(poke_file.name);
     dist_of_sap(folderi).name = foldernames{folderi};
     
-    cd Analyzed_Data_1obj_head %%%%%%%%%%%%%%%%%%%%%%%%%
+    cd Analyzed_Data_1obj_tail %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
 %     cd ./tail
 
@@ -120,18 +120,20 @@ for folderi=1:folderlen
         sap        = intersect(stretches,slows);
         sap_in_rad = intersect(sap, find(LabelsCut(:,21)==1));
         
-%         sap_frame{filei,1}    = sap(find(diff(sap)>1)+1);
-%         sap_num(filei)        = sum(diff(sap)>1); % total SAPs (any location)
-%         sap_num_in_rad(filei) = sum(diff(sap_in_rad)>1)/Time_distance(filei); % SAPs near object (norm)
-%         sap_dist{filei,1}     = LabelsCut(diff(sap)>1,17);
-%         nose_dist{filei,1}    = smooth_headX(diff(sap)>1);
-%         nose_dist{filei,2}    = smooth_headY(diff(sap)>1);
-        sap_frame{filei,1}    = sap;
-        sap_num(filei)        = length(sap); % total SAPs (any location)
-        sap_num_in_rad(filei) = length(sap_in_rad)/Time_distance(filei); % SAPs near object (norm)
-        sap_dist{filei,1}     = LabelsCut(sap,17);
-        nose_dist{filei,1}    = smooth_headX(sap);
-        nose_dist{filei,2}    = smooth_headY(sap);
+        diffSap      = diff(sap);
+        diffSapInRad = diff(sap_in_rad);
+        sap_frame{filei,1}    = sap(find(diffSap>1)+1);
+        sap_num(filei)        = sum(diffSap>1); % total SAPs (any location)
+        sap_num_in_rad(filei) = sum(diffSapInRad>1)/Time_distance(filei); % SAPs near object (norm)
+        sap_dist{filei,1}     = LabelsCut(diffSap>1,17);
+        nose_dist{filei,1}    = smooth_headX(diffSap>1);
+        nose_dist{filei,2}    = smooth_headY(diffSap>1);
+%         sap_frame{filei,1}    = sap;
+%         sap_num(filei)        = length(sap); % total SAPs (any location)
+%         sap_num_in_rad(filei) = length(sap_in_rad)/Time_distance(filei); % SAPs near object (norm)
+%         sap_dist{filei,1}     = LabelsCut(sap,17);
+%         nose_dist{filei,1}    = smooth_headX(sap);
+%         nose_dist{filei,2}    = smooth_headY(sap);
         
 %         load('Arena_Obj_Pos.mat')
 %         disp(['radius: ' num2str(radius_cm)])
