@@ -56,7 +56,7 @@ for folderi=1:folderlen
 %     pokes = csvread(poke_file.name);
     dist_of_sap(folderi).name = foldernames{folderi};
     
-    cd Analyzed_Data_1obj_tail %%%%%%%%%%%%%%%%%%%%%%%%%
+    cd Analyzed_Data_1obj_head %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
 %     cd ./tail
 
@@ -124,13 +124,14 @@ for folderi=1:folderlen
         diffSapInRad = diff(sap_in_rad);
         sap_frame{filei,1}    = sap(find(diffSap>1)+1);
         sap_num(filei)        = sum(diffSap>1); % total SAPs (any location)
-        sap_num_in_rad(filei) = sum(diffSapInRad>1)/Time_distance(filei); % SAPs near object (norm)
+        sap_num_in_rad(filei) = sum(diffSapInRad>1); % SAPs near object
+%         sap_num_in_rad(filei) = sum(diffSapInRad>1)/Time_distance(filei); % (norm)
         sap_dist{filei,1}     = LabelsCut(diffSap>1,17);
         nose_dist{filei,1}    = smooth_headX(diffSap>1);
         nose_dist{filei,2}    = smooth_headY(diffSap>1);
 %         sap_frame{filei,1}    = sap;
 %         sap_num(filei)        = length(sap); % total SAPs (any location)
-%         sap_num_in_rad(filei) = length(sap_in_rad)/Time_distance(filei); % SAPs near object (norm)
+%         sap_num_in_rad(filei) = length(sap_in_rad)/Time_distance(filei); % (norm)
 %         sap_dist{filei,1}     = LabelsCut(sap,17);
 %         nose_dist{filei,1}    = smooth_headX(sap);
 %         nose_dist{filei,2}    = smooth_headY(sap);

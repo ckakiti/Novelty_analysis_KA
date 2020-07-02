@@ -45,7 +45,7 @@ if(nearOrSAP==0)
     
     normOrNo = [];
 elseif(nearOrSAP==1)
-    whichAnalyzedFolder = 'Analyzed_Data_1obj_head'; %8cm=head 12cm=tail
+    whichAnalyzedFolder = 'Analyzed_Data_1obj_tail'; %8cm=head 12cm=tail
     disp('Analyzing SAP number')
     disp(['radius_cm = ' num2str(radius_cm)])
     
@@ -121,10 +121,8 @@ for folderi=1:folderlen
         sap_frame{filei,1}    = sap;
         sap_num(filei)        = length(sap); % total SAPs (any location)
         sap_dist{filei,1}     = LabelsCut(sap,17);
-        sap_pos{filei,1}      = smooth_headX(sap);
-        sap_pos{filei,2}      = smooth_headY(sap);
-        nose_dist{filei,1}    = smooth_headX;
-        nose_dist{filei,2}    = smooth_headY;
+        nose_dist{filei,1}    = smooth_headX(sap);
+        nose_dist{filei,2}    = smooth_headY(sap);
         
         if(normOrNo) % normalized
 %             sap_num_in_rad(filei) = sum(diffSapInRad>1)/Time_distance(filei); 
@@ -141,10 +139,9 @@ for folderi=1:folderlen
     SAP_in_rad_all(folderi,:)     = sap_num_in_rad;
     dist_of_sap(folderi).sapFrame = sap_frame;
     dist_of_sap(folderi).sapDist  = sap_dist;
-    dist_of_sap(folderi).sapPos   = sap_pos;
     dist_of_sap(folderi).nosePos  = nose_dist;
     clearvars Time_angle Time_distance ...
-        sap_num sap_num_in_rad sap_frame sap_dist sap_pos nose_dist
+        sap_num sap_num_in_rad sap_frame sap_dist nose_dist
     cd ../..
     DisOrAng{folderi,1}='Distance';
     DisOrAng{folderlen+folderi,1}='Angle';

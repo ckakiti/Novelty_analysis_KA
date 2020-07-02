@@ -226,16 +226,35 @@ xticklabels(SyllablesX(GSortedusageindex(1:20)));
 set(Plot_GeneralUsage_Top20, 'Position', [340 386 716 450])
 hold off
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Plot_AccGeneralUsage=figure(3);
-plot(X,AccGSortedusage,'LineWidth',1.5)
-title(['Accumulated General Syllable Usage (', setName, ')'],'FontSize',fsize,...
-    'Interpreter', 'none')
-ylabel('Percentage','FontSize',fsize)
-xlabel('Syllables Rank','FontSize',fsize)
-xticks(X);
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% assess how much of the data is explained by how many syllables
+%  e.g. 65 syllables explain 90% of the frames
+close all
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+explainHowMuch = 0.9;
+nSylExplain = find(AccGSortedusage>explainHowMuch, 1)-1;
+
+Plot_AccGeneralUsage=figure(3);
+set(gcf, 'Position', [600 380 800 450])
+hold on
+
+plot(X,AccGSortedusage,'LineWidth',2,'Color','k')
+line([0 length(X)], [explainHowMuch explainHowMuch], 'Color', 'k', 'LineStyle', '--')
+line([nSylExplain nSylExplain], [0 1], 'Color', 'k', 'LineStyle', '--')
+text(nSylExplain+2,0.85,['n=' num2str(nSylExplain)],'FontSize',16)
+
+title(['Accumulated Syllable Usage (', setName, ')'],'FontSize',fsize,...
+    'Interpreter', 'none')
+ylabel('Fractional Usage','FontSize',fsize)
+xlabel('Syllable Rank','FontSize',fsize)
+xlim([0 length(X)])
+%xticks(X);
+
+if(0)
+    saveas(Plot_AccGeneralUsage, ...
+        [setName '_AccSyllableUsage_sorted.tif'])
+end
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Plot_UsageCompare=figure(4);
 plot(X,PG1Usage,'LineWidth',1.5)
 hold on
