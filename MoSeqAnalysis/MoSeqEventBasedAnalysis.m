@@ -158,7 +158,10 @@ xtickangle(45)
 ylim([0 60])
 set(gca,'YTick',[0 15 30 45])
 
-% saveas(Plot_total_interaction_time, [MouseSet '_MoSeq_avgUsage_syl', num2str(IntSyl), '.tif'])
+if(0)
+%     saveas(Plot_total_interaction_time, [MouseSet '_MoSeq_avgUsage_syl', num2str(IntSyl), '.tif'])
+    save('Dataset_20190723_eventBased_syl9avg_10min.mat')
+end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot syllable usage across time bins within 1 day, divide by novelty condition
@@ -211,10 +214,10 @@ xticklabels(IntersessionXTick);
 set(gca,'YTick',[0 2 4 6 8 10])
 
 if(0)
-    saveas(Plot_interaction_time, [MouseSet '_MoSeq_usageAcrossSession_syl', num2str(IntSyl), '.tif'])
-    saveas(Plot_interaction_time, [MouseSet '_MoSeq_usageAcrossSession_syl', num2str(IntSyl), '_err.tif'])
+%     saveas(Plot_interaction_time, [MouseSet '_MoSeq_usageAcrossSession_syl', num2str(IntSyl), '.tif'])
+%     saveas(Plot_interaction_time, [MouseSet '_MoSeq_usageAcrossSession_syl', num2str(IntSyl), '_err.tif'])
+    save('Dataset_20190723_eventBased_syl9acrossDay_10min.mat')
 end
-
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot average syllable usage per novelty condition across novelty days
 

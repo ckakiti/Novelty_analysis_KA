@@ -24,6 +24,7 @@ starttime=0;         % in minutes  Pending: in the future, this should depend on
 timeseg=0:2:10;      % in minutes
 timeseg=starttime+timeseg;
 frameseg=timeseg.*60.*fps;
+frameCutoff = 18000;
 
 Analysis_Mice=1:length(Mice);
 Analysis_Day=1:6;     
@@ -69,7 +70,9 @@ for miceiter=Analysis_Mice
             end
         end
 
-        Labels=double(MoSeqDataFrame.labels{MSidindex});
+%         frameCutoff = length(MoSeqDataFrame.labels{MSidindex}); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        disp(frameCutoff)
+        Labels=double(MoSeqDataFrame.labels{MSidindex}(1:frameCutoff));
         labellen=length(Labels);
 
         Mice(miceiter).ExpDay(dayiter).IntSIndex=find(Labels==IntSyl);
@@ -130,17 +133,17 @@ hold on
 errorbar(CVSX,csavg,csstd,'.','LineWidth',2,'Color','black')
 hold on
  
-% for miceiter=1:length(Mice)
-%     if Mice(miceiter).novelty == 'C'
-%         scatter(1,Plotdata(miceiter),mksize,'filled','d')
-%         hold on 
-%     elseif Mice(miceiter).novelty == 'S'
-%         scatter(2,Plotdata(miceiter),mksize,'filled','d')
-%         hold on
-%     else
-%         error('Novelty class not defined');
-%     end
-% end
+for miceiter=1:length(Mice)
+    if Mice(miceiter).novelty == 'C'
+        scatter(1,Plotdata(miceiter),mksize,'filled','d')
+        hold on 
+    elseif Mice(miceiter).novelty == 'S'
+        scatter(2,Plotdata(miceiter),mksize,'filled','d')
+        hold on
+    else
+        error('Novelty class not defined');
+    end
+end
 
 % legend(['C vs S','SD',{Mice.name}])
 set(Plot_total_interaction_time, 'position', [0 0 500 800]);
@@ -155,7 +158,10 @@ xtickangle(45)
 ylim([0 60])
 set(gca,'YTick',[0 15 30 45])
 
-% saveas(Plot_total_interaction_time, [MouseSet '_MoSeq_avgUsage_syl', num2str(IntSyl), '.tif'])
+if(0)
+%     saveas(Plot_total_interaction_time, [MouseSet '_MoSeq_avgUsage_syl', num2str(IntSyl), '.tif'])
+
+end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot syllable usage across time bins within 1 day, divide by novelty condition
@@ -172,13 +178,13 @@ intersessioncstd=std(Plotdata(Cnum,:));
 intersessionsavg=mean(Plotdata(Snum,:));
 intersessionsstd=std(Plotdata(Snum,:));
 
-% errorbar(IntersessionX,intersessioncavg,intersessioncstd,'Color',cond2Color,'LineWidth',2)
-% hold on
-% errorbar(IntersessionX,intersessionsavg,intersessionsstd,'Color',cond1Color,'LineWidth',2)
-
+errorbar(IntersessionX,intersessioncavg,intersessioncstd,'Color',cond2Color,'LineWidth',2)
 hold on
-plot(IntersessionX, Plotdata(Cnum,:), 'Color', cond2Color, 'LineWidth',2)
-plot(IntersessionX, Plotdata(Snum,:), 'Color', cond1Color, 'LineWidth',2)
+errorbar(IntersessionX,intersessionsavg,intersessionsstd,'Color',cond1Color,'LineWidth',2)
+
+% hold on
+% plot(IntersessionX, Plotdata(Cnum,:), 'Color', cond2Color, 'LineWidth',2)
+% plot(IntersessionX, Plotdata(Snum,:), 'Color', cond1Color, 'LineWidth',2)
 
 % for miceiter=1:length(Mice)
 %     if Mice(miceiter).novelty == 'C'
@@ -192,13 +198,14 @@ plot(IntersessionX, Plotdata(Snum,:), 'Color', cond1Color, 'LineWidth',2)
 %     end
 % end
 xlim([0.5 length(timeseg)-0.5]);
+ylim([-1 7])
 
 set(gca,'FontSize',fsize)
 % title(['Syllable ' num2str(IntSyl) ' per minute N1 (' MouseSet ')'])
 title(['Time course of syllable ' num2str(IntSyl) ' usage'])
 % title({'Time course of syllable usage:','cautious approach'})
 % legend(['Contextual','Stimulus',{Mice.name}])
-legend({Mice.name},'location','north')
+% legend({Mice.name},'location','north')
 xlabel('Time Segments (min)')
 %ylabel(['Syllable ' num2str(IntSyl) ' Usage (s)'])
 ylabel('Syllable Usage (s)')
