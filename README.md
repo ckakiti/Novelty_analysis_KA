@@ -108,6 +108,7 @@ Matlab code for novelty behavior analysis
 
 ### 6. MoSeqGeneralSyllableAnalysis.m
 - plot fractional syllable usage (choice to select subset of mice and/or days, first 10 min or all frames)
+- calculates how many syllables explain 90% of behavior (needed for statistical analysis)
 - Inputs: MiceIndex.mat, MoSeqDataFrame.mat
 - Outputs: plot of fractional syllable usage (sorted by usage, all days), plot of cumulative fractional usage
 
