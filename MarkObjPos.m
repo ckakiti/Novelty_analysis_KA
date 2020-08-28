@@ -7,9 +7,10 @@ Config_NovAna;
 currSet = 'Planets_DLC'; %%%
 currMouse = 'Venus';
 % currDate  = 'allFiles'; %190702
-timeShift = 901-900;%6000;%901-900; 
+timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMouse])% '/' currDate]) %%
+% cd(['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/ForMelissa/'])
 %cd(['/media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq/' currSet '/' currMouse])% '/' currDate]) %%%
 
 %currSessionName = dir('session*'); %%%
@@ -17,15 +18,15 @@ cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/' currSet '/' currMous
 path=cd;
 PathRoot=[path '/'];
 
-%vn = dir('*.avi'); %%%
-%vn = vn.name; %%%
-%flen=1; %%%
+% vn = dir('*.mp4'); %%% '*.avi'
+% vn = vn(1).name; %%%
+% flen=1; %%%
 
 filelist=dir([PathRoot,'*.csv']); %%
 flen = length(filelist); %%
 fn = filelist(flen).name; %%
 vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
-% Labels = csvread(fn,3,0); %%
+Labels = csvread(fn,3,0); %%
 
 video=VideoReader(vn);
 video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
@@ -47,7 +48,7 @@ for fi =flen:-1:1
     
     fn = filelist(fi).name; %%
     vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
-%     Labels = csvread(fn,3,0); %%
+    Labels = csvread(fn,3,0); %%
     
     video=VideoReader(vn);
     video.CurrentTime = (timeShift-1)/video.FrameRate; %1;

@@ -6,12 +6,14 @@ clc
 
 path_to_your_files = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
     'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
+%     'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
 % [/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine]
 cd(path_to_your_files)
 
 % structure with name of each mouse and corresponding novelty condition
 % (order matters - should be the same as your .csv files)
 run('MiceIndex_combine3')
+% run('MiceIndex_combine3')
 
 % name of novelty conditions
 cond2name = 'cont';
@@ -26,7 +28,8 @@ disp(['cond2: ' num2str(cond2')])
 
 % .csv files containing avg time near obj, orientation, SAP #, SAP time near
 stat_timeAng = readtable('TimeStatistic_combine3_tail.csv');
-stat_SAP     = readtable('TimeStatistic_SAP_combine3_8cm_head_norm.csv');
+stat_SAP = readtable('TimeStatistic_SAP_combine3_8cm_norm_incl.csv');
+% stat_SAP     = readtable('TimeStatistic_SAP_combine3_8cm_head_norm.csv');
 
 % separate statistics within .csv files (makes it easier to plot)
 stat_timeAng2 = stat_timeAng{:,3:end};
@@ -66,7 +69,7 @@ Dis_te_frame = fps*60*totalTime+500; % includes 500 frame shift
 disp(['Total time: ' num2str(round(Dis_te_frame/fps/60)) 'min'])
 
 % radius of analysis for time spent near object (8 for nose, 12 for tail)
-radius_cm_disAng = 12;
+radius_cm_disAng = 8;
 radius_cm_SAP = 8;
 angle_radius = 15;
 disp(['Dis/ang radius: ' num2str(radius_cm_disAng) 'cm'])
@@ -158,7 +161,7 @@ ylabel(Y_ang_ylabel)
 legend([a1(1) a2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
    [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
-ylim([0 0.225])
+ylim([0 0.25])
 ylimAng = angfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);

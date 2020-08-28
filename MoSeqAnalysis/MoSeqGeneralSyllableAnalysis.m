@@ -213,7 +213,15 @@ xticklabels(SyllablesX(GSortedusageindex));
 xlim([0 60])
 ylim([0 0.055])
 set(Plot_GeneralUsage, 'Position', [46 353 1870 450])
-%saveas(Plot_GeneralUsage, [setName '_generalUsage_showCutoff.tif'])
+
+if(0)
+    saveas(Plot_GeneralUsage, [setName '_generalUsage_showCutoff.tif'])
+    
+    sortSyl_descend_relativeToPlot = SyllablesX(GSortedusageindex);
+    sortSyl_descend_relativeToOrig = GSortedusageindex;
+    csvwrite([setName '_generalUsageSorted_descend_allFrames_relativeToPlot.csv'], sortSyl_descend_relativeToPlot)
+    csvwrite([setName '_generalUsageSorted_descend_allFrames_relativeToOrig.csv'], sortSyl_descend_relativeToOrig)
+end
 
 %% just plot top 20 most used syllables
 Plot_GeneralUsage_Top20=figure(2);

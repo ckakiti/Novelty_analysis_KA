@@ -3,10 +3,11 @@ clear
 close all
 clc
 
-currMouse = 'Queens';
+currMouse = 'Strawberry';
 currDate  = '190617';
-cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Mitsuko_photometry_190617/' ...
-    currMouse, '/' currDate])
+% cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Mitsuko_photometry_190617/' ...
+%     currMouse, '/' currDate])
+cd(['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/ForMelissa/' currMouse])
 %cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/FP_Test/FP_Test_190422/
 
 % import video information
@@ -23,7 +24,7 @@ for i = 1:1
 end
 
 % import LED position (from MarkObjPos.m)
-cd Analyzed_Data_1obj
+cd Analyzed_Data %Analyzed_Data_1obj
 load('Arena_Obj_Pos.mat')
 cd ..
 
@@ -36,7 +37,7 @@ if(~isempty(sync_light_name))
     sync_light = csvread(sync_light_name.name);
 end
     
-%% Find when the light was on %%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Find when the light was on (WARNING: takes a while) %%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('start')
 
 save_time = [5000:5000:numberOfFrames-1 numberOfFrames];
@@ -74,12 +75,12 @@ disp('end')
 %clear frame thisFrame thisFrame1
 
 %% Plot when the light was on %%%%%%%%%%%%%%%%%%%%%%%%%%
-%sync_norm = zscore(sync_light);
-%middle = (max(sync_norm)-min(sync_norm))/2;
-%crosses = crossing(sync_norm, [], middle);
-sync_norm = double(sync_light);
-middle = 25;
+sync_norm = zscore(sync_light);
+middle = (max(sync_norm)-min(sync_norm))/2;
 crosses = crossing(sync_norm, [], middle);
+% sync_norm = double(sync_light);
+% middle = 25;
+% crosses = crossing(sync_norm, [], middle);
 
 disp(['middle= ' num2str(middle)])
 

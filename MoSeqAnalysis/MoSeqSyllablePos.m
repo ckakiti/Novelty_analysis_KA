@@ -9,19 +9,19 @@ disp(dataset_name)
 disp([num2str(analysis_len) 'min'])
 
 
-cd(['/media/alex/DataDrive1/MoSeqData/' dataset_name '/MoSeq'])
-% cd(['/media/alex/DataDrive1/MoSeqData/' dataset_name '/Data'])
-
-load('MoSeqDataFrame.mat')
+MSDF_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
+    'CombineAnalysis/Just-in-case files/' dataset_name '/MoSeqDataFrame.mat'];
+% '/media/alex/DataDrive1/MoSeqData/' dataset_name '/MoSeq';
+load(MSDF_path)
 Syllablebinedge=[-6,-0.5:1:99.5];
 
-Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/' dataset_name '/MoSeq/MiceIndex.mat'];
-% Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/' dataset_name '/Data/MiceIndex.mat'];
+% Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/' dataset_name '/MoSeq/MiceIndex.mat'];
+Mice_Index_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
+   'CombineAnalysis/Just-in-case files/Dataset_20190723/MiceIndex.mat'];
 load(Mice_Index_path)
-% run(Mice_Index_path);
 
 
-load(['GeneralAnalysis_' dataset_name '_' num2str(analysis_len) 'min.mat'])
+%load(['GeneralAnalysis_' dataset_name '_' num2str(analysis_len) 'min.mat'])
 
 MarkerSize=5;
 Fsize=20;
@@ -29,10 +29,47 @@ Fsize=20;
 disp('done')
 
 %%
+group1 = {'Au', 'Ginga', 'Negativa', ...
+    'Bishop', 'Knight', 'Rook', ...
+    'Appalachian', 'Continental', 'Long'};
+group2 = {'Esquiva', 'MeiaLua', 'Queixada', ...
+    'King', 'Pawn', 'Queen', ...
+    'Arizona', 'JohnMuir', 'Pacific'};
+
+mouse_names_all = cellstr(MoSeqDataFrame.SubjectName);
+mouse_names     = unique(mouse_names_all);
+
+% assign group names
+group1_loc  = all(ismember(mouse_names_all, group1),2);
+group2_loc  = all(ismember(mouse_names_all, group2),2);
+MoSeqDataFrame.group(group1_loc,:) = repmat('group1 ',length(find(group1_loc)),1);
+MoSeqDataFrame.group(group2_loc,:) = repmat('group2 ',length(find(group2_loc)),1);
+
+% get x/y position just for N1
+centroid_x = [];
+centroid_y = [];
+for mouseiter = 1:length(mouse_names)
+    % extract session uuids for single mouse
+    curr_mouse_loc  = all(ismember(mouse_names_all, mouse_names(mouseiter)),2);
+    uuid_all        = MoSeqDataFrame.uuid(curr_mouse_loc,:);
+    uuid_unique     = unique(cellstr(uuid_all));
+    
+    % get x/y position for current mouse
+    justN1 = all(ismember(uuid_all, uuid_unique(3)),2);
+    centroid_x_all = MoSeqDataFrame.centroid_x_mm(curr_mouse_loc);
+    centroid_y_all = MoSeqDataFrame.centroid_y_mm(curr_mouse_loc);
+    centroid_x_N1 = centroid_x_all(justN1);
+    centroid_y_N1 = centroid_y_all(justN1);
+    
+    centroid_x = [centroid_x centroid_x_N1];
+    centroid_y = [centroid_y centroid_y_N1];
+end
+
+%%
 % IntSyllable=[45 20 9 33 14 17 64 62 60 95 85 94 36 50 55 11 0 10 16 2];%[42 94 39 38 70 13];
 % IntSyllable=[36 37 74 18 24];
 % IntSyllable = [15 41 72 1 4 23 63 75 31 52 44 33 49 47 8];
-IntSyllable = 9;% [57 52];
+IntSyllable = 1;% 9; 1; %[57 52];
 
 close all
 SyllableDis=figure;
@@ -43,8 +80,9 @@ set(gca,'ydir','reverse')
 set(SyllableDis, 'position', [0 0 1000 850]);
 
 for syliter=1:length(IntSyllable)
-    XPos=MoSeqDataFrame.centroid_x_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));
-    YPos=MoSeqDataFrame.centroid_y_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));
+    % *** plot position just for N1 ***
+%     XPos=MoSeqDataFrame.centroid_x_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));
+%     YPos=MoSeqDataFrame.centroid_y_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));    
     scatter(XPos,YPos,MarkerSize,'filled')
     hold on
     
