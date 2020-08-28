@@ -5,7 +5,7 @@ clc
 Config_NovAna
 
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine
-run('MiceIndex_combine4')
+run('MiceIndex_combine3')
 
 oneStat = 0;
 
@@ -27,7 +27,7 @@ else
 %     timeStat = readtable('TimeStatistic_12cm_tail.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
-    timeStat = readtable('TimeStatistic_SAP_combine4_nose_norm.csv');
+    timeStat = readtable('TimeStatistic_SAP_combine3_8cm_norm.csv');
     
     timeStat2 = timeStat{:,3:end};
     names = timeStat{1:height(timeStat)/2,1}';
@@ -222,7 +222,7 @@ ylabel(Y_dis_ylabel)
 % legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([d1(1) d2(1)], {'cont', 'stim'})
 xlim([0 X(end)+1])
-% ylim([0 1])
+ylim([0 90])
 ylimDis = boutNumfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -434,7 +434,7 @@ for mouse = 1:length(mouse_name)
     timeStat = readtable('TimeStatistic.csv');
     
     if(strcmp(mouse_name{mouse}, 'Aldehyde'))
-        timeStat_all(2:12,:,mouse) = timeStat{:,2:end};
+        timeStat_all(2:12,:,mouse) = timeStat{:,end};
     else
         timeStat_all(:,:,mouse) = timeStat{:,2:end};
     end

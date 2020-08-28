@@ -187,7 +187,7 @@ legend([l(1) c(1)], {'contextual', 'stimulus'}, 'location','east') ...
     %nameDir(reorder)
 title(['Cumulative distance from object (' num2str(durTotal) 'min): N1'])
 xlim([0 50])
-ylim([0 600])
+
 xlabel('Distance from obj (cm)')
 ylabel('Cumulative time at distance from obj (s)')
 set(gca, 'FontSize', 16)

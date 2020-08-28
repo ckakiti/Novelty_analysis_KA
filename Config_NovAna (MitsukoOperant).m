@@ -1,19 +1,19 @@
 % networkname_format='DeepCut_resnet50_noveltyMay21shuffle1_700000'; % rubber toy orig
 % networkname_format='DeepCut_resnet50_MoSeqNoveltySep12shuffle1_1030000';
-networkname_format='DeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000';
+% networkname_format='DeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MoSeqConfiguralDec04shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MoSeqWithOldArenaDec31shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MoSeqConfiguralUpdateMar04shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MoSeqFPApr24shuffle1_1030000';
-% networkname_format='DeepCut_resnet50_MitsukoOperantLearningSep15shuffle1_1030000';
+networkname_format='DeepCut_resnet50_MitsukoOperantLearningSep15shuffle1_1030000';
 % networkname_format='DeepCut_resnet50_MitsukoOperant_FPJun18shuffle1_1030000';
 % networkname_format = 'DeepCut_resnet50_MoSeqGreyMouseJul23shuffle1_1030000';
 % networkname_format = 'DeepCut_resnet50_Sandra_PupilsOct17shuffle1_1030000';
 
-videoname_format='XYZ_YYMMDD_rgb.avi'; %mp4; %avi';
+videoname_format='XYZ_YYMMDD_rgb.mp4'; %mp4; %avi';
 
-video_xlen=512;%520;%512;%400%320
-video_ywid=424;%420;%424;%480%240            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+video_xlen=640;%520;%512;%400%320
+video_ywid=480;%420;%424;%480%240            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fpm = 900; %12900 %5040 %1800 %1500 %900 % frames per minute
 fps = fpm./60;          % frames per second

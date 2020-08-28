@@ -2,10 +2,10 @@ clear
 clc
 close all
 
-cd /media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data/
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/
 
 % load('GeneralUsage.mat') % name assigned to output from MoSeqGeneralSyllableAnalysis.m
-load('GeneralAnalysis_Dataset_20191007_allFrames.mat')
+load('GeneralAnalysis_Dataset_20190723_10min.mat')
 fsize=16;
 
 N_G1Usage=sum(G1Usage,1)./sum(sum(G1Usage,1),2);

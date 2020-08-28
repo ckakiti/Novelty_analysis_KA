@@ -4,7 +4,7 @@ close all
 
 
 dataset_name = 'Dataset_20190723';
-analysis_len = 10; % analyze first 10 min or all 30 min of each session
+analysis_len = 30; % analyze first 10 min or all 30 min of each session
 disp(dataset_name)
 disp([num2str(analysis_len) 'min'])
 
@@ -99,7 +99,7 @@ ylim([-400 300])
 set(gca,'ydir','reverse')
 set(SyllableDis, 'position', [0 0 1000 850]);
 
-%%
+%% subplot of multiple interesting syllables
 IntSyllable = [15 41 72 1 4 23 63 75 31 52 44 33 49 47 8];
 
 close all
@@ -128,55 +128,84 @@ set(SyllableDis, 'position', [0 0 1850 850]);
 %%
 saveas(SyllableDis, 'Dataset_20191007_SyllablePosDis_syl57_syl52.tif')
 
+%% before plotting position during novelty vs habituation:
+%    create cell arrays for centroid_x_mm/centroid_y_mm
+%    and indices for each uuid within the larger MSDF
+clear uuid_index curr_uuid
+indexiter = 1;
+uuid_index(indexiter).uuid = MoSeqDataFrame.uuid(1,:);
+uuid_index(indexiter).idx_start = 1;
+uuid_index(indexiter).idx_end = [];
+
+for MSDFiter = 1:length(MoSeqDataFrame.centroid_x_mm)
+    curr_uuid = MoSeqDataFrame.uuid(MSDFiter,:);
+    
+    if(~strcmp(curr_uuid, uuid_index(indexiter).uuid))
+        uuid_index(indexiter).idx_end = MSDFiter-1;
+        
+        indexiter = indexiter + 1;
+        uuid_index(indexiter).uuid = curr_uuid;
+        uuid_index(indexiter).idx_start = MSDFiter;
+    end
+end
+uuid_index(end).idx_end = MSDFiter;
+
+framenum = num2cell(cat(1,uuid_index.idx_end)+1-cat(1,uuid_index.idx_start));
+[uuid_index.framenum] = deal(framenum{:});
+
+[uuid_sort_string, uuid_sort_index] = sort({uuid_index.uuid});
+uuid_index_sorted = uuid_index(uuid_sort_index);
+
+for centroid_iter = 1:length(uuid_index_sorted)
+    curr_start = uuid_index_sorted(centroid_iter).idx_start;
+    curr_end   = uuid_index_sorted(centroid_iter).idx_end;
+    
+    uuid_index_sorted(centroid_iter).centroid_x_mm = ...
+        MoSeqDataFrame.centroid_x_mm(curr_start:curr_end);
+    uuid_index_sorted(centroid_iter).centroid_y_mm = ...
+        MoSeqDataFrame.centroid_y_mm(curr_start:curr_end);
+    
+    uuid_index_sorted(centroid_iter).model_label = ...
+        MoSeqDataFrame.model_label(curr_start:curr_end);
+end
+  
 %% divide plots into expression during novelty vs habituation
-
-%  *********WARNING: TAKES FOREVER TO RUN**************
-
-IntSyllable = 52; %[57 52]; 9;
+IntSyllable = 3; %[57 52]; 9;
 syliter = IntSyllable(1);
 
 xPos = [];
 yPos = [];
 
-allSyl = find(MoSeqDataFrame.model_label==syliter);
-
-tic
 for miceiter=1:length(Mice)
     disp(miceiter)
+    daynum = length(Mice(miceiter).ExpDay);
     
-    for dayiter = 2 %G1_Days
-        curr_uuid = Mice(miceiter).ExpDay(dayiter).MSid;
-        find_pos  = ismember(MoSeqDataFrame.uuid,curr_uuid,'rows');
-        find_pos  = find(find_pos);
-        crop_pos  = find_pos(1:(analysis_len*fps*60));
+    for dayiter = 2 %1:daynum %G1_Days
+        curr_uuid  = Mice(miceiter).ExpDay(dayiter).MSid;
+        where_uuid = find(ismember(cat(1,uuid_index_sorted.uuid),...
+            curr_uuid,'rows'));
         
-        curr_model_label = MoSeqDataFrame.model_label(crop_pos);
-        where_syliter    = find(curr_model_label == syliter);
-        intersect_allSyl = intersect(allSyl, crop_pos(where_syliter));
+        curr_labels = uuid_index_sorted(where_uuid).model_label;
+        crop_labels = curr_labels(1:(analysis_len*fps*60)); %%%%%%%%%%%%%%%%%%%%%%
         
-        add_xPos = MoSeqDataFrame.centroid_x_mm(intersect_allSyl);
-        add_yPos = MoSeqDataFrame.centroid_y_mm(intersect_allSyl);
-        
-        xPos = [xPos add_xPos];
-        yPos = [yPos add_yPos];
-    end
-end
-toc
+        where_syl = find(crop_labels==syliter);
+        curr_xPos = uuid_index_sorted(where_uuid).centroid_x_mm(where_syl);
+        curr_yPos = uuid_index_sorted(where_uuid).centroid_y_mm(where_syl);
 
-if(0)
-    csvwrite([dataset_name '_syl' num2str(IntSyllable) '_N1_xPos_' ...
-        num2str(analysis_len) 'min.csv'],xPos)
-    csvwrite([dataset_name '_syl' num2str(IntSyllable) '_N1_yPos_' ...
-        num2str(analysis_len) 'min.csv'],yPos)
+        xPos = [xPos curr_xPos];
+        yPos = [yPos curr_yPos];
+    end
 end
 
 %% plotting interesting syllable on specific day
-IntSyllable = 9; %[52 57]; %9
-whichDay = 'N1';
-xPos_1 = csvread([dataset_name '_syl' num2str(IntSyllable(1)) '_' whichDay ...
-    '_xPos_' num2str(analysis_len) 'min.csv']);
-yPos_1 = csvread([dataset_name '_syl' num2str(IntSyllable(1)) '_' whichDay ...
-    '_yPos_' num2str(analysis_len) 'min.csv']);
+% IntSyllable = 9; %[52 57]; %9
+whichDay = 'H2'; %'N1'; 'H2'; 'allDays';
+xPos_1 = xPos;
+yPos_1 = yPos;
+% xPos_1 = csvread([dataset_name '_syl' num2str(IntSyllable(1)) '_' whichDay ...
+%     '_xPos_' num2str(analysis_len) 'min.csv']);
+% yPos_1 = csvread([dataset_name '_syl' num2str(IntSyllable(1)) '_' whichDay ...
+%     '_yPos_' num2str(analysis_len) 'min.csv']);
 % xPos_2 = csvread([dataset_name '_syl' num2str(IntSyllable(2)) '_' whichDay ...
 %    '_xPos_' num2str(analysis_len) 'min.csv']);
 % yPos_2 = csvread([dataset_name '_syl' num2str(IntSyllable(2)) '_' whichDay ...
@@ -212,5 +241,43 @@ if(0)
         whichDay '_' num2str(analysis_len) 'min.tif'])
 end
 
+%% previous code to divide plots into novelty vs habituation:
+%  *********WARNING: TAKES FOREVER TO RUN**************
+IntSyllable = 9; %[57 52]; 9;
+syliter = IntSyllable(1);
 
+xPos = [];
+yPos = [];
 
+allSyl = find(MoSeqDataFrame.model_label==syliter);
+
+tic
+for miceiter=1:length(Mice)
+    disp(miceiter)
+    
+    for dayiter = 3 %G1_Days
+        curr_uuid = Mice(miceiter).ExpDay(dayiter).MSid;
+        find_pos  = ismember(MoSeqDataFrame.uuid,curr_uuid,'rows');
+        find_pos  = find(find_pos);
+        crop_pos  = find_pos(1:(analysis_len*fps*60));
+        
+        curr_model_label = MoSeqDataFrame.model_label(crop_pos);
+        where_syliter    = find(curr_model_label == syliter);
+        intersect_allSyl = intersect(allSyl, crop_pos(where_syliter));
+        
+        add_xPos = MoSeqDataFrame.centroid_x_mm(intersect_allSyl);
+        add_yPos = MoSeqDataFrame.centroid_y_mm(intersect_allSyl);
+        
+        xPos = [xPos add_xPos];
+        yPos = [yPos add_yPos];
+    end
+end
+toc
+
+if(0)
+    csvwrite([dataset_name '_syl' num2str(IntSyllable) '_N1_xPos_' ...
+        num2str(analysis_len) 'min.csv'],xPos)
+    csvwrite([dataset_name '_syl' num2str(IntSyllable) '_N1_yPos_' ...
+        num2str(analysis_len) 'min.csv'],yPos)
+end
+                              

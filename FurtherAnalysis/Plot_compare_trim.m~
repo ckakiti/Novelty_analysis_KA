@@ -6,14 +6,12 @@ clc
 
 path_to_your_files = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
     'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
-%     'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
 % [/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine]
 cd(path_to_your_files)
 
 % structure with name of each mouse and corresponding novelty condition
 % (order matters - should be the same as your .csv files)
 run('MiceIndex_combine3')
-% run('MiceIndex_combine3')
 
 % name of novelty conditions
 cond2name = 'cont';
@@ -28,8 +26,7 @@ disp(['cond2: ' num2str(cond2')])
 
 % .csv files containing avg time near obj, orientation, SAP #, SAP time near
 stat_timeAng = readtable('TimeStatistic_combine3_tail.csv');
-stat_SAP = readtable('TimeStatistic_SAP_combine3_8cm_norm_incl.csv');
-% stat_SAP     = readtable('TimeStatistic_SAP_combine3_8cm_head_norm.csv');
+stat_SAP     = readtable('TimeStatistic_SAP_combine3_8cm_head_norm.csv');
 
 % separate statistics within .csv files (makes it easier to plot)
 stat_timeAng2 = stat_timeAng{:,3:end};
@@ -69,7 +66,7 @@ Dis_te_frame = fps*60*totalTime+500; % includes 500 frame shift
 disp(['Total time: ' num2str(round(Dis_te_frame/fps/60)) 'min'])
 
 % radius of analysis for time spent near object (8 for nose, 12 for tail)
-radius_cm_disAng = 8;
+radius_cm_disAng = 12;
 radius_cm_SAP = 8;
 angle_radius = 15;
 disp(['Dis/ang radius: ' num2str(radius_cm_disAng) 'cm'])
@@ -81,14 +78,13 @@ Y_dis_title = ['Time spent at obj (', num2str(round(Dis_te_frame/fps/60))  ...
 Y_ang_title = ['Orientation to obj (', num2str(round(Dis_te_frame/fps/60)) ...
     'min); Deg = +-' num2str(angle_radius) char(176)];
 Y_SAPnum_title = ['Total number of SAPs (' num2str(round(Dis_te_frame/fps/60)) 'min)'];
-Y_SAPnear_title = ['SAPs near obj (' num2str(round(Dis_te_frame/fps/60)) 'min; '... %%%% (norm;
+Y_SAPnear_title = ['Number of SAPs near obj (' num2str(round(Dis_te_frame/fps/60)) 'min; '... %%%% (norm;
     'Rad = ' num2str(radius_cm_SAP) 'cm)'];
 
 Y_dis_ylabel     = 'Time near object (frac)';
 Y_ang_ylabel     = 'Orientation to object (frac)';
 Y_SAPnum_ylabel  = 'Number of SAPs';
-Y_SAPnear_ylabel = 'SAPs within radius';
-% Y_SAPnear_ylabel = 'SAPs within radius / time near';
+Y_SAPnear_ylabel = 'Number of SAPs within radius / time near';
 
 x_label = 'Training day';
 
@@ -162,7 +158,7 @@ ylabel(Y_ang_ylabel)
 legend([a1(1) a2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
    [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
-ylim([0 0.25])
+ylim([0 0.225])
 ylimAng = angfig.CurrentAxes.YLim;
 xticks(X);
 xticklabels(XTick);
@@ -272,27 +268,23 @@ xticklabels(XTick);
 
 if(0)
     saveas(SAPnumfig,'SAPnum_10min_combine3.tif')
-    saveas(SAPnearfig,'SAPnear_10min_8cm_combine3.tif')
-    saveas(SAPnearfig,'SAPnear_10min_8cm_combine3_norm.tif')
+    saveas(SAPnearfig,'SAPnear_10min_8cm.tif')
+    saveas(boutLenfig,'SAPnear_10min_12cm_norm.tif')
 end
 
 %% extras %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% plot SAP position in arena
-close all 
-
 cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine/')
 load('SAP_plus_dist_crop_all.mat')
 
 whichDay = 3; % N1
-all_noseX = [];
-all_noseY = [];
 
-for mouseiter = 1:length(dist_of_sap_all)
+for i = 1:length(dist_of_sap_all)
     curr_noseX = dist_of_sap_all(mouseiter).nosePos{whichDay,1};
     curr_noseY = dist_of_sap_all(mouseiter).nosePos{whichDay,2};
     
-    all_noseX = [all_noseX; curr_noseX];
-    all_noseY = [all_noseY; curr_noseY];
+    all_noseX = [all_noseX curr_noseX];
+    all_noseY = [all_noseY curr_noseY];
 end
 
 % spatial location of SAPs
@@ -300,9 +292,8 @@ figure;
 set(gcf, 'Position', [900 500 560 420])
 hold on
 % plot(curr_headX, curr_headY, 'k.-')
-% plot(curr_headX(sap), curr_headY(sap), 'r*')
-plot(all_noseX, all_noseY, 'k.')
-title('Location of SAP (N1, 10min)', 'Interpreter', 'none')
+plot(curr_headX(sap), curr_headY(sap), 'r*')
+title(['Location of SAP: ' foldernames{miceiter} '_N1_' num2str(durTotal) 'min'], 'Interpreter', 'none')
 xlim([50 500])
 ylim([0 400])
 set(gca, 'YDir', 'reverse', 'FontSize', 14)

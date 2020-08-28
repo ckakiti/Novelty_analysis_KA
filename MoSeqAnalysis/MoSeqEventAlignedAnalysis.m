@@ -18,7 +18,7 @@ BarHeight=5;
 cmap=jet(100);
 fsize=24;
 
-load('MoSeqDataFrame.mat');
+load('MoSeqDataFrame_50.mat');
 % Mice_Index_path='./MiceIndex.m';
 % run(Mice_Index_path);
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
@@ -28,7 +28,7 @@ AnalysisDay=3;      % 3 = first novelty day
 detectCond = cat(1, Mice.novelty);
 G1_Mice=find(detectCond=='C')';%[1 2 3 4];
 G2_Mice=find(detectCond=='S')';%[5 6 7 8];
-whichMouse = 9;           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+whichMouse = 1;           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(['whichMouse: ' num2str(whichMouse) ...
     ' (' Mice(G1_Mice(whichMouse)).name '/' Mice(G2_Mice(whichMouse)).name ')'])
 
@@ -283,12 +283,12 @@ PGAASU=GAASU./size(Generalactalignedusage,1);
 
 % Calculating Group1 Group2 usage only used when plot width is cosistent across mice
 G1actalignedusage=[];
-for miceiter=G1_Mice(whichMouse)  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for miceiter=G1_Mice%(whichMouse)  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     G1actalignedusage=cat(1,G1actalignedusage,Mice(miceiter).ExpDay(AnalysisDay).actalignedusage);
 end
 
 G2actalignedusage=[];
-for miceiter=G2_Mice(whichMouse)  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for miceiter=G2_Mice%(whichMouse)  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     G2actalignedusage=cat(1,G2actalignedusage,Mice(miceiter).ExpDay(AnalysisDay).actalignedusage);
 end
 
@@ -363,8 +363,8 @@ set(Plot_G1actalignedusage,'Position',[46 307 1874 390])
 G1areahandle=area(timeline,PG1AASU','LineWidth',0.05);
 set(gca,'FontSize',16)
 % title('Syllable Usage of Contextual Novelty Mice','FontSize',fsize)
-% title('Contextual Novelty','FontSize',fsize)
-title(['Syllable Usage of ' Mice(G1_Mice(whichMouse)).name],'FontSize',fsize)
+title('Contextual Novelty','FontSize',fsize)
+%title(['Syllable Usage of ' Mice(G1_Mice(whichMouse)).name],'FontSize',fsize)
 xlabel('Time (s)','FontSize',fsize)
 ylabel('Syllable Usage (%)','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
@@ -379,8 +379,8 @@ set(Plot_G2actalignedusage,'Position',[46 107 1874 390])
 G2areahandle=area(timeline,PG2AASU','LineWidth',0.05);
 set(gca,'FontSize',16)
 % title('Syllable Usage of Stimulus Novelty Mice','FontSize',fsize)
-% title('Stimulus Novelty','FontSize',fsize)
-title(['Syllable Usage of ' Mice(G2_Mice(whichMouse)).name],'FontSize',fsize)
+title('Stimulus Novelty','FontSize',fsize)
+%title(['Syllable Usage of ' Mice(G2_Mice(whichMouse)).name],'FontSize',fsize)
 xlabel('Time (s)','FontSize',fsize)
 ylabel('Syllable Usage (%)','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
@@ -398,12 +398,12 @@ set(gca,'YTick',[0 0.5 1])
 % areahandle(101).FaceColor=[0 0 0];
 
 disp('plotted')
-%if(0)
+if(0)
     saveas(Plot_G1actalignedusage,['Dataset_20190723_C' num2str(whichMouse) ...
         '_' Mice(G1_Mice(whichMouse)).name '_syllableUsage.tif'])
     saveas(Plot_G2actalignedusage,['Dataset_20190723_S' num2str(whichMouse) ...
         '_' Mice(G2_Mice(whichMouse)).name '_syllableUsage.tif'])
-%end
+end
 
 %% plots of individual syllables for statistical analysis
 close all

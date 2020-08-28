@@ -25,7 +25,7 @@ for i=1:folderlen
     subfoldernames(ismember(subfoldernames,{'.','..'})) = [];
     subfolderlen=length(subfoldernames);
 
-    for j=7:subfolderlen %%%%%%%%%%%%%%%%%%%%%
+    for j=1:subfolderlen %%%%%%%%%%%%%%%%%%%%%
         disp(j)
         cd(subfoldernames{j});
 

@@ -119,7 +119,7 @@ close all
 clc
 
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine
-matFiles = dir('*SAP_plus_dist.mat');
+matFiles = dir('*SAP_plus_dist_10min_incl.mat');
 
 dist_of_sap_all = [];
 for fileiter = 1:length(matFiles)
@@ -128,6 +128,6 @@ for fileiter = 1:length(matFiles)
     dist_of_sap_all = [dist_of_sap_all dist_of_sap];
 end
 if(0)
-    save('SAP_plus_dist_all.mat','dist_of_sap_all')
+    save('SAP_plus_dist_all_crop_incl.mat','dist_of_sap_all')
 end
 
