@@ -18,7 +18,7 @@ BarHeight=5;
 cmap=jet(100);
 fsize=24;
 
-load('MoSeqDataFrame.mat');
+load('MoSeqDataFrame_50.mat');
 % Mice_Index_path='./MiceIndex.m';
 % run(Mice_Index_path);
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
@@ -363,8 +363,8 @@ set(Plot_G1actalignedusage,'Position',[46 307 1874 390])
 G1areahandle=area(timeline,PG1AASU','LineWidth',0.05);
 set(gca,'FontSize',16)
 % title('Syllable Usage of Contextual Novelty Mice','FontSize',fsize)
-% title('Contextual Novelty','FontSize',fsize)
-title(['Syllable Usage of ' Mice(G1_Mice(whichMouse)).name],'FontSize',fsize)
+title('Contextual Novelty','FontSize',fsize)
+%title(['Syllable Usage of ' Mice(G1_Mice(whichMouse)).name],'FontSize',fsize)
 xlabel('Time (s)','FontSize',fsize)
 ylabel('Syllable Usage (%)','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])
@@ -379,8 +379,8 @@ set(Plot_G2actalignedusage,'Position',[46 107 1874 390])
 G2areahandle=area(timeline,PG2AASU','LineWidth',0.05);
 set(gca,'FontSize',16)
 % title('Syllable Usage of Stimulus Novelty Mice','FontSize',fsize)
-% title('Stimulus Novelty','FontSize',fsize)
-title(['Syllable Usage of ' Mice(G2_Mice(whichMouse)).name],'FontSize',fsize)
+title('Stimulus Novelty','FontSize',fsize)
+%title(['Syllable Usage of ' Mice(G2_Mice(whichMouse)).name],'FontSize',fsize)
 xlabel('Time (s)','FontSize',fsize)
 ylabel('Syllable Usage (%)','FontSize',fsize)
 axis([timeline(1),timeline(end),0,1])

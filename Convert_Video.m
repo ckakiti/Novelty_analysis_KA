@@ -4,7 +4,8 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_temp/
+%cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_temp/
+cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/ForMelissa/')
 
 files    = dir;
 whichDir = [files.isdir];
@@ -13,7 +14,7 @@ nameDir  = {nameDir.name};
 nameDir(ismember(nameDir,{'.','..','temp'})) = [];
 mouseList = nameDir;
 
-for mouseiter=1%1:length(mouseList)
+for mouseiter=1:length(mouseList)
     cd(mouseList{mouseiter})
     disp(['Mouse: ' mouseList{mouseiter}])
     

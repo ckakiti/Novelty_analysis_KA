@@ -434,7 +434,7 @@ for mouse = 1:length(mouse_name)
     timeStat = readtable('TimeStatistic.csv');
     
     if(strcmp(mouse_name{mouse}, 'Aldehyde'))
-        timeStat_all(2:12,:,mouse) = timeStat{:,2:end};
+        timeStat_all(2:12,:,mouse) = timeStat{:,end};
     else
         timeStat_all(:,:,mouse) = timeStat{:,2:end};
     end

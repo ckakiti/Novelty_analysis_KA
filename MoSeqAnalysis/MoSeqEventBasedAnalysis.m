@@ -116,9 +116,9 @@ close all
 
 Plot_total_interaction_time=figure;
 
-Plotdata=syltime_total(:,:,Plot_SingleDay);
-csavg=[mean(Plotdata(Cnum,:)) mean(Plotdata(Snum,:))];
-csstd=[std(Plotdata(Cnum,:)) std(Plotdata(Snum,:))];
+Plotdata_avg=syltime_total(:,:,Plot_SingleDay);
+csavg=[mean(Plotdata_avg(Cnum,:)) mean(Plotdata_avg(Snum,:))];
+csstd=[std(Plotdata_avg(Cnum,:)) std(Plotdata_avg(Snum,:))];
 % csavg=[mean(Plotdata(Cnum1,:)) mean(Plotdata(Cnum2,:)) mean(Plotdata(Snum,:))];
 % csstd=[std(Plotdata(Cnum1,:)) std(Plotdata(Cnum2,:)) std(Plotdata(Snum,:))];
 
@@ -132,18 +132,22 @@ b.CData(2,:) = cond1Color;
 hold on
 errorbar(CVSX,csavg,csstd,'.','LineWidth',2,'Color','black')
 hold on
- 
-for miceiter=1:length(Mice)
-    if Mice(miceiter).novelty == 'C'
-        scatter(1,Plotdata(miceiter),mksize,'filled','d')
-        hold on 
-    elseif Mice(miceiter).novelty == 'S'
-        scatter(2,Plotdata(miceiter),mksize,'filled','d')
-        hold on
-    else
-        error('Novelty class not defined');
-    end
-end
+
+scatter(ones(length(Cnum),1),Plotdata_avg(Cnum,1),...
+    mksize,'filled','d','MarkerFaceColor','k')
+scatter(repmat(2, length(Snum), 1),Plotdata_avg(Snum,1),...
+    mksize,'filled','d','MarkerFaceColor','k')
+%for miceiter=1:length(Mice)
+%    if Mice(miceiter).novelty == 'C'
+%        scatter(1,Plotdata_avg(miceiter),mksize,'filled','d')
+%        hold on 
+%    elseif Mice(miceiter).novelty == 'S'
+%        scatter(2,Plotdata_avg(miceiter),mksize,'filled','d')
+%        hold on
+%    else
+%        error('Novelty class not defined');
+%    end
+%end
 
 % legend(['C vs S','SD',{Mice.name}])
 set(Plot_total_interaction_time, 'position', [0 0 500 800]);
@@ -170,13 +174,13 @@ close all
 Plot_interaction_time=figure;
 set(Plot_interaction_time,'position',[680 495 710 455])
 
-Plotdata=syltime_per_minute(:,:,Plot_SingleDay);
+Plotdata_avg=syltime_per_minute(:,:,Plot_SingleDay);
 
-intersessioncavg=mean(Plotdata(Cnum,:));
-intersessioncstd=std(Plotdata(Cnum,:));
+intersessioncavg=mean(Plotdata_avg(Cnum,:));
+intersessioncstd=std(Plotdata_avg(Cnum,:));
 
-intersessionsavg=mean(Plotdata(Snum,:));
-intersessionsstd=std(Plotdata(Snum,:));
+intersessionsavg=mean(Plotdata_avg(Snum,:));
+intersessionsstd=std(Plotdata_avg(Snum,:));
 
 errorbar(IntersessionX,intersessioncavg,intersessioncstd,'Color',cond2Color,'LineWidth',2)
 hold on
@@ -223,13 +227,13 @@ end
 
 Plot_interaction_time_multiday=figure;
 
-Plotdata=syltime_per_minute(:,:,Plot_MultiDay);
+Plotdata_bins=syltime_per_minute(:,:,Plot_MultiDay);
 
-intersessioncavg=mean(Plotdata(Cnum,:,:),1);
-intersessioncstd=std(Plotdata(Cnum,:,:),1);
+intersessioncavg=mean(Plotdata_bins(Cnum,:,:),1);
+intersessioncstd=std(Plotdata_bins(Cnum,:,:),1);
 
-intersessionsavg=mean(Plotdata(Snum,:,:),1);
-intersessionsstd=std(Plotdata(Snum,:,:),1);
+intersessionsavg=mean(Plotdata_bins(Snum,:,:),1);
+intersessionsstd=std(Plotdata_bins(Snum,:,:),1);
 
 for dayiter=1:length(Plot_MultiDay)
     plot(IntersessionX,intersessioncavg(:,:,dayiter),'LineWidth',1.5,'Color',cmap(dayiter,:))
@@ -248,4 +252,20 @@ ylabel(['Syllable ' num2str(IntSyl) ' Usage Time (s)'],'FontSize',fsize)
 title(['Syllable ' num2str(IntSyl) ' per min on all novelty days (Capoeira)'],'FontSize',fsize)
 
 % saveas(Plot_interaction_time_multiday, [MouseSet '_MoSeq_usageAcrossDays_syl', num2str(IntSyl), '.tif'])
+
+%% statistical analysis
+
+% for avg syl expression; non-parametric 2-sample test
+[curr_p, curr_h, curr_stats] = ...
+        ranksum(Plotdata_avg(Snum,1), Plotdata_avg(Cnum,1))
+
+% for plot across days; non-parametric 2-sample test with bonf-holm correction
+clear stat_summary curr_p curr_h curr_stats
+for biniter = 1:size(Plotdata_bins,2)
+    [curr_p, curr_h, curr_stats] = ...
+        ranksum(Plotdata_bins(Snum,biniter), Plotdata_bins(Cnum,biniter));
+    stat_summary(biniter).p = curr_p;
+    stat_summary(biniter).h = curr_h;
+end
+[corrected_p, corrected_h] = bonf_holm(cat(1,stat_summary.p),0.05)
 
