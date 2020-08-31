@@ -6,7 +6,7 @@ docker exec -it yuxie_GPU1 /bin/bash
 ```
 ### 0. Setup/configuration of your project:
  - create a folder in /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos containing the videos you want to train your network with
- - name this folder "Training_Videos"
+ - name this folder "Training_Videos_YOURNETWORKNAME"
 
 Edit `myconfig.py`
  - find under /home/alex/Programs/DeepLabCut_new/DeepLabCut
@@ -23,7 +23,7 @@ Edit `myconfig.py`
      - **scorer** (again change this to woever is doing the labeling)
      - additional variables are explained in the myconfig.py file
 
-:exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. 'myconfig (NETWORKNAME).py' :exclamation:
+:exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. 'myconfig (YOUR_NETWORKNAME).py' :exclamation:
 
 ### 1. Selecting data to label:
 ```
