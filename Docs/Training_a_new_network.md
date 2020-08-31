@@ -7,7 +7,7 @@ docker exec -it yuxie_GPU1 /bin/bash
 ```
 ## 0. Setup/configuration of your project:
 - Create a folder in /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos named "Training_Videos_NETWORKNAME" (except replace NETWORKNAME with what you want your network to be named)
-- Add to this folder the videos you want to train your network with
+- In this folder, add the videos you want to train your network with
 - Go to /home/alex/Programs/DeepLabCut_new/DeepLabCut and edit `myconfig.py`
 
 Important variables to modify and/or pay attention to:
