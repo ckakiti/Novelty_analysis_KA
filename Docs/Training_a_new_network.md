@@ -4,10 +4,24 @@
 docker start yuxie_GPU1
 docker exec -it yuxie_GPU1 /bin/bash
 ```
-#### Starting the docker environment
-##### 0. Configuration of your project:
+##### 0. Setup/configuration of your project:
+ - 
 
 Edit `myconfig.py`
+ - find under /home/alex/Programs/DeepLabCut_new/DeepLabCut
+ - important variables to modify and/or pay attention to:
+     - **Task** (change this to whatever you want your network name to be)
+     - **videopath** (change this to wherever you stored the video files you want to train your network with)
+     - **videotype** (make sure this matches the file type of the videos in videopath folder)
+     - **numframes2pick** (this will determine how many frames are extracted from each video in videopath folder; ideally you want to end up with anywhere from 50-200 frames total across all your videos)
+     - **selectionalgorithm** (specifies how file will choose which frames to extract; kmeans takes much longer to extract, but extracted frames will better represent the variety of frames / breadth within each video)
+     - **bodyparts** (the body parts you want to identify in each video; names do not matter so much, but must select this sequence of body parts in this exact order when labeling in later step)
+     - **Scorers** (change this to whoever's doing the labeling)
+     - **invisibleboundary** (when labeling, if you click a pixel with this value or lower (top left corner of image), the label will be set to NaN; use when you are not confident in or cannot identify a particular body part in the frame)
+     - **date** (change this to the date that you do your labeling)
+     - **scorer** (again change this to woever is doing the labeling)
+     - additional variables are explained in the myconfig.py file
+     
 ##### 1. Selecting data to label:
 ```
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut
