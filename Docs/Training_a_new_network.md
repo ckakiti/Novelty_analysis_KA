@@ -35,7 +35,7 @@ In the previously mentioned terminal window, type the following:
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut
 cd Generating_a_Training_Set
 python3 Step1_SelectRandomFrames_fromVideos.py
-chmod 755 ./data-NETWORKNAME
+chmod 777 ./data-NETWORKNAME
 ```
 This generates a folder in Generating_a_Training_Set named 'data-NETWORKNAME'. This folder should contain 1 folder for each video you added in step 0, and those folders should contain a series of images (the number of images is specified by the numframes2pick variable within myconfig.py
 ## 2. Label the frames:
@@ -97,6 +97,17 @@ If using for the first time, download a pretrained network:
 cd pose-tensorflow/models/pretrained
 ./download.sh
 ```
+If you want to train your network based on an already existing dataset on your machine:
+```
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Generating_a_Training_Set
+cd NETWORKNAME/DATE-trainset95shuffle1
+cd train
+```
+ - Open the pose_cfg.yaml file
+ - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from
+ - to find the name of that network file, go to the "NETWORKNAME/DATE-trainset95shuffle1" folder of the previously trained network
+ - in the end, the init_weights variable should look like: ../../NETWORKNAME/DATE-trainset95shuffle1/train/snapshot_1030000
+ 
 Copy the two folders generated from the last step to `/pose-tensorflow/models/`
 ```
 cp -r YOURexperimentNameTheDate-trainset95shuffle1 ../pose-tensorflow/models/
