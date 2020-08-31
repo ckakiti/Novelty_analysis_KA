@@ -1,5 +1,6 @@
 # Training a new neural network
 ### Starting the docker environment
+Open a new terminal window and type in the following:
 ```
 docker start yuxie_GPU1
 docker exec -it yuxie_GPU1 /bin/bash
