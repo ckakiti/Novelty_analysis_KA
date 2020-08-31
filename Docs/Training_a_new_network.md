@@ -27,7 +27,7 @@ Important variables to modify and/or pay attention to:
  - **scorer** (again change this to woever is doing the labeling)
  - additional variables are explained within the myconfig.py file
 
-:exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. 'myconfig (NETWORKNAME).py' :exclamation:
+:exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. `myconfig (NETWORKNAME).py` :exclamation:
 
 ## 1. Selecting data to label:
 In the previously mentioned terminal window, type the following:
@@ -37,7 +37,7 @@ cd Generating_a_Training_Set
 python3 Step1_SelectRandomFrames_fromVideos.py
 chmod 777 ./data-NETWORKNAME
 ```
-This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'. This folder should contain 1 folder for each video you added in step 0, and those folders should contain a series of images (the number of images is specified by the numframes2pick variable within myconfig.py
+This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'. This folder should contain 1 folder for each video you added in step 0, and those folders should contain a series of images (the number of images is specified by the numframes2pick variable within `myconfig.py`
 ## 2. Label the frames:
 
  - open ImageJ or Fiji
@@ -103,11 +103,11 @@ cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Generating_a_Training_Set
 cd NETWORKNAMEDATE-trainset95shuffle1
 cd train
 ```
- - Open the pose_cfg.yaml file
- - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from
- - to find the name of that network file, go to "pose-tensorflow/models/PREVNETWORKNAME-trainset95shuffle1/train
+ - Open `pose_cfg.yaml`
+ - the variable you'll be changing is `init_weights` (but what you change it to depends on what network you want to start from
+ - to find the name of that network file, go to `pose-tensorflow/models/PREVNETWORKNAME-trainset95shuffle1/train`
  - here you'll find a whole list of snapshot files, make note of the number of the last snapshot file in the list (usually 1030000)
- - in the end, the init_weights variable should have this format: ../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot_1030000 (or whatever number you noted from the list of snapshot files)
+ - in the end, the init_weights variable should have this format: `../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot_1030000` (or whatever number you noted from the list of snapshot files)
  
 Copy the two folders generated from the last step to `/pose-tensorflow/models/`
 ```
