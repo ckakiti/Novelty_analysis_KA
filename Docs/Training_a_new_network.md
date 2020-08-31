@@ -9,8 +9,7 @@ docker exec -it yuxie_GPU1 /bin/bash
  - create a folder in /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos named "Training_Videos_NETWORKNAME" (except replace NETWORKNAME with what you want your network to be named)
  - add to this folder the videos you want to train your network with
 
-Edit `myconfig.py`
- - find under /home/alex/Programs/DeepLabCut_new/DeepLabCut
+Go to /home/alex/Programs/DeepLabCut_new/DeepLabCut and edit `myconfig.py`
  - important variables to modify and/or pay attention to:
      - **Task** (change this to whatever you want your network name to be)
      - **videopath** (change this to wherever you stored the video files you want to train your network with)
