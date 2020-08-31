@@ -30,6 +30,7 @@ Important variables to modify and/or pay attention to:
 :exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. 'myconfig (NETWORKNAME).py' :exclamation:
 
 ## 1. Selecting data to label:
+In the previously mentioned terminal window, type the following:
 ```
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut
 cd Generating_a_Training_Set
