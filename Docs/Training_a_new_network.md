@@ -87,7 +87,7 @@ This step will add folders within 'data-NETWORKNAME' with labeled images. This s
 python3 Step4_GenerateTrainingFileFromLabelledData.py
 ```
 This step will generate two folders under Generating_a_Training_Set:
- - NETWORKNAME/DATE-trainset95shuffle1
+ - NETWORKNAMEDATE-trainset95shuffle1
  - UnaugmentedDataSet_NETWORKNAME
  
 ## 6. Training the deep neural network:
@@ -100,14 +100,14 @@ cd pose-tensorflow/models/pretrained
 If you want to train your network based on an already existing dataset on your machine:
 ```
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Generating_a_Training_Set
-cd NETWORKNAME/DATE-trainset95shuffle1
+cd NETWORKNAMEDATE-trainset95shuffle1
 cd train
 ```
  - Open the pose_cfg.yaml file
  - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from
- - to find the name of that network file, go to "pose-tensorflow/models/NETWORKNAMEDATE-trainset95shuffle1/train
+ - to find the name of that network file, go to "pose-tensorflow/models/PREVNETWORKNAME-trainset95shuffle1/train
  - here you'll find a whole list of snapshot files, make note of the number of the last snapshot file in the list (usually 1030000)
- - in the end, the init_weights variable should have this format: ../../NETWORKNAME/DATE-trainset95shuffle1/train/snapshot_1030000 (or whatever number you noted from the list of snapshot files)
+ - in the end, the init_weights variable should have this format: ../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot_1030000 (or whatever number you noted from the list of snapshot files)
  
 Copy the two folders generated from the last step to `/pose-tensorflow/models/`
 ```
