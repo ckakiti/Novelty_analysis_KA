@@ -25,7 +25,7 @@ Important variables to modify and/or pay attention to:
  - **invisibleboundary** (when labeling, if you click a pixel with this value or lower (top left corner of image), the label will be set to NaN; use when you are not confident in or cannot identify a particular body part in the frame)
  - **date** (change this to the date that you do your labeling)
  - **scorer** (again change this to woever is doing the labeling)
- - additional variables are explained in the myconfig.py file
+ - additional variables are explained within the myconfig.py file
 
 :exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. 'myconfig (NETWORKNAME).py' :exclamation:
 
