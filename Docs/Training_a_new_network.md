@@ -11,7 +11,7 @@ docker ps
 ```
 ## 0. Setup/configuration of your project:
 - Create a folder in /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos named "Training_Videos_NETWORKNAME" (except replace NETWORKNAME with what you want your network to be named)
-- In this folder, add the videos you want to train your network with (usually 3-4 videos that represent the breadth of the scenery/behavior you've captured)
+- In this folder, add the videos you want to train your network with (usually 3-4 videos that represent the breadth of the scenery/behavior that's in your full dataset)
 - Go to /home/alex/Programs/DeepLabCut_new/DeepLabCut and edit `myconfig.py`
 
 Important variables to modify and/or pay attention to:
