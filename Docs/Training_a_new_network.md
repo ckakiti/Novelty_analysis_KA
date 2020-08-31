@@ -37,7 +37,7 @@ cd Generating_a_Training_Set
 python3 Step1_SelectRandomFrames_fromVideos.py
 chmod 777 ./data-NETWORKNAME
 ```
-This generates a folder in Generating_a_Training_Set named 'data-NETWORKNAME'. This folder should contain 1 folder for each video you added in step 0, and those folders should contain a series of images (the number of images is specified by the numframes2pick variable within myconfig.py
+This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'. This folder should contain 1 folder for each video you added in step 0, and those folders should contain a series of images (the number of images is specified by the numframes2pick variable within myconfig.py
 ## 2. Label the frames:
 
  - open ImageJ or Fiji
@@ -86,7 +86,7 @@ This step will add folders within 'data-NETWORKNAME' with labeled images. This s
 ```
 python3 Step4_GenerateTrainingFileFromLabelledData.py
 ```
-This step will generate two folders under Generating_a_Training_Set:
+This step will generate two folders under `Generating_a_Training_Set`:
  - NETWORKNAMEDATE-trainset95shuffle1
  - UnaugmentedDataSet_NETWORKNAME
  
