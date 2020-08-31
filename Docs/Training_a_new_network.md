@@ -111,8 +111,9 @@ cd train
  
 Copy the two folders generated from the last step to `/pose-tensorflow/models/`
 ```
-cp -r YOURexperimentNameTheDate-trainset95shuffle1 ../pose-tensorflow/models/
-cp -r UnaugmentedDataSet_YOURexperimentNameTheDate ../pose-tensorflow/models/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Generating_a_Training_Set
+cp -r NETWORKNAMEDATE-trainset95shuffle1 ../pose-tensorflow/models/
+cp -r UnaugmentedDataSet_NETWORKNAMEDATE ../pose-tensorflow/models/
 ```
 Start training
 ```
