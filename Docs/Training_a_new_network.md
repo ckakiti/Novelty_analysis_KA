@@ -86,6 +86,10 @@ This step will add folders within 'data-NETWORKNAME' with labeled images. This s
 ```
 python3 Step4_GenerateTrainingFileFromLabelledData.py
 ```
+This step will generate two folders under Generating_a_Training_Set:
+ - NETWORKNAME/DATE-trainset95shuffle1
+ - UnaugmentedDataSet_NETWORKNAME
+ 
 ## 6. Training the deep neural network:
 
 If using for the first time, download a pretrained network:
@@ -104,6 +108,7 @@ cd pose-tensorflow/models/data_set_name/train
 TF_CUDNN_USE_AUTOTUNE=0 CUDA_VISIBLE_DEVICES=0 python3 ../../../train.py 
 ```
 ## 7. Evaluate your network:
+Not strictly necessary, but if you'd like to evaluate the performance of your newly trained network, run:
 ```
 CUDA_VISIBLE_DEVICES=0 python3 Step1_EvaluateModelonDataset.py #to evaluate your model [needs TensorFlow]
 python3 Step2_AnalysisofResults.py  #to compute test & train errors for your trained model
