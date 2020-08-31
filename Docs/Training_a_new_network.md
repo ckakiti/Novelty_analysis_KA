@@ -74,10 +74,14 @@ This generates a folder in Generating_a_Training_Set named 'data-NETWORKNAME'. T
 ```
 python3 Step2_ConvertingLabels2DataFrame.py
 ```
+This step will add spreadsheet (.xls) files to each folder within 'data-NETWORKNAME' with a Results.csv file (which you've just created in step 2). The number of spreadsheet files should correspond to the number of body parts you labeled.
+
 ## 4. Checking the formatted data:
 ```
 python3 Step3_CheckLabels.py
 ```
+This step will add folders within 'data-NETWORKNAME' with labeled images. This simply overlays the labels from the Results.csv file in step 2 onto the corresponding image. It serves as a "sanity check" to make sure nothing was accidentally mislabeled.
+
 ## 5. Formatting the data II:
 ```
 python3 Step4_GenerateTrainingFileFromLabelledData.py
