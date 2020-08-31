@@ -22,7 +22,7 @@ Edit `myconfig.py`
      - **scorer** (again change this to woever is doing the labeling)
      - additional variables are explained in the myconfig.py file
 
-**MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. myconfig (NETWORKNAME).py**
+:exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. myconfig (NETWORKNAME).py :exclamation:
 
 ### 1. Selecting data to label:
 ```
