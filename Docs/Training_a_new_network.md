@@ -128,18 +128,7 @@ python3 Step2_AnalysisofResults.py  #to compute test & train errors for your tra
 ```
 
 # Analyzing videos
-0. Configuration of your project:
-
-Edit: `myconfig_analysis.py`
-
-1. AnalyzingVideos:
-```
-CUDA_VISIBLE_DEVICES=0 python3 AnalyzeVideos.py
-```
-2. Making labeled videos
-```
-python3 MakingLabeledVideo.py
-```
+see [Running an existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
 
 # Running on the cluster
 Start an interactivate session with GPU
