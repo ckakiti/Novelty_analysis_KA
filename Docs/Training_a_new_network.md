@@ -131,7 +131,7 @@ python3 Step2_AnalysisofResults.py  #to compute test & train errors for your tra
 # Analyzing videos
 see [Running an existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
 
-# Running on the cluster
+# Running on the cluster (unfinished)
 Start an interactivate session with GPU
 
 ```
@@ -141,7 +141,6 @@ srun --pty --mem=8G -n 4 -N 1 -p gpu -t 60 --gres=gpu:2 bash
 Load mudules in the interactivate session
 ```
 module load cuda/9.0-fasrc02 cudnn/7.0_cuda9.0-fasrc01
-
 ```
 
 Generate a singularity image from docker local image.
