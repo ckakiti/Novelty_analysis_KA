@@ -19,10 +19,7 @@ you should see your prompt shows `root` rather than your user name now.
 #### 2. Changing configuration files: 
 For the new network trained for MoSeq Arena, Go to the following directory (you don't need to do this in the terminal): 
 `/home/alex/Programs/DeepLabCut_new/DeepLabCut/` 
-and you can find many configuration files. Open `myconfig_analysis (MoSeqNovelty_Retrain).py`, edit the `videopath` for you new videos, and save the changes. 
-
-
-Rename this configeration file to `myconfig_analysis.py` and replace the existing file. Also save a copy of this file with name `myconfig_analysis (MoSeqNovelty_Retrain).py` for your future use.
+and you can find many configuration files. Open `myconfig_analysis.py`, edit the `videopath` for you new videos, and save the changes. Then save a copy of this file with name `myconfig_analysis (NETWORKNAME).py` for your future use (replace NETWORKNAME with the name of your network). 
 
 #### 3. Start extraction
 Go to `Analysis-tools` subfolder inside the DeepLabCut folder in the docker terminal
