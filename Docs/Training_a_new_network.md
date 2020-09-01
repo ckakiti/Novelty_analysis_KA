@@ -43,7 +43,7 @@ This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'.
  - open ImageJ or Fiji
  - File > Import > Image Sequence
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.38.43.png)
- - within pop-up window navigate to folder with images to be labeled (Generating_a_Training_Set -> data-YOUR_NETWORK)
+ - within pop-up window navigate to folder with images to be labeled (`Generating_a_Training_Set` -> data-NETWORKNAME)
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.41.15.png)
  - click first image, then click open
  - you will see window pop up named "Sequence Options"
@@ -55,7 +55,7 @@ This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'.
      - you may see this botton as "point tool" (single star). if this happens, right click and change to be multi-point
   ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.42.48.png)
   ![alt_text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.43.04.png)
- - click on body features in EXACT order for every image (order specified in myconfig.py - Step 2, bodyparts variable)
+ - click on body features in EXACT order for every image (order specified by "bodyparts" in `myconfig.py`)
  
    ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.46.30.png)
  
