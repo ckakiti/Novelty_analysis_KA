@@ -59,7 +59,7 @@ This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'.
  
    ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.46.30.png)
  
-   (if a point can't be determined, click in the top left corner of the image, so that X and Y positions are less than 20 pixels -> determined by "invisibleboundary" variable in myconfig.py)
+   (if a point can't be determined, click in the top left corner of the image, so that X and Y positions are less than 20 pixels -> determined by "invisibleboundary" variable in `myconfig.py`)
    ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.48.13.png)
  - once you get through all frames, go to Analyze -> Measure
  ![alt text](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Labeling_images/Screen%20Shot%202019-10-16%20at%2012.48.36.png)
@@ -104,7 +104,7 @@ cd NETWORKNAMEDATE-trainset95shuffle1
 cd train
 ```
  - Open `pose_cfg.yaml`
- - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from
+ - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from)
  - to find the name of that network file, go to `pose-tensorflow/models/PREVNETWORKNAME-trainset95shuffle1/train`
  - here you'll find a whole list of snapshot files, make note of the number of the last snapshot file in the list (usually 1030000)
  - in the end, the init_weights variable should have this format: `../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot_1030000` (or whatever number you noted from the list of snapshot files)
