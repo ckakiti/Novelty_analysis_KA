@@ -1,5 +1,5 @@
 # Training a new neural network
-## 0 Starting the docker environment
+## 0. Starting the docker environment
 Open a new terminal window and type in the following:
 ```
 docker start yuxie_GPU1
