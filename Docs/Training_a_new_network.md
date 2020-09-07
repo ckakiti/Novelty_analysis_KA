@@ -27,7 +27,7 @@ Important variables to modify and/or pay attention to:
  - **scorer** (again change this to woever is doing the labeling)
  - additional variables are explained within the myconfig.py file
 
-:exclamation: AFTER EDITING `myconfig.py`, MAKE SURE TO SAVE A COPY OF THIS FILE UNDER A DIFFERENT NAME: i.e. `myconfig (NETWORKNAME).py` :exclamation:
+:exclamation: :exclamation: :exclamation: AFTER EDITING `myconfig.py`, MAKE SURE TO SAVE A COPY OF THIS FILE: i.e. `myconfig (NETWORKNAME).py` :exclamation: :exclamation: :exclamation:
 
 ## 1. Selecting data to label:
 In the previously mentioned terminal window, type the following:
