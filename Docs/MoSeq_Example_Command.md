@@ -161,7 +161,18 @@ moseq2-viz make-crowd-movies moseq2-index.yaml my_model.p
 ```
 moseq2-viz make-crowd-movies  --max-syllable 1000 --raw-size 512 512 --sort False moseq2-index.yaml my_model.p
 ```
-
+# Batch download of specific file types for analysis (e.g. only .yaml/.h5 files)
+* Open a new terminal
+* Navigate to the folder where you want the files transfered to (destination)
+* Run the following code
+* Note: take out `--dry-run` to run for real
+```
+rsync --dry-run -avz path/to/source/files/ . --include='*/' --include='*.h5' --include='*.yaml' --exclude='*' --prune-empty-dirs
+```
+Example command:
+```
+rsync -avz /media/alex/My\ Passport/MoSeqData/CvsS_180831/CvsS_20180831_MoSeq/ . --include='*/' --include='*.h5' --include='*.yaml' --exclude='*' --prune-empty-dirs
+```
 # Using MoSeq on a cluster
 
 1. Start an interactivate session, activate moseq conda environment
