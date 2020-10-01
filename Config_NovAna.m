@@ -10,7 +10,7 @@ networkname_format='DeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000';
 % networkname_format = 'DeepCut_resnet50_MoSeqGreyMouseJul23shuffle1_1030000';
 % networkname_format = 'DeepCut_resnet50_Sandra_PupilsOct17shuffle1_1030000';
 
-videoname_format='XYZ_YYMMDD_rgb.avi'; %mp4; %avi';
+videoname_format='XYZ_YYMMDD_rgb.mp4'; %mp4; %avi';
 
 video_xlen=512;%520;%512;%400%320
 video_ywid=424;%420;%424;%480%240            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -18,7 +18,7 @@ video_ywid=424;%420;%424;%480%240            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fpm = 900; %12900 %5040 %1800 %1500 %900 % frames per minute
 fps = fpm./60;          % frames per second
 ppc = 42/6.3; %123/23; %340/(2*30);   % pixels per cm   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-radius_cm = 8; %10 for tea obj %9 for MoSeq %8 default %6 Mit_FP  % Time spent around the obj radius (cm)   %%%%%%%%%%%%%
+radius_cm = 12; %12 for tail %10 for tea obj %9 for MoSeq %8 default %6 Mit_FP  % Time spent around the obj radius (cm)   %%%%%%%%%%%%%
 radius = radius_cm.*ppc;% Time spent around the obj radius (pixels)
 angle_radius = 15;      % Time orient towards the obj radius (degree)
 

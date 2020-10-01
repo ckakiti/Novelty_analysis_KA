@@ -5,11 +5,12 @@ clear
 clc
 close all
 
-setName = 'Dataset_20190723';
+setName = 'CvsS_180831_MoSeq';
 whichDay = 3; % 3=N1
 
-Mice_Index_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
-   'CombineAnalysis/Just-in-case files/Dataset_20190723/MiceIndex.mat'];
+% Mice_Index_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
+%    'CombineAnalysis/Just-in-case files/Dataset_20190723/MiceIndex.mat'];
+Mice_Index_path = '/media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq/MiceIndex.mat';
 load(Mice_Index_path)
 
 Mice_uuid_N1 = struct('name', {Mice.name}, ...

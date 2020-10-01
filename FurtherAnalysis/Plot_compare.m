@@ -4,8 +4,8 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine
-run('MiceIndex_combine3')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine
+run('MiceIndex')
 
 oneStat = 0;
 
@@ -27,7 +27,7 @@ else
 %     timeStat = readtable('TimeStatistic_12cm_tail.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
-    timeStat = readtable('TimeStatistic_SAP_combine3_8cm_norm.csv');
+    timeStat = readtable('TimeStatistic_tail_12cm.csv');
     
     timeStat2 = timeStat{:,3:end};
     names = timeStat{1:height(timeStat)/2,1}';
@@ -68,9 +68,10 @@ conastd=std(Y_ang(cond2,:));
 stuastd=std(Y_ang(cond1,:));
 
 
+fps=25;
 totalTime = 10;
-Dis_te_frame = 15*60*totalTime+500;
-radius_cm = 8; %12 %8
+Dis_te_frame = fps*60*totalTime+500;
+radius_cm = 12; %12 %8
 disp(['Total time: ' num2str(round(Dis_te_frame/fps/60)) 'min'])
 disp(['Radius: ' num2str(radius_cm) 'cm'])
 

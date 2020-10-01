@@ -5,13 +5,13 @@ clear
 clc
 close all
 
-% setName = 'Standard_CapoeiraHikingChess';
-setName = 'Dataset_20190723';%'7day_preexposure';
+% setName = 'Standard_CapoeiraHikingChess';%'7day_preexposure';
+setName = 'CvsS_20180831_MoSeq';%'Dataset_20190723';
 
 % Mice_Index_path='/Users/yuxie/Dropbox/YuXie/CvsS_180831/CvsS_180831_MoSeq/Mice_Index.m';
 % Mice_Index_path='/media/alex/DataDrive1/MoSeqData/7day_preexposure_MoSeq/Mice_Index.m';
 % Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq/Mice_Index.m';
-Mice_Index_path = '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex.mat';
+Mice_Index_path = '/media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq/MiceIndex.mat';
 %Mice_Index_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
 %   'CombineAnalysis/Just-in-case files/Dataset_20190723/MiceIndex.mat'];
 % run(Mice_Index_path);
@@ -30,12 +30,12 @@ G2_Days = [3 4 5 6]; %3:7;
 G3_Mice = 1:length(Mice);
 G3_Days = [1 2];
 
-%cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq %7day_preexposure_MoSeq
+cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq %7day_preexposure_MoSeq
 % cd /media/alex/DataDrive1/MoSeqData/Capoeira/Capoeira_MoSeq
-cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
+% cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
 %cd(['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
 %    'CombineAnalysis/Just-in-case files/Dataset_20190723/'])
-load('MoSeqDataFrame_75.mat')
+load('MoSeqDataFrame.mat')
 %load('GeneralUsage.mat') %%%%%%%%%%%%%%
 cmap=jet(100);
 fps=30;

@@ -6,8 +6,8 @@ clc
 Config_NovAna
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/
 
-curr_set = 'Capoeira_DLC';
-curr_day = 3;  % N1
+curr_set = 'Configural_set';
+curr_day = 9;  % N1
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
@@ -17,8 +17,8 @@ startframe   = Dis_ts_frame;
 endframe     = Dis_te_frame;
 
 cd(curr_set)
-poke_file = dir('*poke_labels_N1.csv');
-pokes     = csvread(poke_file.name);
+%poke_file = dir('*poke_labels_N1.csv');
+%pokes     = csvread(poke_file.name);
 
 folderpath = cd;
 folderd = dir(folderpath);
@@ -44,9 +44,10 @@ for miceiter = 1:folderlen
     clc
     
     cd(foldernames{miceiter})
-    cd Analyzed_Data_1obj_tail
+    %cd Analyzed_Data_1obj_tail
+    cd Analyzed_Data_10cm
     
-    mat_files = dir('*Converted.mat');
+    mat_files = dir('*rgb.mat'); %'Converted.mat')
     load(mat_files(curr_day).name)
     
     curr_headX = smoothdata( Labels(startframe:endframe,2), 'rloess', Swindow);
@@ -64,7 +65,7 @@ for miceiter = 1:folderlen
     slows     = find(vel<5);
     sap       = intersect(stretches,slows);
     
-    curr_pokes = find(pokes(:,1)==miceiter);
+%     curr_pokes = find(pokes(:,1)==miceiter);
     
     % plot trajectories for nose and tail side-by-side
 %     fig1 = figure(1);
@@ -113,13 +114,77 @@ for miceiter = 1:folderlen
     cd ../..
 end
 
+%% plot SAP from .mat file (already created from TimeStatistic_configural)
+clear
+close all
+clc
+pause(0.5)
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/
+
+curr_set   = 'Configural_set';
+curr_mouse = 'Arya';
+fps=15;
+disp(['Mouse: ' curr_mouse])
+disp(['fps=' num2str(fps)])
+
+cd(curr_set)
+load('Configural_set_SAP_plus_dist_10min_smooth.mat')
+curr_mouse_loc = find(strcmp({dist_of_sap.name},curr_mouse));
+
+cd(curr_mouse)
+cd('Analyzed_Data_10cm')
+
+for session_iter = 1:length(dist_of_sap(1).sapFrame)
+    if(strcmp(curr_mouse, 'Aldehyde') && session_iter==1)
+        disp('skip Aldehyde session 1')
+        continue
+    end
+    
+    % % histogram of body lengths (sanity check)
+    % fig3 = figure(3);
+    % set(gcf, 'Position', [300 500 560 420])
+    % hold on
+    % hist(bodyLen,100)
+    % sap_threshold = mean(bodyLen)+std(bodyLen);
+    % line([sap_threshold sap_threshold]', (fig3.CurrentAxes.YLim)', 'Color', 'r')
+    % title(['Body lengths + sap threshold: ' foldernames{miceiter} '_N1_' num2str(durTotal) 'min'], 'Interpreter', 'none')
+    % set(gca, 'FontSize', 14)
+    
+    curr_posX = dist_of_sap(curr_mouse_loc).nosePosAll{session_iter,1};
+    curr_posY = dist_of_sap(curr_mouse_loc).nosePosAll{session_iter,2};
+    curr_sapX = dist_of_sap(curr_mouse_loc).nosePosSAP{session_iter,1};
+    curr_sapY = dist_of_sap(curr_mouse_loc).nosePosSAP{session_iter,2};
+    durTotal  = floor(length(curr_posX)/60/fps);
+    
+    % spatial location of SAPs (superimposed on smoothed x/y position)
+    fig1 = figure(1);
+    set(gcf, 'Position', [900 500 560 420])
+    hold on
+    plot(curr_posX, curr_posY, 'k.-')
+    plot(curr_sapX, curr_sapY, 'r*')
+    title(['Location of SAP: ' curr_mouse '_S' num2str(session_iter) ...
+        '_' num2str(durTotal) 'min'], 'Interpreter', 'none')
+    xlim([50 500])
+    ylim([0 400])
+    set(gca, 'YDir', 'reverse', 'FontSize', 14)
+    
+%     if(0)
+%         csvwrite([curr_set '_' curr_mouse '_N1_' num2str(durTotal) 'min_sap.csv'], sap)
+%         saveas(fig3, [curr_set '_' curr_mouse '_N1_' num2str(durTotal) 'min_bodyLen_hist.tif'])
+        saveas(fig1, [curr_mouse '_S' num2str(session_iter) '_' ...
+            num2str(durTotal) 'min_sapPos.tif'])
+%     end
+    clf
+end
+disp('end')
+
 %% concatenate structures of SAP distance from object for all mouse sets
 clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine
-matFiles = dir('*SAP_plus_dist_10min_incl.mat');
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set
+matFiles = dir('*SAP_plus_dist_10min_incl.mat'); % generated at end of TimeStatistic
 
 dist_of_sap_all = [];
 for fileiter = 1:length(matFiles)

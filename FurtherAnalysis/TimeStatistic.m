@@ -8,7 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -17,6 +17,8 @@ cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/
 
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
+
+fps=25; %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Dis_ts_frame=500;
 Dis_te_frame=durTotal.*60.*fps+Dis_ts_frame;
@@ -27,7 +29,7 @@ folderpath = cd;
 folderd = dir(folderpath);
 isub = [folderd(:).isdir];
 foldernames = {folderd(isub).name}'; 
-foldernames(ismember(foldernames,{'.','..','Retrain_Sep17','temp'})) = []; 
+foldernames(ismember(foldernames,{'.','..','Retrain_Sep17','temp','Trajectories_H2N1'})) = []; 
 folderlen=length(foldernames);
 
 % smoothing window for SAP+orientation analysis
@@ -56,13 +58,13 @@ for folderi=1:folderlen
 %     pokes = csvread(poke_file.name);
     dist_of_sap(folderi).name = foldernames{folderi};
     
-    cd Analyzed_Data_1obj_head %%%%%%%%%%%%%%%%%%%%%%%%%
+    cd Analyzed_Data %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
-%     cd ./tail
+    cd ./tail
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir('*rgb_Converted.mat'); 
+    filelist=dir('*rgb.mat'); 
     %*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) 
     flen = length(filelist);
     
@@ -261,7 +263,7 @@ for folderi=1:folderlen
     clearvars Time_angle Time_distance Time_periphery totalDistCut ...
         fracArea sap_num sap_num_in_rad sap_frame sap_dist nose_dist
     cd ..
-%     cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
     DisOrAng{folderi,1}='Distance';
     DisOrAng{folderlen+folderi,1}='Angle';

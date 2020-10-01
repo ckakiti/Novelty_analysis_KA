@@ -1,9 +1,9 @@
 # load in the model and the index to the extracted data
-index_file = '/media/alex/DataDrive1/MoSeqData/Planets/Planets_MoSeq/moseq2-index.yaml'
-model_file = '/media/alex/DataDrive1/MoSeqData/Planets/Planets_MoSeq/my_model.p'
+index_file = '/media/alex/DataDrive1/MoSeqData/Configural_set/moseq2-index.yaml'
+model_file = '/media/alex/DataDrive1/MoSeqData/Configural_set/my_model.p'
 
 # Save file directory
-save_directory='/media/alex/DataDrive1/MoSeqData/Planets/Planets_MoSeq/MoSeqDataFrame.mat'
+save_directory='/media/alex/DataDrive1/MoSeqData/Configural_set/MoSeqDataFrame_sortTrue.mat'
 
 
 import scipy.io as sio
@@ -30,9 +30,10 @@ dist = get_behavioral_distance(sorted_index,
                                model_file, 
                                distances=['ar[init]'], 
                                max_syllable=None,
-                               sort_labels_by_usage=True) # FALSE ########################
+                               sort_labels_by_usage=True) # False ########################
 
-# packs data into a dataframe, including all scalars and model labels (note that -5 is a fill value, ignore for all downstream analysis)
+# packs data into a dataframe, including all scalars and model labels 
+# (note that -5 is a fill value, ignore for all downstream analysis)
 
 df = scalars_to_dataframe(sorted_index, include_model=model_file)
 

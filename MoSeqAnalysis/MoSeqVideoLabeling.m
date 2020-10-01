@@ -7,56 +7,56 @@ clear
 close all
 clc
 
-Labeling_mice=[6]
-Labeling_days=[3]
+Labeling_mice=[1]
+Labeling_days=[1]
 BarHeight=30;
 % Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex.mat';
-Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/Analysis-tools/B-SOID/Dataset_200501/MiceIndex_wBSOIDLabels.mat';
+Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set/MiceIndex.mat';
 %run(Mice_Index_path); %for .m file
 load(Mice_Index_path); %for .mat file
 
 
 tic
-% cd '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/'
-cd '/home/alex/Programs/DeepLabCut_new/DeepLabCut/Analysis-tools/B-SOID/Dataset_200501/'
-% load('MoSeqDataFrame.mat');
+cd '/media/alex/DataDrive1/MoSeqData/Configural_set/'
+% cd '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set/'
+load('MoSeqDataFrame_sortTrue.mat');
 % load('ActAlignedPercentage_poke_PW200.mat')
 % cd('Videos');
-cd extra
+% cd extra
 
 %  for miceiter=1:length(Mice)
 for miceiter=Labeling_mice
 %     cd Chess_MoSeq
-%     cd(Mice(miceiter).name);
+    cd(Mice(miceiter).name);
 
     % for dayiter=1:length(Mice(miceiter).ExpDay)
-    for dayiter=Labeling_days
-%         cd(Mice(miceiter).ExpDay(dayiter).date)
-%         sessionName = dir('session*');
-%         cd(sessionName.name)
-%         cd proc
+    for dayiter=1%Labeling_days %%%%%%%%%%%%%%%%%%%%%%%
+        cd(Mice(miceiter).ExpDay(dayiter).date{:})
+        sessionName = dir('session*');
+        cd(sessionName(Labeling_days).name) %%%%%%%%%%%%%%%%%%%%%%%
+        cd proc
         
         % find MSid index
-%         MSidindex=1;
-%         for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
-%             if strcmp(MoSeqDataFrame.session_uuid(indexiter,:),Mice(miceiter).ExpDay(dayiter).MSid)
-%                 break
-%             end
-%             MSidindex=MSidindex+1;
-%             if MSidindex==size(MoSeqDataFrame.session_uuid,1)+1
-%                 error('MSid not found');
-%             end
-%         end
+        MSidindex=1;
+        for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
+            if strcmp(MoSeqDataFrame.session_uuid(indexiter,:),Mice(miceiter).ExpDay(dayiter).MSid)
+                break
+            end
+            MSidindex=MSidindex+1;
+            if MSidindex==size(MoSeqDataFrame.session_uuid,1)+1
+                error('MSid not found');
+            end
+        end
 
-%         Labels=double(MoSeqDataFrame.labels{MSidindex});
-        Labels = Mice(Labeling_mice).labels';
+        Labels=double(MoSeqDataFrame.labels{MSidindex});
+%         Labels = Mice(Labeling_mice).labels';
         
-%         vn='results_00.mp4';
-        vn='Au_190413_01_rgb_Converted.avi';
+        vn='results_00.mp4';
+%         vn='Au_190413_01_rgb_Converted.avi';
         Changepoint=(abs(Labels(2:end)-Labels(1:end-1))>0);
         Changepoint=[Changepoint zeros(1,6)];
-%         cmap=jet(100);
-        cmap=jet(12);
+        cmap=jet(100);
+%         cmap=jet(12);
 
         raw_video=VideoReader(vn);
         final_video = VideoWriter([vn(1:end-4) '_Labeled.avi']);

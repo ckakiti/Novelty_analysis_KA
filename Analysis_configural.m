@@ -23,9 +23,9 @@
 % Labels(:,22) if distance to object 2 <= radius 1; else 0
 % Labels(:,23) if distance to object 3 <= radius 1; else 0
 % Labels(:,24) if distance to object 4 <= radius 1; else 0
-% Labels(:,25)
-% Labels(:,26)
-% Labels(:,27)
+% Labels(:,25) x velocity (cm/s)
+% Labels(:,26) y velocity (cm/s)
+% Labels(:,27) velocity angle (degree)
 
 % Dis_t_obj_x Time spent in the radius for obj x according to the distance
 
@@ -34,18 +34,19 @@
 %***********************************************************
 clear
 clc
+pause(0.5)
 cd /home/alex/Programs/Novelty_analysis_KA
 Config_NovAna;
 
-% radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
+radius_cm = 10; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+radius = radius_cm.*ppc; %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Rim_KO_DLC/03
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set/Up
 pathname = cd;
 PathRoot=[pathname '/'];
 filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
 flen = length(filelist);
-cd Analyzed_Data_4obj;
+cd Analyzed_Data_10cm;
 
 if isfile('Arena_Obj_Pos_4obj.mat')
     load('Arena_Obj_Pos_4obj.mat', 'obj_center', 'obj', 'arena');
@@ -58,6 +59,17 @@ if isfile('Arena_Obj_Pos_4obj.mat')
     
 else
     load('Arena_Obj_Pos.mat');
+end
+
+% choose to analyze nose, tail, head, or body
+x_curr = 2; %2=nose; 2+5+8=head; 11=tail;          %%%%%%%%%%%%%%%
+y_curr = 3; %3=nose; 3+6+9=head; 12=tail;          %%%%%%%%%%%%%%%
+if(x_curr == 2 && y_curr == 3)
+    disp('analyze nose')
+elseif(x_curr == 11 && y_curr == 12)
+    disp('analyze tail')
+else
+    disp('analyse head')
 end
 
 cd ..
@@ -98,10 +110,24 @@ for fiter =1:flen%%%%%
     %***********************************************************
 
     % Calculate head position
-    Labels(:,14)=Labels(:,2); %Labels(:,5)+Labels(:,8))./3;
-    Labels(:,15)=Labels(:,3); %Labels(:,6)+Labels(:,9))./3;
+    Labels(:,14)=Labels(:,x_curr); %Labels(:,5)+Labels(:,8))./3;
+    Labels(:,15)=Labels(:,y_curr); %Labels(:,6)+Labels(:,9))./3;
     %Labels(:,16)=(Labels(:,4)+Labels(:,7)+Labels(:,10))./3;
 
+    % Correct labeling errors (jumps)
+    diffCurr = sqrt(diff(Labels(:,x_curr)).^2 + diff(Labels(:,y_curr)).^2);
+    findJump = find(diffCurr>50);
+    
+    for i=1:length(findJump)
+        Labels(findJump(i)+1,14)=Labels(findJump(i),14);
+        Labels(findJump(i)+1,15)=Labels(findJump(i),15);
+    end
+    
+    diffNew = sqrt(diff(Labels(:,14)).^2 + diff(Labels(:,15)).^2);
+    findNewJump = find(diffNew>50);
+    Labels(findNewJump,14) = nan;
+    Labels(findNewJump,15) = nan;
+    
     % head distance from object center
     Labels(:,17)=sqrt((obj_center{fiter,1}(1)-Labels(:,14)).^2+(obj_center{fiter,1}(2)-Labels(:,15)).^2)/ppc;
     Labels(:,18)=sqrt((obj_center{fiter,2}(1)-Labels(:,14)).^2+(obj_center{fiter,2}(2)-Labels(:,15)).^2)/ppc;
@@ -143,6 +169,15 @@ for fiter =1:flen%%%%%
     Dis_t_obj_2 = sum(Labels(Dis_ts_frame:Dis_te_frame,22))./(Dis_te_frame-Dis_ts_frame);
     Dis_t_obj_3 = sum(Labels(Dis_ts_frame:Dis_te_frame,23))./(Dis_te_frame-Dis_ts_frame);
     Dis_t_obj_4 = sum(Labels(Dis_ts_frame:Dis_te_frame,24))./(Dis_te_frame-Dis_ts_frame);
+    
+    
+    % Calculate head velocity
+    floorfra = floor(vspace/2);
+    for i = floorfra+1:len-vspace-floorfra
+        Labels(i,25) = ((sum(Labels(i-floorfra:i+floorfra,14))-sum(Labels(i-floorfra+vspace:i+floorfra+vspace,14)))./ppc)./(vspace./fps);
+        Labels(i,26) = ((sum(Labels(i-floorfra:i+floorfra,15))-sum(Labels(i-floorfra+vspace:i+floorfra+vspace,15)))./ppc)./(vspace./fps);
+    end
+    Labels(:,27)=atan2d(Labels(:,26),Labels(:,25));
     
     %***********************************************************
     % Plot
@@ -200,7 +235,8 @@ for fiter =1:flen%%%%%
     
     % Plot trajectory
     Trafigure=figure('visible','off');
-    scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),8,'filled');
+%     scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),8,'filled');
+    plot(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),'k')
     rectangle('Position',[arena(fiter,1),arena(fiter,2),...
                           arena(fiter,3)-arena(fiter,1),...
                           arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',4)
@@ -233,7 +269,7 @@ for fiter =1:flen%%%%%
     % Save
     % ***********************************************************
     % pause
-    cd Analyzed_Data_4obj
+    cd Analyzed_Data_10cm
 
 %     mkdir([vn(1:end-4) '_Plots'])
 %     cd([vn(1:end-4) '_Plots'])
@@ -249,7 +285,7 @@ for fiter =1:flen%%%%%
     close all
     clearvars -except arena obj obj_center filelist fiter fpm fps ppc radius radius_cm angle_radius...
                       Dis_ts_frame Dis_te_frame Ang_ts_frame Ang_te_frame video_xlen video_ywid...
-                      networkname_format videoname_format
+                      networkname_format videoname_format x_curr y_curr
 
     cd ..
     

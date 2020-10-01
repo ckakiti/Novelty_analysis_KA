@@ -44,10 +44,10 @@ Config_NovAna;
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Capoeira_DLC/Au/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine/S6_Neville/
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-whichFolder = 'Analyzed_Data_1obj_tail';        %%%%%%%%%%%%
+whichFolder = 'Analyzed_Data';        %%%%%%%%%%%%
 cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -103,9 +103,7 @@ flen = length(filelist);
 
 tic;
 
-
-
-
+%%
 for fiter = 1:flen %%%%%%%%%%%
     vn = filelist(fiter).name;
     fn=[vn(1:end-4) networkname_format '.csv'];

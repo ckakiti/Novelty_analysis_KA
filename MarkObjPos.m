@@ -4,8 +4,8 @@ close all
 
 Config_NovAna;
 
-currSet = 'Planets_DLC'; %%%
-currMouse = 'Venus';
+currSet = 'Configural_set'; %%%
+currMouse = 'Alcohol';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
@@ -25,7 +25,7 @@ PathRoot=[path '/'];
 filelist=dir([PathRoot,'*.csv']); %%
 flen = length(filelist); %%
 fn = filelist(flen).name; %%
-vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
 Labels = csvread(fn,3,0); %%
 
 video=VideoReader(vn);
@@ -47,7 +47,7 @@ end
 for fi =flen:-1:1
     
     fn = filelist(fi).name; %%
-    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% -4 -9 -12 %%
+    vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% +1 -4 -9 -12 %%
     Labels = csvread(fn,3,0); %%
     
     video=VideoReader(vn);
