@@ -1,5 +1,8 @@
 # Training a new neural network
-## Starting the docker environment
+
+## 0. Setup/configuration of your project:
+
+### Starting the docker environment
 Open a new terminal window and type in the following:
 ```
 docker start yuxie_GPU1
@@ -9,7 +12,8 @@ If you're curious, you can check the status of the docker container by typing:
 ```
 docker ps
 ```
-## 0. Setup/configuration of your project:
+
+### Setup
 - Create a folder in /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos named "Training_Videos_NETWORKNAME" (except replace NETWORKNAME with what you want your network to be named)
 - In this folder, add the videos you want to train your network with (usually 3-4 videos that represent the breadth of the scenery/behavior that's in your full dataset)
 - Go to /home/alex/Programs/DeepLabCut_new/DeepLabCut and edit `myconfig.py`
@@ -27,7 +31,7 @@ Important variables to modify and/or pay attention to:
  - **scorer** (again change this to woever is doing the labeling)
  - additional variables are explained within the myconfig.py file
 
-:exclamation: MAKE SURE TO SAVE A COPY OF THIS FILE AFTER EDITING: i.e. `myconfig (NETWORKNAME).py` :exclamation:
+:exclamation: :exclamation: :exclamation: AFTER EDITING `myconfig.py`, MAKE SURE TO SAVE A COPY OF THIS FILE: i.e. `myconfig (NETWORKNAME).py` :exclamation: :exclamation: :exclamation:
 
 ## 1. Selecting data to label:
 In the previously mentioned terminal window, type the following:
@@ -35,7 +39,7 @@ In the previously mentioned terminal window, type the following:
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut
 cd Generating_a_Training_Set
 python3 Step1_SelectRandomFrames_fromVideos.py
-chmod 777 ./data-NETWORKNAME
+chmod -R 777 ./data-NETWORKNAME
 ```
 This generates a folder in `Generating_a_Training_Set` named 'data-NETWORKNAME'. This folder should contain 1 folder for each video you added in step 0, and those folders should contain a series of images (the number of images is specified by the numframes2pick variable within `myconfig.py`
 ## 2. Label the frames:
