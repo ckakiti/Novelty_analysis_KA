@@ -111,7 +111,7 @@ cd train
  - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from)
  - to find the name of that network file, go to `pose-tensorflow/models/PREVNETWORKNAME-trainset95shuffle1/train`
  - here you'll find a whole list of snapshot files, make note of the number of the last snapshot file in the list (usually 1030000)
- - in the end, the init_weights variable should have this format: `../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot_1030000` (or whatever number you noted from the list of snapshot files)
+ - in the end, the init_weights variable should have this format: `../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot-1030000` (or whatever number you noted from the list of snapshot files)
  
 Copy the two folders generated from the last step to `/pose-tensorflow/models/`
 ```
