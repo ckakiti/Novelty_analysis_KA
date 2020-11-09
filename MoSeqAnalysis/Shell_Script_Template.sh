@@ -13,7 +13,8 @@ moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Dataset_name/Dataset_nam
 
 # to quickly get path to all .dat files nested under folder, enter this into terminal:
 # find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
-
+# to get all .mp4 files:
+# find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
 
 # STEP 2: PCA
 # for small datasets

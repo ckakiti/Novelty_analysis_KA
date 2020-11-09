@@ -6,8 +6,8 @@ clc
 Config_NovAna
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/
 
-curr_set = 'Configural_set';
-curr_day = 9;  % N1
+curr_set = 'Capoeira_DLC';
+curr_day = 3;  % N1
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
@@ -27,7 +27,6 @@ foldernames = {folderd(isub).name}';
 foldernames(ismember(foldernames,{'.','..','Retrain_Sep17','temp'})) = []; 
 folderlen=length(foldernames);
 
-
 disp('next')
 
 %%
@@ -44,27 +43,38 @@ for miceiter = 1:folderlen
     clc
     
     cd(foldernames{miceiter})
-    %cd Analyzed_Data_1obj_tail
-    cd Analyzed_Data_10cm
+    cd Analyzed_Data_1obj_tail
+    %cd Analyzed_Data_10cm
     
-    mat_files = dir('*rgb.mat'); %'Converted.mat')
+    mat_files = dir('*Converted.mat'); %'Converted.mat') %'rgb.mat')
     load(mat_files(curr_day).name)
+    LabelsCut = Labels(startframe:endframe,:);
     
-    curr_headX = smoothdata( Labels(startframe:endframe,2), 'rloess', Swindow);
-    curr_headY = smoothdata( Labels(startframe:endframe,3), 'rloess', Swindow);
-    curr_tailX = smoothdata( Labels(startframe:endframe,11), 'rloess', Swindow);
-    curr_tailY = smoothdata( Labels(startframe:endframe,12), 'rloess', Swindow);
-    curr_velX  = Labels(startframe:endframe,24);
-    curr_velY  = Labels(startframe:endframe,25);
+    smooth_headX = smoothdata( LabelsCut(:,2), 'rloess', Swindow);
+    smooth_headY = smoothdata( LabelsCut(:,3), 'rloess', Swindow);
+    smooth_tailX = smoothdata( LabelsCut(:,11), 'rloess', Swindow);
+    smooth_tailY = smoothdata( LabelsCut(:,12), 'rloess', Swindow);
+    curr_velX  = LabelsCut(:,24);
+    curr_velY  = LabelsCut(:,25);
     
-    bodyLen    = sqrt( (curr_tailX-curr_headX).^2 + (curr_tailY-curr_headY).^2 ); % pixels
+    bodyLen    = sqrt( (smooth_tailX-smooth_headX).^2 + (smooth_tailY-smooth_headY).^2 ); % pixels
     bodyLen(bodyLen>bodyLen_cutoff)=0; % body lengths >80px are likely to be errors
     
-    vel       = sqrt( curr_velX.^2 + curr_velY.^2 ); % head velocity, cm/s
-    stretches = find(bodyLen>(mean(bodyLen)+std(bodyLen)));
-    slows     = find(vel<5);
-    sap       = intersect(stretches,slows);
+    vel        = sqrt( curr_velX.^2 + curr_velY.^2 ); % head velocity, cm/s
+    stretches  = find(bodyLen>(mean(bodyLen)+std(bodyLen)));
+    slows      = find(vel<5);
+    sap        = intersect(stretches,slows);
+    sap_in_rad = intersect(sap, find(LabelsCut(:,21)==1));
     
+    diffSap      = diff(sap);
+    diffSapInRad = diff(sap_in_rad);
+    sap_frame    = sap(find(diffSap>1)+1);
+    sap_num        = sum(diffSap>1); % total SAPs (any location)
+    sap_num_in_rad = sum(diffSapInRad>1); % SAPs near object
+    sap_dist      = LabelsCut(diffSap>1,17);
+    nose_distX    = smooth_headX(diffSap>1);
+    nose_distY    = smooth_headY(diffSap>1);
+        
 %     curr_pokes = find(pokes(:,1)==miceiter);
     
     % plot trajectories for nose and tail side-by-side
@@ -97,8 +107,9 @@ for miceiter = 1:folderlen
     fig4 = figure(4);
     set(gcf, 'Position', [900 500 560 420])
     hold on
-    plot(curr_headX, curr_headY, 'k.-')
-    plot(curr_headX(sap), curr_headY(sap), 'r*')
+    plot(smooth_headX, smooth_headY, 'k.-')
+%     plot(smooth_headX(sap), smooth_headY(sap), 'r*')
+    plot(nose_distX, nose_distY, 'r*')
     title(['Location of SAP: ' foldernames{miceiter} '_N1_' num2str(durTotal) 'min'], 'Interpreter', 'none')
     xlim([50 500])
     ylim([0 400])

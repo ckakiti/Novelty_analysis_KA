@@ -7,33 +7,35 @@ clear
 close all
 clc
 
-Labeling_mice=[1]
-Labeling_days=[1]
+Labeling_mice=[2]
+Labeling_days=[2]
 BarHeight=30;
-% Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex.mat';
-Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set/MiceIndex.mat';
+Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/MiceIndex_isIn_head_depth.mat';
+% Mice_Index_path='/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set/MiceIndex.mat';
+
 %run(Mice_Index_path); %for .m file
 load(Mice_Index_path); %for .mat file
 
 
 tic
-cd '/media/alex/DataDrive1/MoSeqData/Configural_set/'
+cd '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/'
 % cd '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Configural_set/'
-load('MoSeqDataFrame_sortTrue.mat');
+load('MoSeqDataFrame.mat');
 % load('ActAlignedPercentage_poke_PW200.mat')
 % cd('Videos');
 % cd extra
 
 %  for miceiter=1:length(Mice)
 for miceiter=Labeling_mice
-%     cd Chess_MoSeq
+    cd Capoeira_MoSeq
     cd(Mice(miceiter).name);
 
     % for dayiter=1:length(Mice(miceiter).ExpDay)
-    for dayiter=1%Labeling_days %%%%%%%%%%%%%%%%%%%%%%%
-        cd(Mice(miceiter).ExpDay(dayiter).date{:})
+    for dayiter=Labeling_days %%%%%%%%%%%%%%%%%%%%%%%
+        cd(Mice(miceiter).ExpDay(dayiter).date(:))
         sessionName = dir('session*');
-        cd(sessionName(Labeling_days).name) %%%%%%%%%%%%%%%%%%%%%%%
+        %cd(sessionName(Labeling_days).name) %%%%%%%%%%%%%%%%%%%%%%%
+        cd(sessionName(1).name)
         cd proc
         
         % find MSid index
@@ -157,7 +159,8 @@ for miceiter=Labeling_mice
         cd ..
     end
 
-    cd ../../..
+    cd ../..
+    cd ..
 end
  cd ..
  

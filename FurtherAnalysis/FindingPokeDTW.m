@@ -9,7 +9,7 @@ clc
 
 Config_NovAna
 
-fps=25; % 15 rgb; % 25; 30 depth; 
+fps=15; % 15 rgb; % 25 unconverted; 30 depth; 
 
 startframe=1;%1;%900;
 endframe=(fps*60*10)+startframe;%15000;%18000;

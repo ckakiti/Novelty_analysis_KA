@@ -3,13 +3,13 @@ clc
 close all
 
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/190425
-load('nidaq.mat')
+%load('nidaq.mat')
 
 cd ./proc
 vn='results_00.mp4';
 raw_video=VideoReader(vn);
 
-final_video = VideoWriter([vn(1:end-4) '_FP_Labeled.avi']);
+final_video = VideoWriter([vn(1:end-4) '_Labeled.avi']);
 final_video.FrameRate = raw_video.FrameRate;
 open(final_video);
 videolength=round(raw_video.Duration.*raw_video.FrameRate,0);

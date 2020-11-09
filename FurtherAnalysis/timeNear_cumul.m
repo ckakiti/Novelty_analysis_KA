@@ -53,7 +53,7 @@ for fileiter = 1:length(nameDir)%length(reorder) %length(nameDir)
 %     timeNearN1 = [timeNearN1 isNear];
     endframe = min(endframe, size(Labels,1));
     [counts, centers] = hist(Labels(startframe:endframe,17),0:70);
-    count_cumul = cumsum(counts);
+    count_cumul = counts;%cumsum(counts);
     timeNearN1 = [timeNearN1; count_cumul];
     
     if(max(Labels(:,17) > global_max))
@@ -171,7 +171,13 @@ end
 close all
 clc
 
-timeNearN1_cumul = csvread('timeNearN1_cumul_combine3_12cm_tail.csv',0,1);
+% cumul_file = dir('*timeNearN1_cumul*.csv');
+cumul_file = dir('*timeNearN1_combine3*.csv');
+cumul_file_name = cumul_file.name;
+
+% timeNearN1_cumul = csvread('timeNearN1_cumul_combine3_12cm_tail.csv',0,1);
+timeNearN1_cumul = csvread(cumul_file_name,0,1);
+
 centers = 0:70;
 radius_cm = 12; %%%%%%%%%%%%%
 
@@ -187,7 +193,7 @@ legend([l(1) c(1)], {'contextual', 'stimulus'}, 'location','east') ...
     %nameDir(reorder)
 title(['Cumulative distance from object (' num2str(durTotal) 'min): N1'])
 xlim([0 50])
-ylim([0 600])
+% ylim([0 600])
 xlabel('Distance from obj (cm)')
 ylabel('Cumulative time at distance from obj (s)')
 set(gca, 'FontSize', 16)

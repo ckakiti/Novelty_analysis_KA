@@ -8,7 +8,7 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -18,7 +18,7 @@ cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-fps=25; %%%%%%%%%%%%%%%%%%%%%%%%%%%
+fps=15; %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Dis_ts_frame=500;
 Dis_te_frame=durTotal.*60.*fps+Dis_ts_frame;
@@ -60,12 +60,12 @@ for folderi=1:folderlen
     
     cd Analyzed_Data %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
-    cd ./tail
+    cd ./nose_8cm
 
     subpath=cd;
     PathRoot=[subpath '/'];
-    filelist=dir('*rgb.mat'); 
-    %*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) 
+%     filelist=dir('*rgb.mat'); 
+    filelist=dir('*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) 
     flen = length(filelist);
     
     for filei = 1:flen

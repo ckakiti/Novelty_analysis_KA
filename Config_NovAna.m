@@ -10,7 +10,7 @@ networkname_format='DeepCut_resnet50_MoSeqNovelty_RetrainSep17shuffle1_1030000';
 % networkname_format = 'DeepCut_resnet50_MoSeqGreyMouseJul23shuffle1_1030000';
 % networkname_format = 'DeepCut_resnet50_Sandra_PupilsOct17shuffle1_1030000';
 
-videoname_format='XYZ_YYMMDD_rgb.mp4'; %mp4; %avi';
+videoname_format='XYZ_YYMMDD_rgb*.avi'; %mp4; %avi';
 
 video_xlen=512;%520;%512;%400%320
 video_ywid=424;%420;%424;%480%240            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -4,8 +4,8 @@ clc
 
 Config_NovAna
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/7day_preexposure_combine
-run('MiceIndex')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/NewHope-ROTJ/
+run('MiceIndex_NewHope_ROTJ')
 
 oneStat = 0;
 
@@ -27,7 +27,7 @@ else
 %     timeStat = readtable('TimeStatistic_12cm_tail.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
-    timeStat = readtable('TimeStatistic_tail_12cm.csv');
+    timeStat = readtable('TimeStatistic_tail.csv');
     
     timeStat2 = timeStat{:,3:end};
     names = timeStat{1:height(timeStat)/2,1}';
@@ -68,7 +68,7 @@ conastd=std(Y_ang(cond2,:));
 stuastd=std(Y_ang(cond1,:));
 
 
-fps=25;
+fps=15;
 totalTime = 10;
 Dis_te_frame = fps*60*totalTime+500;
 radius_cm = 12; %12 %8
@@ -355,46 +355,48 @@ end
 %% box plot of time near + orient for single day
 currday = 3;
 
-% currYdis_cond1 = Y_dis(cond1,currday);
-% currYdis_cond2 = Y_dis(cond2,currday);
+currYdis_cond1 = Y_dis(cond1,:);
+currYdis_cond2 = Y_dis(cond2,:);
+
 %%currYdis_cond2 = Y_dis(:,currday);
 %%currYdis_cond1 = Y_dis(:,2);
 %%currYdis_cond3 = Y_dis(:,8);
 % currTitle      = ['Time near object: Day ' num2str(currday) ' (tail)'];
 % currYlim       = [0 0.6];
 
-cond2 = [2 3 5 6 8 9];
+%cond2 = [2 3 5 6 8 9];
 %cond2 = [2 8 9];
 %cond3 = [3 5 6];
 
-currYdis_cond1 = Y_dis(cond1,currday)-Y_dis(cond1,2);
-currYdis_cond2 = Y_dis(cond2,currday)-Y_dis(cond2,2);
+%currYdis_cond1 = Y_dis(cond1,currday)-Y_dis(cond1,2);
+%currYdis_cond2 = Y_dis(cond2,currday)-Y_dis(cond2,2);
 %currYdis_cond3 = Y_dis(cond3,currday)-Y_dis(cond3,2);
 
-% currYdis_cond1 = Y_dis(:,currday)-Y_dis(:,2);
-% currYdis_cond2 = Y_dis(:,8)-Y_dis(:,2);
-currTitle      = ['Time near object: Day ' num2str(currday) ' (tail; norm.)'];
-currYlim       = [-0.4 0.4];
+% currTitle = ['Time near object: Day ' num2str(currday) ' (tail; norm)'];
+currTitle = ['Time near object: cont (tail)'];
+currYlim  = [-0.0 0.2];
 
 
 close all
 boxPlot_oneDay = figure(1);
-boxplot([currYdis_cond1; currYdis_cond2], ...; currYdis_cond3], ...
-    [zeros(1,length(currYdis_cond1)), ones(1,length(currYdis_cond2))])%, repmat(2, 1, length(currYdis_cond3))])
+% boxplot([currYdis_cond1; currYdis_cond2], ...; currYdis_cond3], ...
+%     [zeros(1,length(currYdis_cond1)), ones(1,length(currYdis_cond2))])%, repmat(2, 1, length(currYdis_cond3))])
+boxplot(currYdis_cond2)%, ...; currYdis_cond3], ...
+%    [zeros(1,length(currYdis_cond1)), ones(1,length(currYdis_cond2))])%, repmat(2, 1, length(currYdis_cond3))])
 %boxplot(currYdis_cond1)
 set(gca,'FontSize',16)
-set(gca,'XTickLabel',{'saline','6OHDA'})%,'6OHDA2'})
-% set(gca,'XTickLabel',{cond1name,cond2name})
-% set(gca, 'XTickLabel', {'N1','N6'})
+%set(gca,'XTickLabel',{'saline','6OHDA'})%,'6OHDA2'})
+%set(gca,'XTickLabel',{cond1name,cond2name})
+set(gca, 'XTickLabel', {'H1','H2','1','2','3','4','5','6','7','8','9','10'})
 title(currTitle)
-xlabel('Condition')
+%xlabel('Condition')
+xlabel('Day')
 ylabel('Time spent near object (frac)')
 ylim(currYlim)
 
 if(0)
     saveas(boxPlot_oneDay,'timeNearObj_10min_box_combine.tif')
-
-    
+    saveas(boxPlot_oneDay,'timeNearObj_10min_tail_box_allDays_stim.tif')
     saveas(boxPlot_oneDay, ['timeNearObj_10min_tail_box_N' num2str(currday-2) '_norm.tif'])
 end
 
