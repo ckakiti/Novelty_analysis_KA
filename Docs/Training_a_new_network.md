@@ -125,7 +125,7 @@ cd pose-tensorflow/models/NETWORKNAMEDATE-trainset95shuffle1/train
 TF_CUDNN_USE_AUTOTUNE=0 CUDA_VISIBLE_DEVICES=0 python3 ../../../train.py 
 ```
 ## 7. Evaluate your network:
-Not strictly necessary, but if you'd like to evaluate the performance of your newly trained network, do the following:
+If you'd like to evaluate the performance of your newly trained network, do the following:
  - edit `myconfig.py` to match the network that you want to evaluate
  - run this code:
 ```
@@ -133,6 +133,8 @@ cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Evaluation-Tools
 CUDA_VISIBLE_DEVICES=0 python3 Step1_EvaluateModelonDataset.py #to evaluate your model [needs TensorFlow]
 python3 Step2_AnalysisofResults.py  #to compute test & train errors for your trained model
 ```
+ - Step1 creates a .h5 file within `Evaluation-Tools/Results` that contains x/y labels and likelihood values for the images you extracted when training the network (see `Generating_a_Training_Set/data-NETWORKNAME`). Most of those are "Training" images (used to train the network in the first place) and a small subset are "Test" images (held out when training and used for testing labeling accuracy now).
+ - Step2 creates a folder in Evaluation-Tools (LabeledImages_...) with labels superimposed on the aforementioned images. KEY: '+' = manual label; dot = DLC prediction w/ likelihood > p-cutoff; 'x' = DLC prediction w/ likelihood <= p-cutoff
  
 # Analyzing videos
 see [Running an existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
