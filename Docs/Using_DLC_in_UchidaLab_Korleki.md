@@ -55,7 +55,7 @@ If you orgnize your videos in different ways, you can refer to `AnalyzeVideos_yu
 
 ## 4. Create labeled videos
 To create a video with the DLC labels superimposed, do this:
-- note: you need to have run `AnalyzeVideos.py` or `AnalysisVideos_yuxie_180913_recursive.py` before you do this step
+- note: you need to have run `AnalyzeVideos.py` or `AnalyzeVideos_yuxie_180913_recursive.py` before you do this step
 - edit `myconfig_analysis.py` so that videofolder matches the path to your video and DLC label files (.csv/.h5/.pickle - generated from `AnalyzeVideos.py`) then run the following
 ```
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Analysis-tools
