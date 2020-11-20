@@ -136,7 +136,16 @@ python3 Step2_AnalysisofResults.py  #to compute test & train errors for your tra
  - Step1 creates a .h5 file within `Evaluation-Tools/Results` that contains x/y labels and likelihood values for the images you extracted when training the network (see `Generating_a_Training_Set/data-NETWORKNAME`). Most of those are "Training" images (used to train the network in the first place) and a small subset are "Test" images (held out when training and used for testing labeling accuracy now).
  - Step2 creates a folder in `Evaluation-Tools` (LabeledImages_...) with labels superimposed on the aforementioned images
      - KEY: '+' = manual label; dot = DLC prediction w/ likelihood > p-cutoff; 'x' = DLC prediction w/ likelihood <= p-cutoff
- 
+## 8. Create labeled videos
+To create a video with the DLC labels superimposed, do this:
+- note: you need to have run `AnalyzeVideos.py` or `AnalysisVideos_yuxie_180913_recursive.py` before you do this step
+- edit `myconfig_analysis.py` so that videofolder matches the path to your video and DLC label files (.csv/.h5/.pickle - generated from AnalyzeVideos.py) then run the following
+```
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Analysis-tools
+python3 MakingLabeledVideo_fast.py
+```
+- this will give you a file with the same name as your raw video except with 'DeepLabCutlabeled' appended
+
 # Analyzing videos
 see [Running an existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
 
