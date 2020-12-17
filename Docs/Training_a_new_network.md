@@ -101,7 +101,7 @@ If using for the first time, download a pretrained network:
 cd pose-tensorflow/models/pretrained
 ./download.sh
 ```
-If you want to train your network based on an already existing dataset on your machine:
+If you want to train your network based on an already existing dataset on your machine, you need to edit the `pose_cfg.yaml` file for the new (not yet trained) network:
 ```
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Generating_a_Training_Set
 cd NETWORKNAMEDATE-trainset95shuffle1
@@ -109,9 +109,9 @@ cd train
 ```
  - Open `pose_cfg.yaml`
  - the variable you'll be changing is init_weights (but what you change it to depends on what network you want to start from)
- - to find the name of that network file, go to `pose-tensorflow/models/PREVNETWORKNAME-trainset95shuffle1/train`
+ - to find the name of that network file, go to `pose-tensorflow/models/PREV_NETWORKNAME-trainset95shuffle1/train`
  - here you'll find a whole list of snapshot files, make note of the number of the last snapshot file in the list (usually 1030000)
- - in the end, the init_weights variable should have this format: `../../NETWORKNAMEDATE-trainset95shuffle1/train/snapshot-1030000` (or whatever number you noted from the list of snapshot files)
+ - in the end, the init_weights variable should have this format: `../../PREV_NETWORKNAMEDATE-trainset95shuffle1/train/snapshot-1030000` (or whatever number you noted from the list of snapshot files)
  
 Copy the two folders generated from the last step to `/pose-tensorflow/models/`
 ```
