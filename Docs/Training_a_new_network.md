@@ -93,6 +93,7 @@ python3 Step4_GenerateTrainingFileFromLabelledData.py
 This step will generate two folders under `Generating_a_Training_Set`:
  - NETWORKNAMEDATE-trainset95shuffle1
  - UnaugmentedDataSet_NETWORKNAME
+
 Then make sure to change the file permissions so you can edit:
 ```
 cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Generating_a_Training_Set/
