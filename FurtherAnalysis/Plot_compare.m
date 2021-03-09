@@ -2,10 +2,10 @@ clear
 close all
 clc
 
-Config_NovAna
+Config_NovAna_Ghana
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/NewHope-ROTJ/
-run('MiceIndex_NewHope_ROTJ')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/
+run('MiceIndex_Parents')
 
 oneStat = 0;
 
@@ -27,7 +27,7 @@ else
 %     timeStat = readtable('TimeStatistic_12cm_tail.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
-    timeStat = readtable('TimeStatistic_tail.csv');
+    timeStat = readtable('TimeStatistic_10cm_tail.csv');
     
     timeStat2 = timeStat{:,3:end};
     names = timeStat{1:height(timeStat)/2,1}';
@@ -41,12 +41,14 @@ XTick = {'H1' 'H2' 'N1' 'N2' 'N3' 'N4' 'N5' 'N6' 'N7' 'N8' 'N9' 'N10'};
 % XTick = {'0-6','7-12','13-18','19-24','25-30'};
 
 
-cond2name = 'cont';%'lego@5min';%'GroupB';%'cont';%'6OHDA';
-cond1name = 'stim';%'lego@0min';%'GroupA';%'stim';%'saline';
+cond2name = '6OHDA';%'6OHDA';%'cont';%'lego@5min';%'GroupB';%'cont';%'6OHDA';
+cond1name = 'saline';%'saline';%'stim';%'lego@0min';%'GroupA';%'stim';%'saline';
 
 detectCond = cat(1, Mice.novelty);
-cond2 = find(detectCond=='C');
-cond1 = find(detectCond=='S');
+% cond2 = find(detectCond=='C');
+% cond1 = find(detectCond=='S');
+cond2 = find(detectCond=='l');
+cond1 = find(detectCond=='s');
 disp(['cond1: ' num2str(cond1')])
 disp(['cond2: ' num2str(cond2')])
 cond2Color = [0.5 0.0 0.5];%[0.5 0.0 0.5]; %[0.5 0.0 0.5]; [0.5 0.0 0.5]};
@@ -68,10 +70,10 @@ conastd=std(Y_ang(cond2,:));
 stuastd=std(Y_ang(cond1,:));
 
 
-fps=15;
+fps=15; %%%%%%%%%%%%%%%%%%%%%%%
 totalTime = 10;
 Dis_te_frame = fps*60*totalTime+500;
-radius_cm = 12; %12 %8
+radius_cm = 10; %12 %8
 disp(['Total time: ' num2str(round(Dis_te_frame/fps/60)) 'min'])
 disp(['Radius: ' num2str(radius_cm) 'cm'])
 
@@ -92,8 +94,8 @@ set(disfig, 'Position', [600 600 1200 450])
 
 subplot(1, 2, 2)
 hold on
-% d1 = plot(repmat(X, length(cond2), 1)', Y_dis(cond2,:)', 'Marker', '*');
-% d2 = plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', 'Marker', '*');
+% d1 = plot(repmat(X, length(cond2), 1)', Y_dis(cond2,:)', 'Marker', '*', 'LineWidth',2);
+% d2 = plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', 'Marker', '*', 'LineWidth',2);
 d1 = plot(repmat(X, length(cond2), 1)', Y_dis(cond2,:)', 'Color', cond2Color, 'Marker', '*', 'LineWidth',2);
 d2 = plot(repmat(X, length(cond1), 1)', Y_dis(cond1,:)', 'Color', cond1Color, 'Marker', '*', 'LineWidth',2);
 % set(d1, {'color'}, cond2Color)
@@ -103,10 +105,11 @@ set(gca, 'FontSize', 14)
 % set(gca, 'FontSize', 18)
 xlabel(x_label)
 ylabel(Y_dis_ylabel)
+% legend(names(cond1))
 % legend([names(cond2) names(cond1)])
 % legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([d1(1) d2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
-   [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
+  [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
 % ylim([0 0.6])
 % ylim([0 1])
@@ -139,8 +142,8 @@ set(angfig, 'Position', [400 50 1200 450])
 
 subplot(1, 2, 2)
 hold on
-% a1 = plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', 'Marker', '*');
-% a2 = plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', 'Marker', '*');
+% a1 = plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', 'Marker', '*', 'LineWidth',2);
+% a2 = plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', 'Marker', '*', 'LineWidth',2);
 a1 = plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', 'Color', cond2Color, 'Marker', '*', 'LineWidth',2);
 a2 = plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', 'Color', cond1Color, 'Marker', '*', 'LineWidth',2);
 % set(a1, {'color'}, cond2Color)
@@ -150,10 +153,11 @@ set(gca, 'FontSize', 14)
 % set(gca, 'FontSize', 18)
 xlabel(x_label)
 ylabel(Y_ang_ylabel)
+% legend(names(cond1))
 % legend([names(cond2) names(cond1)])
 % legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([a1(1) a2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
-   [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
+  [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
 % ylim([0 0.3])%25]) %4])
 ylimAng = angfig.CurrentAxes.YLim;

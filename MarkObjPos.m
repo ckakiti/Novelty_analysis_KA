@@ -2,10 +2,12 @@ clear
 clc
 close all
 
-Config_NovAna;
+% Config_NovAna_MoSeq_LegoRubber;
+% Config_NovAna_combine3;
+Config_NovAna_Ghana;
 
-currSet = 'Configural_set'; %%%
-currMouse = 'Alcohol';
+currSet = 'Montana_DLC'; %%%
+currMouse = 'Missoula';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
@@ -25,10 +27,21 @@ PathRoot=[path '/'];
 filelist=dir([PathRoot,'*.csv']); %%
 flen = length(filelist); %%
 fn = filelist(flen).name; %%
-vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+%vn = 'Au_190413_01_rgb_Converted_DeepLabCutlabeled.mp4';
 Labels = csvread(fn,3,0); %%
 
 video=VideoReader(vn);
+
+% for timeStep = 1:100
+%     video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
+%     frame=readFrame(video);
+%     imshow(frame)
+%     display(num2str(timeShift+timeStep))
+%     pause
+%     timeShift=timeShift+1;
+% end
+%%
 video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
 frame=readFrame(video);
 imshow(frame)
@@ -45,9 +58,8 @@ else
 end
 
 for fi =flen:-1:1
-    
     fn = filelist(fi).name; %%
-    vn=[fn(1:end+1-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% +1 -4 -9 -12 %%
+    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% +1 -4 -9 -12 %%
     Labels = csvread(fn,3,0); %%
     
     video=VideoReader(vn);

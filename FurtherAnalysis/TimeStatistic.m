@@ -6,9 +6,9 @@ clear
 close all
 clc
 
-Config_NovAna
+Config_NovAna_Ghana
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -42,7 +42,8 @@ bodyLen_cutoff = 80;
 disp('next')
 
 %%
-shift_time = input('Exclude first 5 min for some mice? 0/1: ');
+% shift_time = input('Exclude first 5 min for some mice? 0/1: ');
+shift_time = 0;
 if(shift_time==1)
     whichFiles_shift = [4 5 6];
     disp(['Mice where lego is placed in arena at 5min: ' num2str(whichFiles_shift)])
@@ -58,14 +59,15 @@ for folderi=1:folderlen
 %     pokes = csvread(poke_file.name);
     dist_of_sap(folderi).name = foldernames{folderi};
     
-    cd Analyzed_Data %%%%%%%%%%%%%%%%%%%%%%%%%
+    cd Analyzed_Data_1obj_10cm_tail %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
-    cd ./nose_8cm
+%     cd ./nose_8cm
 
     subpath=cd;
     PathRoot=[subpath '/'];
 %     filelist=dir('*rgb.mat'); 
-    filelist=dir('*rgb_Converted.mat'); %'session01*.mat']; PathRoot, '*.mat']); foldernames{folderi}(4:end) 
+%     filelist=dir('session01*.mat');
+    filelist=dir('*rgb_Converted*.mat'); %PathRoot, '*.mat']); foldernames{folderi}(4:end) 
     flen = length(filelist);
     
     for filei = 1:flen
@@ -263,7 +265,7 @@ for folderi=1:folderlen
     clearvars Time_angle Time_distance Time_periphery totalDistCut ...
         fracArea sap_num sap_num_in_rad sap_frame sap_dist nose_dist
     cd ..
-    cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     cd .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     cd ..
     DisOrAng{folderi,1}='Distance';
     DisOrAng{folderlen+folderi,1}='Angle';
