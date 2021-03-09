@@ -37,26 +37,29 @@
 % Initialization
 %***********************************************************
 clear
+pause(0.5)
 clc
 cd /home/alex/Programs/Novelty_analysis_KA
-Config_NovAna;
+Config_NovAna_Ghana;
 
-durTotal = 10; % duration of analysis (min)
+durTotal = 10; % duration of analysis (min)M08_Bozeman
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/Wash
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/M12_Missoula
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-whichFolder = 'Analyzed_Data';        %%%%%%%%%%%%
+whichFolder = 'Analyzed_Data_1obj_10cm_tail';        %%%%%%%%%%%%
 cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
 pathname = cd;
 PathRoot=[pathname '/'];
-filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
+% filelist=dir([PathRoot,'*' videoname_format(end-3:end)]);
+filelist=dir([PathRoot,'*.csv']);
 flen = length(filelist);
 
-shift_time = input('Exclude first 5 min? 0/1: ');
+% shift_time = input('Exclude first 5 min? 0/1: ');
+shift_time=0;
 if(shift_time==1)
     timeShift = 5000;
     disp(['start analysis at ' num2str(timeShift) ' frames'])
@@ -76,19 +79,19 @@ else
     Ang_ts_frame=500;
     Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
     
-    radius_cm = 8; %%%%%%%%%%%%
+    radius_cm = 10; %%%%%%%%%%%%
     disp(['radius_cm: ' num2str(radius_cm)])
 end
 
 % choose to analyze nose, tail, head, or body
-x_curr = 2; %2=nose; 2+5+8=head; 11=tail;          %%%%%%%%%%%%%%%
-y_curr = 3; %3=nose; 3+6+9=head; 12=tail;          %%%%%%%%%%%%%%%
-if(x_curr == 2 && y_curr == 3)
+x_curr = 11; %2=nose; 2+5+8=head; 11=tail;          %%%%%%%%%%%%%%%
+y_curr = 12; %3=nose; 3+6+9=head; 12=tail;          %%%%%%%%%%%%%%%
+if(x_curr == 2 && y_curr == 3 && radius_cm == 8)
     disp('analyze nose')
-elseif(x_curr == 11 && y_curr == 12)
+elseif(x_curr == 11 && y_curr == 12 && radius_cm == 12)
     disp('analyze tail')
 else
-    disp('analyse head')
+    disp('analyse other')
 end
 
 for fiter =1:flen
@@ -105,7 +108,9 @@ tic;
 % %
 for fiter = 1:flen %%%%%%%%%%%
     vn = filelist(fiter).name;
-    fn=[vn(1:end-4) networkname_format '.csv'];
+    %fn=[vn(1:end-4) networkname_format(1:17) '*' networkname_format(end-15:end) '.csv'];
+    fn=dir([vn(1:end-4) '*.csv']);
+    fn=fn.name;
     disp(['Analyzing: ' fn]);
 
     Labels = csvread(fn,3,0);
