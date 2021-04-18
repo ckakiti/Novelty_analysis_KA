@@ -4,22 +4,22 @@ clear
 close all
 clc
 
-groupfolder = ['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/'];
+groupfolder = ['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardLesion_combine/'];
 cd(groupfolder)
 
-run('MiceIndex_Parents.m')
+run('MiceIndex_combineL.m')
 detectCond = cat(1, Mice.novelty);
 cond2 = find(detectCond=='l'); %'C'; %'l';
 cond1 = find(detectCond=='s'); %'S'; %'s';
 names = {Mice.name};
 
-for mouseiter = 1:length(Mice)
+for mouseiter = 1%:length(Mice)
     currMouse = Mice(mouseiter).name;
     % currMouse = 'M01_Accra';%'AllMice_N1_tail'; %'AllMice_N1_nose';
     % cd temp
     cd(currMouse);%, '/190305/'])
     % cd allFiles
-    cd Analyzed_Data_1obj_10cm_nose/;
+    cd Analyzed_Data_1obj_8cm_nose/;
     
     trajs = dir('*Trajectory*.tif');%'*Trajectory*.tif'); % 'Heatmap*.tif');
     % trajsOrder = [trajs(cond2'); trajs(cond1')];
@@ -61,8 +61,8 @@ for mouseiter = 1:length(Mice)
     % %
     cd ../
     %saveas(fig1, ['Trajectories: ' currMouse])
-    saveas(fig1, ['Trajectories: ' currMouse, '_nose.tif'])
-    close all
-    disp('Saved')
+    %saveas(fig1, ['Trajectories: ' currMouse, '_nose.tif'])
+    %close all
+    %disp('Saved')
     cd(groupfolder)
 end

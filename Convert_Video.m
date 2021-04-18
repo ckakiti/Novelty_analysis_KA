@@ -4,7 +4,7 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Quarky_conf/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Constellations_DLC/
 %cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/ForMelissa/')
 
 files    = dir;
