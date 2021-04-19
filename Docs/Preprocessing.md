@@ -50,6 +50,7 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
  - for extraction, you'll need to create a new line for each .dat file in your dataset (see instructions in template file to quickly get path for each file)
  - extraction and PCA steps depend on whether your data contains optogenetic fibers in them or not
  - PCA step depends on whether you're running a small or large dataset (try instructions for small dataset first, and if your computer runs out of memory use instructions for large dataset)
-#### 11. run ```Shell_Script.sh``` in terminal (within moseq environment)
- - to activate moseq environment, run ```source activate moseq_1.2``` (for instructions to create this environment, see original MoSeq documentation)
+#### 11. activate moseq environment
+ - run ```source activate moseq_1.2``` (for instructions to create this environment, see original MoSeq documentation)
+#### 12. run ```Shell_Script.sh``` in terminal (within moseq environment)
  - will execute all commands you specified when editing the file in step 10
