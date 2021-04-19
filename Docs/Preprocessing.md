@@ -31,5 +31,10 @@ Process raw data so it can be analysed with DLC or MoSeq
 cd /location/of/raw/data
 rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /media/alex/DataDrive1/MoSeqData/groupname/groupname_MoSeq/
 ```
-#### 4. run [MoSeqMoveRGB.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/MoSeqMoveRGB.m)
+#### 4. in MATLAB, run [MoSeqMoveRGB.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/MoSeqMoveRGB.m)
  - edit lines 3 and 5 to match your data
+ - this will create another folder within ```groupname``` called ```groupname_DLC``` that contains all rgb.mp4 and rgb_ts.txt files (transferred out of ```groupname_MoSeq```, folder structure preserved)
+#### 5. copy ```groupname_DLC``` to folder that you want to do DLC analysis in
+ - default is ```/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/```
+#### 6. in MATLAB, run [Convert_video.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Convert_Video.m) to convert .mp4 files to .avi 
+ - for some reason if you run DLC on raw .mp4 files, it reads the wrong frame rate (not the case if you first convert to .avi)
