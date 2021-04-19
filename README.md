@@ -1,17 +1,18 @@
-# Sample commands for using DeepLabCut and MoSeq
+# Instructions for using DeepLabCut and MoSeq
 
-[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
-
+[Preprocessing raw video data](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md)
 
 [Training a New Network for DeepLabCut](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
 
-[MoSeq Sample Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
+[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
+
+[MoSeq Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
 
 [Running MoSeq on the cluster](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_on_cluster.md)
 
 # Novelty analysis code
 
-Matlab code for novelty behavior analysis
+Code for novelty behavior analysis of processed data (see [Processing.md](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md) for instructions on processing raw video data)
 
 ## DLC Workflow
 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-config_novanam)
