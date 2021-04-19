@@ -42,7 +42,7 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
  - for some reason if you run DLC on raw .mp4 files, it reads the wrong frame rate (not the case if you first convert to .avi)
  - edit line 7 to match your data
 #### 7. follow instructions to either run DLC on .avi files with [existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md) or [create a new network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
-#### 8. follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#novelty-analysis-code)
+#### 8. follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#dlc_workflow)
 ## MoSeq-specific preprocessing
 #### 9. create copy of [Shell_Script_Template.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh) and move it to ```groupname```
 #### 10. edit ```Shell_Script.sh``` (created in step 9)
@@ -54,3 +54,4 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
  - run ```source activate moseq_1.2``` (for instructions to create this environment, see original MoSeq documentation)
 #### 12. run ```Shell_Script.sh``` in terminal (within moseq environment)
  - will execute all commands you specified when editing the file in step 10
+#### 13. follow workflow to [analyze MoSeq-generated files](https://github.com/ckakiti/Novelty_analysis_KA#moseq-workflow)
