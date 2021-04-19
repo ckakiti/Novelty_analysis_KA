@@ -13,6 +13,9 @@
 
 Matlab code for novelty behavior analysis
 
+## Preprocessing
+Prepare raw data for analysis
+
 ## DLC Workflow
 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-config_novanam)
 1. [MarkObjPos.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-markobjposm)
