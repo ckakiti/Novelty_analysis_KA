@@ -25,3 +25,9 @@ Process raw data so it can be analysed with DLC or MoSeq
  - name of folder will be referred to as ```groupname``` in this document
 2. within ```groupname``` create another blank folder labeled ```groupname_MoSeq``` (this folder structure is important for later scripts)
 3. copy raw data to ```groupname_MoSeq```
+ - tip: if you just want to transfer certain files (e.g. only .mp4 and timestamp files), use rsync:
+```
+cd /location/of/raw/data
+rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /media/alex/DataDrive1/MoSeqData/groupname/groupname_MoSeq/
+```
+5. 
