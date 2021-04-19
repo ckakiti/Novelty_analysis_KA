@@ -7,7 +7,7 @@ Process raw data so it can be analysed with DLC or MoSeq
 +-- Group_name
 |   +-- animal1_name
 |       +-- date1
-|           +-- session_date
+|           +-- session_yyyymmddhhmmss
 |               +-- depth.dat
 |               +-- depth_ts.txt
 |               +-- metadata.json
