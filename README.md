@@ -1,4 +1,4 @@
-# Step-by-step instructions for using DeepLabCut and MoSeq
+# Instructions for using DeepLabCut and MoSeq
 
 [Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
 
@@ -10,7 +10,7 @@
 
 [Preprocessing raw data](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md)
 
-# Novelty analysis code (post-processing)
+# Novelty analysis code
 
 Code for novelty behavior analysis of processed data (see [Processing.md](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md) for instructions on processing raw video data)
 
