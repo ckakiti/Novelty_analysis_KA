@@ -7,6 +7,8 @@
 
 [MoSeq Sample Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
 
+[Running MoSeq on the cluster](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_on_cluster.md)
+
 # Novelty_analysis
 
 Matlab code for novelty behavior analysis
