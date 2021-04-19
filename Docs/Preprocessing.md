@@ -43,7 +43,7 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
 #### 7. follow instructions to either run DLC on .avi files with [existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md) or [create a new network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
 #### 8. follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#novelty-analysis-code)
 #### 9. create copy of [Shell_Script_Template.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh) and move it to ```groupname```
-#### 10. edit Shell_Script.sh (created in step 7)
+#### 10. edit ```Shell_Script.sh``` (created in step 7)
  - this is a document to streamline extraction, modeling, and visualization of MoSeq data (without having to execute instructions line-by-line)
  - for extraction, you'll need to create a new line for each .dat file in your dataset (see instructions in template file to quickly get path for each file)
  - extraction and PCA steps depend on whether your data contains optogenetic fibers in them or not
