@@ -39,5 +39,6 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
  - default is ```/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/```
 #### 6. in MATLAB, run [Convert_video.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Convert_Video.m)
  - for some reason if you run DLC on raw .mp4 files, it reads the wrong frame rate (not the case if you first convert to .avi)
+ - edit line 7 to match your data
 #### 7. follow instructions to either run DLC on .avi files with [existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md) or [create a new network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
 #### 8. follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#novelty-analysis-code)
