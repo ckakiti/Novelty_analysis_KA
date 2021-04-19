@@ -1,14 +1,14 @@
 # Instructions for using DeepLabCut and MoSeq
 
-[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
+[Preprocessing raw data](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md)
 
 [Training a New Network for DeepLabCut](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
 
-[MoSeq Sample Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
+[Running an existing network (Korleki)](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md)
+
+[MoSeq Commands](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_Example_Command.md)
 
 [Running MoSeq on the cluster](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_on_cluster.md)
-
-[Preprocessing raw data](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md)
 
 # Novelty analysis code
 
