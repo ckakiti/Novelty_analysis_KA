@@ -9,7 +9,7 @@
 
 [Running MoSeq on the cluster](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/MoSeq_on_cluster.md)
 
-# Novelty_analysis
+# Novelty analysis code
 
 Matlab code for novelty behavior analysis
 
