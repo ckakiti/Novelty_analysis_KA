@@ -20,5 +20,6 @@ Process raw data so it can be analysed with DLC or MoSeq
 ```
 
 ## Separating DLC- and MoSeq-specific files
-1. copy raw data to computer that can run DLC and MoSeq (this document assumes you're using "alex" and storing larges (.dat) files on DataDrive1)
-2. 
+1. create blank folder on computer that can run DLC and MoSeq
+ - this document assumes you're using "alex" and copying data first to ```/media/alex/DataDrive1/MoSeqData/```
+2. copy raw data to folder
