@@ -37,11 +37,13 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
  - this will create another folder within ```groupname``` called ```groupname_DLC``` that contains all rgb.mp4 and rgb_ts.txt files (transferred out of ```groupname_MoSeq```, folder structure preserved)
 #### 5. copy ```groupname_DLC``` to folder that you want to do DLC analysis in
  - default is ```/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/```
+## DLC-specific preprocessing
 #### 6. in MATLAB, run [Convert_video.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Convert_Video.m)
  - for some reason if you run DLC on raw .mp4 files, it reads the wrong frame rate (not the case if you first convert to .avi)
  - edit line 7 to match your data
 #### 7. follow instructions to either run DLC on .avi files with [existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md) or [create a new network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
 #### 8. follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#novelty-analysis-code)
+## MoSeq-specific preprocessing
 #### 9. create copy of [Shell_Script_Template.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh) and move it to ```groupname```
 #### 10. edit ```Shell_Script.sh``` (created in step 9)
  - this is a document to streamline extraction, modeling, and visualization of MoSeq data (without having to execute instructions line-by-line)
