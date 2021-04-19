@@ -40,11 +40,14 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
 #### 6. in MATLAB, run [Convert_video.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Convert_Video.m)
  - for some reason if you run DLC on raw .mp4 files, it reads the wrong frame rate (not the case if you first convert to .avi)
  - edit line 7 to match your data
-#### 7. create copy of [Shell_Script_Template.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh) and move it to ```groupname```
-#### 8. edit Shell_Script.sh (created in step 7)
+#### 7. follow instructions to either run DLC on .avi files with [existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md) or [create a new network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
+#### 8. follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#novelty-analysis-code)
+#### 9. create copy of [Shell_Script_Template.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh) and move it to ```groupname```
+#### 10. edit Shell_Script.sh (created in step 7)
  - this is a document to streamline extraction, modeling, and visualization of MoSeq data (without having to execute instructions line-by-line)
  - for extraction, you'll need to create a new line for each .dat file in your dataset (see instructions in template file to quickly get path for each file)
  - extraction and PCA steps depend on whether your data contains optogenetic fibers in them or not
  - PCA step depends on whether you're running a small or large dataset (try instructions for small dataset first, and if your computer runs out of memory use instructions for large dataset)
-#### DLC-specific (1). follow instructions to either run DLC on .avi files with [existing network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Using_DLC_in_UchidaLab_Korleki.md) or [create a new network](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Training_a_new_network.md)
-#### DLC-specific (2). follow workflow to [analyze DLC-generated files](https://github.com/ckakiti/Novelty_analysis_KA#novelty-analysis-code)
+#### 11. run ```Shell_Script.sh``` in terminal (within moseq environment)
+ - to activate moseq environment, run ```source activate moseq_1.2``` (for instructions to create this environment, see original MoSeq documentation)
+ - will execute all commands you specified when editing the file in step 10
