@@ -31,4 +31,5 @@ Process raw data so it can be analysed with DLC or MoSeq
 cd /location/of/raw/data
 rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /media/alex/DataDrive1/MoSeqData/groupname/groupname_MoSeq/
 ```
-#### 4. 
+#### 4. run [MoSeqMoveRGB.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/MoSeqMoveRGB.m)
+ - edit lines 3 and 5 to match your data
