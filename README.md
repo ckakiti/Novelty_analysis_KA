@@ -12,7 +12,7 @@
 
 # Novelty analysis code
 
-Code for novelty behavior analysis of processed data (see [Processing.md](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md) for instructions on processing raw video data)
+Code for novelty behavior analysis of processed data (see [Preprocessing.md](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Docs/Preprocessing.md) for instructions on processing raw video data)
 
 ## DLC Workflow
 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-config_novanam)
