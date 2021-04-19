@@ -5,16 +5,17 @@
 # ./Shell_Script_Template.sh
 
 # STEP 1: EXTRACTION
+# to quickly get path to all .dat files nested under folder, enter this into terminal:
+# find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
+# to get all .mp4 files:
+# find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
+
 # no fiber:
 moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Dataset_name/Dataset_name_MoSeq/ path_to_file /depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl --bg-roi-dilate 75 75 --frame-trim 900 0
 
 # fiber:
 moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Dataset_name/Dataset_name_MoSeq/ path_to_file /depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl --bg-roi-dilate 75 75 --frame-trim 900 0 --use-tracking-model True --cable-filter-iters 1
 
-# to quickly get path to all .dat files nested under folder, enter this into terminal:
-# find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
-# to get all .mp4 files:
-# find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
 
 # STEP 2: PCA
 # for small datasets

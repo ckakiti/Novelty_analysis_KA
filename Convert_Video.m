@@ -25,7 +25,7 @@ for mouseiter=1:length(mouseList)
     nameDir(ismember(nameDir,{'.','..','25fps','temp'})) = [];
     dateList = nameDir;
     
-    for dateiter = 1:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
+    for dateiter = 7:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
         cd(dateList{dateiter})
         
         filelist = dir('*.mp4');
