@@ -9,6 +9,8 @@
 # find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
 # to get all .mp4 files:
 # find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-
+# to delete all .mp4 files under current folder:
+# find -type f -name '*.mp4' -delete
 
 # no fiber:
 moseq2-extract extract /media/alex/DataDrive1/MoSeqData/Dataset_name/Dataset_name_MoSeq/ path_to_file /depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl --bg-roi-dilate 75 75 --frame-trim 900 0

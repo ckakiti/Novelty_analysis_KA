@@ -4,8 +4,8 @@ clc
 
 Config_NovAna_Ghana
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/
-run('MiceIndex_Parents')
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardLesion_combine/
+run('MiceIndex_combineL')
 
 oneStat = 0;
 
@@ -27,7 +27,7 @@ else
 %     timeStat = readtable('TimeStatistic_12cm_tail.csv');
 %     timeStat = readtable('boutAnalysis_nose.csv');   
 %     timeStat = readtable('areaAnalysis_nose_quad3-4.csv');
-    timeStat = readtable('TimeStatistic_10cm_tail.csv');
+    timeStat = readtable('TimeStatistic_12cm_tail.csv');
     
     timeStat2 = timeStat{:,3:end};
     names = timeStat{1:height(timeStat)/2,1}';
@@ -73,7 +73,7 @@ stuastd=std(Y_ang(cond1,:));
 fps=15; %%%%%%%%%%%%%%%%%%%%%%%
 totalTime = 10;
 Dis_te_frame = fps*60*totalTime+500;
-radius_cm = 10; %12 %8
+radius_cm = 12; %12 %8
 disp(['Total time: ' num2str(round(Dis_te_frame/fps/60)) 'min'])
 disp(['Radius: ' num2str(radius_cm) 'cm'])
 
@@ -107,7 +107,6 @@ xlabel(x_label)
 ylabel(Y_dis_ylabel)
 % legend(names(cond1))
 % legend([names(cond2) names(cond1)])
-% legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([d1(1) d2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
   [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])
@@ -155,7 +154,6 @@ xlabel(x_label)
 ylabel(Y_ang_ylabel)
 % legend(names(cond1))
 % legend([names(cond2) names(cond1)])
-% legend([names(cond2,:); names(cond1,:)], 'location', 'northwest')
 legend([a1(1) a2(1)], [cond2name ' (n=' num2str(length(cond2)) ')'], ...
   [cond1name ' (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
 xlim([0 X(end)+1])

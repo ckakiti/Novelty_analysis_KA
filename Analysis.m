@@ -45,10 +45,10 @@ Config_NovAna_Ghana;
 durTotal = 10; % duration of analysis (min)M08_Bozeman
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/M12_Missoula
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Constellations_DLC/Virgo
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-whichFolder = 'Analyzed_Data_1obj_10cm_tail';        %%%%%%%%%%%%
+whichFolder = 'Analyzed_Data_1obj_12cm_tail';        %%%%%%%%%%%%
 cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -79,7 +79,7 @@ else
     Ang_ts_frame=500;
     Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
     
-    radius_cm = 10; %%%%%%%%%%%%
+    radius_cm = 12; %%%%%%%%%%%%
     disp(['radius_cm: ' num2str(radius_cm)])
 end
 

@@ -4,9 +4,9 @@ clear
 close all
 clc
 
-Config_NovAna
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Planets_DLC/')
-run('MiceIndex')
+Config_NovAna_combine3
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine/')
+run('MiceIndex_combine3')
 
 % only analyze first 10 minutes of video
 start_min=0;%0.5;

@@ -8,7 +8,7 @@ clc
 
 Config_NovAna_Ghana
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Parents_6OHDA_combine/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardLesion_combine/
 
 % start_min=0.5;
 % end_min=start_min+10;
@@ -59,7 +59,7 @@ for folderi=1:folderlen
 %     pokes = csvread(poke_file.name);
     dist_of_sap(folderi).name = foldernames{folderi};
     
-    cd Analyzed_Data_1obj_10cm_tail %%%%%%%%%%%%%%%%%%%%%%%%%
+    cd Analyzed_Data_1obj_12cm_tail %%%%%%%%%%%%%%%%%%%%%%%%%
     load('Arena_Obj_Pos.mat','arena')
 %     cd ./nose_8cm
 

@@ -6,8 +6,8 @@ close all
 % Config_NovAna_combine3;
 Config_NovAna_Ghana;
 
-currSet = 'Montana_DLC'; %%%
-currMouse = 'Missoula';
+currSet = 'Constellations_DLC'; %%%
+currMouse = 'Virgo';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
