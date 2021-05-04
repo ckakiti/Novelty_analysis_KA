@@ -8,6 +8,8 @@ Config_NovAna_combine3
 cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine/')
 run('MiceIndex_combine3')
 
+radius_cm = 7; %%%%%%%% modify default radius (from Config_NovAna)
+
 % only analyze first 10 minutes of video
 start_min=0;%0.5;
 end_min=start_min+10.25;
@@ -249,8 +251,9 @@ clc
 % cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/Capoeira_MoSeq')
 % poke_labels=csvread('Capoeira_poke_labels_N1.csv',1,3);
 
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Machines_DLC/')
-load('PokesApproaches.mat')
+rootdir = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine/';
+cd(rootdir)
+load('PokesApproaches_7cm.mat')
 
 files    = dir;
 whichDir = [files.isdir];
@@ -258,23 +261,40 @@ nameDir  = files(whichDir);
 nameDir  = {nameDir.name};
 nameDir(ismember(nameDir,{'.','..','temp'})) = [];
 
+filelist_rgb_Capoeira = dir(fullfile(rootdir, '**/190413/*rgb_ts.txt'));
+filelist_rgb_Hiking   = dir(fullfile(rootdir, '**/190622/*rgb_ts.txt'));
+filelist_rgb_Chess    = dir(fullfile(rootdir, '**/190712/*rgb_ts.txt'));
+filelist_rgb = [filelist_rgb_Capoeira; filelist_rgb_Hiking; filelist_rgb_Chess];
+
+filelist_depth_Capoeira = dir(fullfile(rootdir, '**/190413/*depth_ts.txt'));
+filelist_depth_Hiking   = dir(fullfile(rootdir, '**/190622/*depth_ts.txt'));
+filelist_depth_Chess    = dir(fullfile(rootdir, '**/190712/*depth_ts.txt'));
+filelist_depth = [filelist_depth_Capoeira; filelist_depth_Hiking; filelist_depth_Chess];
+
 curr_labels = [];
 for mousei=1:length(Mice)
-%     curr_rgb = Mice(mousei).Pokes_Day3'; % identify pokes for N1
-    curr_rgb = Mice(mousei).Approach_Day3';
+    curr_rgb = Mice(mousei).Pokes_Day3'; % identify pokes for N1
+%     curr_rgb = Mice(mousei).Approach_Day3';
     
     cd(nameDir{mousei})
     
-    rgbts_file   = dir('*190906_rgb_ts.txt');
-    depthts_file = dir('*190906_depth_ts.txt');
+    which_rgb   = contains({filelist_rgb.name},Mice(mousei).name);
+    which_depth = contains({filelist_depth.name},Mice(mousei).name);
+    
+    rgbts_file = fullfile(filelist_rgb(mousei).folder, ...
+                          filelist_rgb(mousei).name);
+    depthts_file = fullfile(filelist_depth(mousei).folder, ...
+                            filelist_depth(mousei).name);
+%     rgbts_file   = dir('*190906_rgb_ts.txt');
+%     depthts_file = dir('*190906_depth_ts.txt');
     % Capoeira: 190413_01
     % Hiking: 190622
     % Chess: 190712
     % Machines: 190906
     % Planets: 200102
     
-    rgbts   = load(rgbts_file.name);
-    depthts = load(depthts_file.name);
+    rgbts   = load(rgbts_file);
+    depthts = load(depthts_file);
     
     curr_depth = zeros(length(curr_rgb),1);
     for ts_iter = 1:length(curr_rgb)
@@ -287,6 +307,7 @@ for mousei=1:length(Mice)
     cd .. 
 end
 
-% csvwrite('***_poke_labels_N1.csv', curr_labels)
-
+if(0)
+    csvwrite('***_poke_labels_N1.csv', curr_labels)
+end
 

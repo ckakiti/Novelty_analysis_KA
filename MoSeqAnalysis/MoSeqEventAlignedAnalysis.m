@@ -18,7 +18,7 @@ BarHeight=5;
 cmap=jet(100);
 fsize=24;
 
-load('MoSeqDataFrame_50.mat');
+load('MoSeqDataFrame.mat');
 % Mice_Index_path='./MiceIndex.m';
 % run(Mice_Index_path);
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
@@ -36,7 +36,7 @@ frameCutoff = 18000;
 
 trim_frame_start=899;
 % AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
-AllAct_file = dir('*poke_labels_N1.csv');
+AllAct_file = dir('*poke_labels_N1_10min_7cm.csv');
 % AllAct_file = dir('*appr_labels_N1.csv'); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 AllAct=csvread(AllAct_file.name,0,0);
 AllActLabels=AllAct(:,3);
@@ -176,7 +176,6 @@ end
 %tic
 
 for miceiter=1:length(Mice)
-
 
     % find MSid index
     MSidindex=1;
@@ -404,6 +403,32 @@ if(0)
     saveas(Plot_G2actalignedusage,['Dataset_20190723_S' num2str(whichMouse) ...
         '_' Mice(G2_Mice(whichMouse)).name '_syllableUsage.tif'])
 end
+
+%% plot syl usage by trial for individual animals (trial x time)
+cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/plots_new/SylByTrial')
+
+for curr_mouse = 1:length(Mice)
+    close all
+    
+    indiv_ActAligned = Mice(curr_mouse).ExpDay(AnalysisDay).actalignedusage;
+    
+    plot_indiv_ActAligned = figure;
+    imagesc(indiv_ActAligned)
+    colorbar
+    caxis([0 100])
+    xlabel('Time (s)')
+    ylabel('Trial')
+    title(['Syllable Usage by Trial: Day' num2str(AnalysisDay)' ' ' ...
+        Mice(curr_mouse).name '(' Mice(curr_mouse).novelty ')'])
+    set(gca,'FontSize',20)
+    set(gcf,'Position',[250 250 1460 650])
+    
+    % if(0)
+    saveas(plot_indiv_ActAligned,['SylByTrial_Day' num2str(AnalysisDay) ...
+        '_M' num2str(curr_mouse) Mice(curr_mouse).novelty '_' Mice(curr_mouse).name '.tif'])
+    % end
+end
+cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/')
 
 %% plots of individual syllables for statistical analysis
 close all
