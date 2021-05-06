@@ -121,4 +121,6 @@ Following sections:
 - Outputs: plot of fractional syllable usage (sorted by usage, all days), plot of cumulative fractional usage
 
 ## Fiber Photometry Workflow
-0. Shell_Script.sh
+0. script
+
+### 0. script
