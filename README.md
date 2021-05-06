@@ -16,7 +16,7 @@ Code for novelty behavior analysis of processed data (see [Preprocessing.md](htt
 
 Sections:
 - [DLC workflow](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#dlc-workflow)
-- [MoSeq workflow](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#moseq-workflow]
+- [MoSeq workflow](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#moseq-workflow)
 - Fiber photometry workflow
 
 ## DLC Workflow
