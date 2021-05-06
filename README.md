@@ -17,7 +17,7 @@ Code for novelty behavior analysis of processed data (see [Preprocessing.md](htt
 Following sections:
 - [DLC workflow](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#dlc-workflow)
 - [MoSeq workflow](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#moseq-workflow)
-- Fiber photometry workflow
+- [Fiber photometry workflow](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#fiber-photometry-workflow)
 
 ## DLC Workflow
 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-config_novanam)
@@ -120,5 +120,5 @@ Following sections:
 - Inputs: MiceIndex.mat, MoSeqDataFrame.mat
 - Outputs: plot of fractional syllable usage (sorted by usage, all days), plot of cumulative fractional usage
 
-## Fiber photometry Workflow
+## Fiber Photometry Workflow
 0. Shell_Script.sh
