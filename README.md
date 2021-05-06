@@ -119,3 +119,6 @@ Following sections:
 - calculates how many syllables explain 90% of behavior (needed for statistical analysis)
 - Inputs: MiceIndex.mat, MoSeqDataFrame.mat
 - Outputs: plot of fractional syllable usage (sorted by usage, all days), plot of cumulative fractional usage
+
+## Fiber photometry Workflow
+0. Shell_Script.sh
