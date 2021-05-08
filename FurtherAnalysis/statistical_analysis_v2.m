@@ -5,20 +5,20 @@ clc
 Config_NovAna_trim
 
 path_to_your_file = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/'...
-    'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
+    'Behavior/NewHope+ROTJ/'];
 %    'Behavior/Standard setup/CombineAnalysis/for_statistics'];
 cd(path_to_your_file)
 % timeStat = readtable('TimeStatistic_combine3_tail.csv');
 % timeStat = readtable('TimeStatistic_SAP_combine3_8cm_norm_incl.csv');
-timeStat = readtable('TimeStatistic_combine3_tail.csv');
+timeStat = readtable('TimeStatistic_body_r8.csv');
 
-% timeStat_half = timeStat(1:height(timeStat)/2,:); disp('top half')
-timeStat_half = timeStat(height(timeStat)/2+1:height(timeStat),:); disp('bottom half')
+timeStat_half = timeStat(1:height(timeStat)/2,:); disp('top half')
+% timeStat_half = timeStat(height(timeStat)/2+1:height(timeStat),:); disp('bottom half')
 timeStat_half = timeStat_half{:,3:end};
 
 
 path_to_MiceIndex = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
-    'Behavior/Standard setup/CombineAnalysis/Dataset_20190723/MiceIndex_combine3'];
+    'Behavior/NewHope+ROTJ/MiceIndex_NewHope_ROTJ.m'];
 %     'Behavior/Standard setup/CombineAnalysis/Dataset_20190723/'...
 %     'MiceIndex_combine3.m'];
 run(path_to_MiceIndex)
@@ -49,7 +49,39 @@ cond2_N4 = timeStat_half(cond2, 4);
 cond2_norm = cond2_N1-cond2_H2;%./cond2_H;
 cond1_norm = cond1_N1-cond1_H2;%./cond1_H;
 
-%% t-tests
+%% for conf dataset
+clear
+close all
+clc
+
+path_to_your_file = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/'...
+    'Behavior/ComparingConf'];
+cd(path_to_your_file)
+
+compareConf = readtable('compareConfAll_avgStatAvg.csv');
+compareConf_data = compareConf{:,2:end};
+
+% compare baseline fam to novelty fam (paired)
+[curr_h, curr_p, curr_ci, curr_stats] = ...
+    ttest(compareConf_data(1,:), compareConf_data(3,:));
+% h=0; p=0.6066; ci=[-0.0217 0.0137]
+
+% compare baseline novel to novelty novel (paired)
+[curr_h, curr_p, curr_ci, curr_stats] = ...
+    ttest(compareConf_data(2,:), compareConf_data(4,:));
+% h=0; p=0.2344; ci=[-0.0637 0.0185]
+
+% compare baseline familiar to baseline novel (unpaired)
+[curr_h, curr_p, curr_ci, curr_stats] = ...
+    ttest2(compareConf_data(1,:), compareConf_data(2,:));
+% h=1; p=0.0092; ci=[-0.0593 -0.0101]
+
+% compare novelty familiar to novelty novel (unpaired)
+[curr_h, curr_p, curr_ci, curr_stats] = ...
+    ttest2(compareConf_data(3,:), compareConf_data(4,:));
+% h=1; p=0.0013; ci=[-0.0816 -0.0248]
+
+%% t-tests (stim/cont)
 stat_summary(1).data = [cond1_H2 cond1_N1]; % paired
 stat_summary(2).data = [cond2_H2 cond2_N1]; % paired
 stat_summary(3).data = [cond1_N1 cond2_N1]; % unpaired
