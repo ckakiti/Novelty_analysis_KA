@@ -40,15 +40,15 @@ clear
 pause(0.5)
 clc
 cd /home/alex/Programs/Novelty_analysis_KA
-Config_NovAna_Ghana;
+Config_NovAna_FP_test;
 
 durTotal = 10; % duration of analysis (min)M08_Bozeman
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Constellations_DLC/Virgo
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/FP_test/no_mouse
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-whichFolder = 'Analyzed_Data_1obj_12cm_tail';        %%%%%%%%%%%%
+whichFolder = 'Analyzed_Data_1obj_8cm_nose';        %%%%%%%%%%%%
 cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -79,13 +79,13 @@ else
     Ang_ts_frame=500;
     Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
     
-    radius_cm = 12; %%%%%%%%%%%%
+    radius_cm = 8; %%%%%%%%%%%%
     disp(['radius_cm: ' num2str(radius_cm)])
 end
 
 % choose to analyze nose, tail, head, or body
-x_curr = 11; %2=nose; 2+5+8=head; 11=tail;          %%%%%%%%%%%%%%%
-y_curr = 12; %3=nose; 3+6+9=head; 12=tail;          %%%%%%%%%%%%%%%
+x_curr = 2; %2=nose; 2+5+8=head; 11=tail;          %%%%%%%%%%%%%%%
+y_curr = 3; %3=nose; 3+6+9=head; 12=tail;          %%%%%%%%%%%%%%%
 if(x_curr == 2 && y_curr == 3 && radius_cm == 8)
     disp('analyze nose')
 elseif(x_curr == 11 && y_curr == 12 && radius_cm == 12)

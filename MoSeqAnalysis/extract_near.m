@@ -3,12 +3,12 @@
 clear
 clc
 
-% set_names = {'Capoeira_DLC', 'Chess_DLC', 'Hiking_DLC'};
-set_names = {'CvsS_180831_DLC'};
+set_names = {'Capoeira_DLC', 'Chess_DLC', 'Hiking_DLC'};
+% set_names = {'CvsS_180831_DLC'};
 
 % load MiceIndex file (contains mice, condition, date, MSid) 
-% cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
-cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq
+cd /media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq
+% cd /media/alex/DataDrive1/MoSeqData/CvsS_20180831_MoSeq
 load('MiceIndex.mat') % generated from extract_uuid.m
 
 for setiter =1:length(set_names)

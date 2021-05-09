@@ -3,7 +3,7 @@ clear
 close all
 clc
 
-basefolder = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/FP_test';
+basefolder = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/';
 
 currMouse = 'no_mouse';
 currDate  = '210506';

@@ -4,22 +4,38 @@ clear
 close all
 clc
 
-Mice_Index_path='/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex/MiceIndex_Chess.m';
+basefolder = '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/';
+
+Mice_Index_path=[basefolder 'MiceIndex/MiceIndex_Chess.m'];
 run(Mice_Index_path);
 
-currSet = 'Chess_DLC';
+currSet = 'StandardSetup_combine';
 
 cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/', ...
     currSet, '/'])
+folderpath = cd;
+folderd = dir(folderpath);
+isub = [folderd(:).isdir];
+foldernames = {folderd(isub).name}'; 
+foldernames(ismember(foldernames,{'.','..','temp'})) = []; 
+folderlen=length(foldernames);
 
 for miceiter = 1:length(Mice)
     currMouse = Mice(miceiter).name;
-    cd(currMouse)
+    mouse_idx = find(contains(foldernames,currMouse));
+    cd(foldernames{mouse_idx})
     
-    allRGBts = dir('*rgb_ts*');
+    % filter out blank sessions (no MSid)
+    anyEmpty = find(cellfun(@isempty, {Mice(miceiter).ExpDay.MSid}));
+    for emptyiter = 1:length(anyEmpty)
+        disp('file missing')
+        Mice(miceiter).ExpDay(anyEmpty(emptyiter)) = [];
+    end
+        
+    allRGBts = dir('*rgb_ts');
     for fileiter = 1:length(allRGBts)
-        cd 'Analyzed_Data_1obj'
-        currFiles = dir('*rgb.mat');%'*Converted.mat');
+        cd 'Analyzed_Data_1obj_8cm_nose'
+        currFiles = dir('*rgb_Converted.mat');%'*Converted.mat');
         currLabels = load(currFiles(fileiter).name, 'Labels');
         temp = currLabels.Labels;
         temp2 = temp(:,21);
@@ -70,4 +86,25 @@ end
 %         %nearObj = dist<
 
 %%
-save('NearObj_ts', 'Mice')
+cd([basefolder '/MiceIndex'])
+save('NearObj_ts_***', 'Mice')
+
+%% combine NearObj files from multiple sets of mice
+clear
+clc
+
+filefolder = '/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MiceIndex';
+cd(filefolder)
+
+NearObj_all = [];
+nearObj_files = dir('NearObj_ts*');
+for neariter = 1:length(nearObj_files)
+    load(nearObj_files(neariter).name)
+    NearObj_all = [NearObj_all Mice];
+end
+Mice = NearObj_all;
+
+if(0)
+    cd(filefolder)
+    save('NearObj_***','Mice')
+end
