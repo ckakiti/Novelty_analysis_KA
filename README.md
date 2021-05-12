@@ -144,7 +144,7 @@ Following sections:
   - mouse_date_FP.mat (containing GCaMP, tdTom, TTL, TTL_on, pos_within_TTL)
   - mouse_date_rgb_ts (containing rgb indices and corresponding FP indices)
 
-### 3. [bout_analysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/bout_analysis.m)
+### 3. [bout_analysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/bout_analysis.m) OR hand-annotate
 - annotate rgb/depth video with significant events (e.g. pokes, bout start, reward delivery)
 - Input: Config_NovAna, MiceIndex, .mat files from Analysis.m
 - Output: PokesApproaches.mat, DatasetName_poke_labels_N1.csv
