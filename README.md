@@ -121,10 +121,10 @@ Following sections:
 - Outputs: plot of fractional syllable usage (sorted by usage, all days), plot of cumulative fractional usage
 
 ## Fiber Photometry Workflow
-1. KW_1_LED.m
-2. FPdat_import.m
-3. bout_analysis.m / by hand
-4. MoSeqFP_raster.m
+1. [KW_1_LED.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-kw_1_ledm)
+2. [FPdat_import.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-kw_1_ledm)
+3. [bout_analysis.m / by hand](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-kw_1_ledm)
+4. [MoSeqFP_raster.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-kw_1_ledm)
 
 ### 1. [KW_1_LED.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/KW_1_LED.m)
 - extract frames when LED was on (in rgb video)
