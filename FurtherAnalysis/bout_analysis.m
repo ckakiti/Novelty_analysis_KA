@@ -4,9 +4,9 @@ clear
 close all
 clc
 
-Config_NovAna_combine3
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine/')
-run('MiceIndex_combine3')
+Config_NovAna_ATLA
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/ATLA_DLC/')
+run('MiceIndex_ATLA')
 
 radius_cm = 7; %%%%%%%% modify default radius (from Config_NovAna)
 
@@ -29,7 +29,7 @@ whichDir = [files.isdir];
 nameDir  = files(whichDir);
 nameDir  = {nameDir.name};
 nameDir(ismember(nameDir,{'.','..','Retrain_Sep17','temp'})) = [];
-days = 6;
+days = 3;
 
 shift_time = input('Exclude first 5 min for some mice? 0/1: ');
 if(shift_time==1)
@@ -42,11 +42,13 @@ boutNum = zeros(length(nameDir),days);
 boutLen = zeros(length(nameDir),days);
 
 for mousei = 1:length(nameDir)
-    cd([nameDir{1,mousei}, '/Analyzed_Data_1obj_12cm_tail'])
+    cd([nameDir{1,mousei}, '/Analyzed_Data_1obj_7cm_nose'])
     load('Arena_Obj_Pos.mat')
+    cd ..
     
-    matFiles = dir('*rgb_Converted.mat'); %'*rgb.mat'); %'*Converted.mat');
-    matFiles = cat(1, matFiles.name);
+    matFiles = dir('DLC_label*.mat'); %'*rgb.mat' %'*Converted.mat' %'DLC_Label*.mat'
+%     matFiles = cat(1, matFiles.name);
+    matFiles = {matFiles.name}';
     
     
     % exclude first 5 min of recording (if lego is placed in arena after 5 min)
@@ -68,7 +70,7 @@ for mousei = 1:length(nameDir)
     
     
     for filei = 1:size(matFiles,1)     %%%% which day to analyze %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        load(matFiles(filei,:))
+        load(matFiles{filei,1})
 
         if(startframe<=0)
             startframe=1;
@@ -144,7 +146,7 @@ for mousei = 1:length(nameDir)
         end
     end
     
-    cd ../..
+    cd ..
 % end
 disp('end')
 
@@ -251,7 +253,7 @@ clc
 % cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/Capoeira_MoSeq')
 % poke_labels=csvread('Capoeira_poke_labels_N1.csv',1,3);
 
-rootdir = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine/';
+rootdir = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/ATLA_DLC/';
 cd(rootdir)
 load('PokesApproaches_7cm.mat')
 

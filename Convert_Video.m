@@ -4,7 +4,7 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Constellations_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/ATLA_DLC/
 %cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/ForMelissa/')
 
 files    = dir;
@@ -25,7 +25,7 @@ for mouseiter=1:length(mouseList)
     nameDir(ismember(nameDir,{'.','..','25fps','temp'})) = [];
     dateList = nameDir;
     
-    for dateiter = 7:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
+    for dateiter = 3%1:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
         cd(dateList{dateiter})
         
         filelist = dir('*.mp4');

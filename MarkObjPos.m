@@ -5,10 +5,10 @@ close all
 % Config_NovAna_MoSeq_LegoRubber;
 % Config_NovAna_combine3;
 % Config_NovAna_Ghana;
-Config_NovAna_FP_test;
+Config_NovAna_ATLA;
 
-currSet = 'FP_test'; %%%
-currMouse = 'FP_test';
+currSet = 'ATLA_DLC'; %%%
+currMouse = 'Water';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
@@ -25,12 +25,11 @@ PathRoot=[path '/'];
 % vn = vn(1).name; %%%
 % flen=1; %%%
 
-filelist=dir([PathRoot,'*.mp4']); %csv 
+filelist=dir([PathRoot,'*.csv']); %csv %mp4
 flen = length(filelist); %%
 fn = filelist(flen).name; %%
-%vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
-vn = 'rgb.mp4';
-%Labels = csvread(fn,3,0); %%
+vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%% +1 -4 -9 -12 %%
+Labels = csvread(fn,3,0); %%
 
 video=VideoReader(vn);
 
@@ -60,9 +59,8 @@ end
 
 for fi =flen:-1:1
     fn = filelist(fi).name; %%
-    %vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% +1 -4 -9 -12 %%
-    vn='rgb.mp4';
-    %Labels = csvread(fn,3,0); %%
+    vn=[fn(1:end-4-length(networkname_format)) videoname_format(end-3:end)]; %%%%%%%%%%%%% +1 -4 -9 -12 %%
+    Labels = csvread(fn,3,0); %%
     
     video=VideoReader(vn);
     video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
