@@ -128,6 +128,7 @@ Following sections:
 
 ### 1. [KW_1_LED.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/KW_1_LED.m)
 - extract frames when LED was on (in rgb video)
+- NOTE: TAKES A LONG TIME TO RUN
 - Input:
   - video file (.mp4/.avi)
   - ArenaObjPos.mat (from MarkObjPos.m, containing LED position)
