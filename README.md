@@ -27,9 +27,12 @@ Following sections:
 4. [MiceIndex.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-miceindexm)
 5. [Plot_compare.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#5-plot_comparem)
 6. [bout_analysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-bout_analysism)
-7. [video_novelty_multi_labels_2011.m](https://github.com/ckakiti/Novelty_analysis_KA#7-video_novelty_multi_labels_2011m-mitsuko-code) (Mitsuko code)
-8. [analy_novelty2103](https://github.com/ckakiti/Novelty_analysis_KA#8-analy_novelty2103-mitsuko-code) (Mitsuko code)
-9. [analy_novelty_multi_sessions_2012](https://github.com/ckakiti/Novelty_analysis_KA#9-analy_novelty_multi_sessions_2012-mitsuko-code) (Mitsuko code)
+
+Mitsuko's code:
+
+8. [video_novelty_multi_labels_2011.m](https://github.com/ckakiti/Novelty_analysis_KA#7-video_novelty_multi_labels_2011m-mitsuko-code)
+9. [analy_novelty2103](https://github.com/ckakiti/Novelty_analysis_KA#8-analy_novelty2103-mitsuko-code)
+10. [analy_novelty_multi_sessions_2012](https://github.com/ckakiti/Novelty_analysis_KA#9-analy_novelty_multi_sessions_2012-mitsuko-code)
 
 ## DLC Script Details
 ### 0. [Config_NovAna.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/Config_NovAna.m)
