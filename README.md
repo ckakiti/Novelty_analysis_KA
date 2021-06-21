@@ -140,8 +140,8 @@ Following sections:
 
 Mitsuko's code:
 
-1. photometry_water_tone_Korleki_2105.m
-2. photometry_novelty_Korleki_2105.m
+1. [photometry_water_tone_Korleki_2105.m](https://github.com/ckakiti/Novelty_analysis_KA#1-photometry_water_tone_korleki_2105m-mitsuko-code)
+2. [photometry_novelty_Korleki_2105.m](https://github.com/ckakiti/Novelty_analysis_KA#2-photometry_novelty_korleki_2105m)
 
 Korleki's code:
 
