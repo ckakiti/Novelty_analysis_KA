@@ -161,12 +161,17 @@ Korleki's code:
   - DLC csv file
 
 ### 1. photometry_water_tone_Korleki_2105.m (Mitsuko code)
-- Input: 
-- Output:
+- plotting tone-aligned photometry response
+- Input: tone_data
+- Output: photometry_corrected.mat, ANIMAL_tone_SESSION.tif, raw photometry signal plot, GCaMP/tdTom correlation plot
 
 ### 2. photometry_novelty_Korleki_2105.m (Mitsuko code)
-- Input:
-- Output:
+- required supplementary code:
+  - analyze_noise_2105_novelty
+  - photometry_sync_every10_2105
+  - videosync_every10_2105
+- Input: akiti_miceID_210318.xlsx, DLC_label.mat
+- Output: ANIMAL_FPaligned_SESSION.tif
 
 ### 3. [KW_1_LED.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/KW_1_LED.m)
 - extract frames when LED was on (in rgb video)
