@@ -92,9 +92,6 @@ Following sections:
   - noseTailAvgOfMean.tif, noseTailAvgOfMean_sep.tif, noseTailHeatmap_mean.tif
   - exponential fit plots + statistics
 
-### 10. novelty_comparison_multi_days.m (Mitsuko code)
-- 
-
 ## MoSeq Workflow
 0. [Shell_Script.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#0-shell_scriptsh)
 1. [ModelDataTransfer.py](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#1-modeldatatransferpy)
