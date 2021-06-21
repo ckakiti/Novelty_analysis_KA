@@ -131,7 +131,9 @@ Following sections:
 
 ## Fiber Photometry Workflow
 0. Preprocessing requirements
+
 Mitsuko's code:
+
 1. photometry_water_tone_Korleki_2105.m
 2.
 3.
