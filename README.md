@@ -146,6 +146,7 @@ Mitsuko's code:
   - in terminal window, activate moseq environment (`source activate moseq2`)
   - start jupyter notebook (`jupyter notebook`)
   - in browser, open `localhost:8888` (or follow URLs given in terminal at startup)
+  - navigate to folder with .ipynb file
 
 ## Fiber Photometry Workflow
 0. Preprocessing requirements
