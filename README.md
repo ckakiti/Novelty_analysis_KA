@@ -102,7 +102,7 @@ Mitsuko's code:
 4. [MoSeqEventAlignedAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-moseqeventalignedanalysism)
 5. [MoSeqEventBasedAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#5-moseqeventbasedanalysism)
 6. [MoSeqGeneralSyllableAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#6-moseqgeneralsyllableanalysism)
-7. [MoSeq_stats.ipynb](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#7-moseqstatsipynb)
+7. [MoSeq_stats.ipynb](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#7-moseq_statsipynb)
 
 ## MoSeq Script Details
 ### 0. [Shell_Script.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh)
