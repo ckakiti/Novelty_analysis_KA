@@ -101,6 +101,8 @@ Mitsuko's code:
 3. [extract_uuid](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#3-extract_uuid)
 4. [MoSeqEventAlignedAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#4-moseqeventalignedanalysism)
 5. [MoSeqEventBasedAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#5-moseqeventbasedanalysism)
+6. [MoSeqGeneralSyllableAnalysis.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#6-moseqgeneralsyllableanalysism)
+7. [MoSeq_stats.ipynb](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/README.md#7-moseqstatsipynb)
 
 ## MoSeq Script Details
 ### 0. [Shell_Script.sh](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh)
@@ -137,6 +139,12 @@ Mitsuko's code:
 - calculates how many syllables explain 90% of behavior (needed for statistical analysis)
 - Inputs: MiceIndex.mat, MoSeqDataFrame.mat
 - Outputs: plot of fractional syllable usage (sorted by usage, all days), plot of cumulative fractional usage
+
+### 7. MoSeq_stats.ipynb
+- run statistics on MoSeq data in python notebook
+- startup:
+  - in terminal window, activate moseq environment (`source activate moseq2`)
+  - start jupyter notebook (`jupyter notebook`)
 
 ## Fiber Photometry Workflow
 0. Preprocessing requirements
