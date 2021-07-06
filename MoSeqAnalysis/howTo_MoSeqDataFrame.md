@@ -11,11 +11,8 @@
   - animal name
   - novelty condition (e.g. S, C for stimulus, contextual)
   - ExpDay (sub-structure with rows for session date and MSid)
-- MSid 
-  - a unique identifier assigned by MoSeq program to each session used for a particular MoSeq analysis batch
-  - comes from ```moseq2-index.yaml``` (primary file generated when running MoSeq analysis)
-  - there are the same number of MSid's as the number of sessions used to run MoSeq for that batch (e.g. 107 for combine3)
 
 ## About MoSeqDataFrame.mat
 - MATLAB structure containing output from MoSeq analysis
-- 
+- relevant fields:
+  - 
