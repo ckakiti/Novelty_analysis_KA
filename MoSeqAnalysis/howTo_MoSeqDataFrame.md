@@ -15,4 +15,3 @@
 ## About MoSeqDataFrame.mat
 - MATLAB structure containing output from MoSeq analysis
 - relevant fields:
-  - 
