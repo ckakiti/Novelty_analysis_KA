@@ -1,9 +1,7 @@
 # How to work with data from MoSeqDataFrame file
 
-Preprocessing:
-
 You'll need these files:
-- MiceIndex.mat
-- MoSeqDataFrame.mat
-- depth_ts.txt (for each session)
-- rgb_ts.txt (for each session)
+- MiceIndex.mat (generated with [extract_uuid.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/extract_uuid.m))
+- MoSeqDataFrame.mat (generated with [ModelDataTransfer.py](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/ModelDataTransfer.py)
+- depth_ts.txt (for each session, primary file generated when collecting data)
+- rgb_ts.txt (for each session, primary file generated when collecting data)
