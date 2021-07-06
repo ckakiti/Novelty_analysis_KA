@@ -1,4 +1,4 @@
-# How to work with MoSeq file (MoSeqDataFrame.mat)
+# How to work with data from MoSeqDataFrame file
 
 Preprocessing:
 
