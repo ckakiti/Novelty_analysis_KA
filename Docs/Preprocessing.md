@@ -56,3 +56,14 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
 #### 12. run ```Shell_Script.sh``` in terminal (within moseq environment)
  - will execute all commands you specified when editing the file in step 10
 #### 13. follow workflow to [analyze MoSeq-generated files](https://github.com/ckakiti/Novelty_analysis_KA#moseq-workflow)
+
+## Other: tips & tricks
+
+to quickly get path to all .dat files nested under folder, enter this into terminal:
+`find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
+
+to get all .mp4 files:
+`find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
+
+to delete all .mp4 files under current folder:
+`find -type f -name '*.mp4' -delete`
