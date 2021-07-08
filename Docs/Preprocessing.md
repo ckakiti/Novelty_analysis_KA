@@ -60,10 +60,13 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
 ## Other: tips & tricks
 
 to quickly get path to all .dat files nested under folder, enter this into terminal:
+
 `find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
 
 to get all .mp4 files:
+
 `find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
 
 to delete all .mp4 files under current folder:
+
 `find -type f -name '*.mp4' -delete`
