@@ -175,7 +175,13 @@ Korleki's code:
 - Input: tone_data
 - Output: photometry_corrected.mat, ANIMAL_tone_SESSION.tif, raw photometry signal plot, GCaMP/tdTom correlation plot
 
-### 2. photometry_novelty_Korleki_2105.m (Mitsuko code)
+### 2. detect_video_LED_2010.m (Mitsuko code)
+- creates file with frame number of when LED was on (for photometry synchronization)
+- alternative to KW_1_LED.m
+- Input: Arena_Obj_Pos.mat (with LEDpos), video file (.avi)
+- Output: LED_ts.mat
+
+### 3. photometry_novelty_Korleki_2105.m (Mitsuko code)
 - required supplementary code:
   - analyze_noise_2105_novelty
   - photometry_sync_every10_2105
@@ -183,7 +189,8 @@ Korleki's code:
 - Input: akiti_miceID_210318.xlsx, DLC_label.mat
 - Output: ANIMAL_FPaligned_SESSION.tif
 
-### 3. [KW_1_LED.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/KW_1_LED.m)
+### 4. [KW_1_LED.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/FurtherAnalysis/KW_1_LED.m)
+- use detect_video_LED_2010.m instead
 - extract frames when LED was on (in rgb video)
 - NOTE: TAKES A LONG TIME TO RUN
 - Input:
