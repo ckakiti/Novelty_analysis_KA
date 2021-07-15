@@ -261,8 +261,6 @@ title(['Syllable ' num2str(IntSyl) ' per min on all novelty days (Capoeira)'],'F
 
 % saveas(Plot_interaction_time_multiday, [MouseSet '_MoSeq_usageAcrossDays_syl', num2str(IntSyl), '.tif'])
 
-disp('plotted')
-
 %% [EXTRA] statistical analysis
 
 % for avg syl expression; non-parametric 2-sample test
