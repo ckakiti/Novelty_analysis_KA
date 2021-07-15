@@ -7,8 +7,8 @@ close all
 % Config_NovAna_Ghana;
 Config_NovAna_ATLA;
 
-currSet = 'ATLA_DLC'; %%%
-currMouse = 'Water';
+currSet = 'Explorers_DLC'; %%%
+currMouse = 'SouthPole';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 

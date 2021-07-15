@@ -5,7 +5,7 @@ clc
 
 basefolder = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Explorers_DLC';
 
-currMouse = 'Elbrus';
+currMouse = 'Aconcagua';
 currDate  = '210613';
 % cd(['/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Mitsuko_photometry_190617/' ...
 %     currMouse, '/' currDate])
@@ -79,7 +79,7 @@ disp('end')
 %% Plot when the light was on %%%%%%%%%%%%%%%%%%%%%%%%%%
 sync_norm = zscore(sync_light);
 %middle = (max(sync_norm)-min(sync_norm))/2;
-middle = 10; %%%%%%%%% sometimes cutoff needs to be adjusted 
+middle = 10.8; %%%%%%%%% sometimes cutoff needs to be adjusted 
 crosses = crossing(sync_norm, [], middle);
 
 % sync_norm = double(sync_light);

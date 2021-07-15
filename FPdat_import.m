@@ -3,10 +3,10 @@ clear
 clc
 close all
 
-basefolder = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/ATLA_DLC/';
+basefolder = '/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Explorers_DLC/';
 %basefolder = '~/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/FP_ATLA/';
-currMouse = 'Air';
-currDate  = '210511';
+currMouse = 'Aconcagua';
+currDate  = '210613';
 
 cd(fullfile(basefolder, currMouse, currDate))
 
@@ -48,6 +48,12 @@ ylim([0.5 5])
 title(['Raw signal (tone): ' currMouse])
 legend([p1, p2, l1(1)], {'GCaMP','tdTom','TTL'})
 
+% correct differences between LED_on and TTL_on (if one is shorter)
+if(length(LED_on_max)>length(TTL_on))
+    length_diff = length(LED_on_max)-length(TTL_on);
+    LED_on_max(1:length_diff) = [];
+end
+
 if(0)
     saveas(gca, [currMouse '_' currDate '_FP_raw_tone.tif'])
 end
@@ -55,12 +61,13 @@ end
 %% convert pokes (rgb frames) -> FP units (scaled with detected LED_on)
 % poke_rgb = dir('NoveltyResponse*poke');
 % poke_rgb = load(poke_rgb.name)';
-cd ./Analyzed_Data_1obj_7cm_nose
-rgb_mat = dir('*0000.mat');
-rgb_mat = load(rgb_mat.name);
-poke_rgb = (1:length(rgb_mat.Labels))';
-poke_rgb(poke_rgb<=LED_on_max(1))=[];
-poke_rgb(poke_rgb>=LED_on_max(end))=[];
+%cd ./Analyzed_Data_1obj_7cm_nose
+%rgb_mat = dir('*0000.mat');
+%rgb_mat = load(rgb_mat.name);
+%poke_rgb = (1:length(rgb_mat.Labels))';
+%poke_rgb(poke_rgb<=LED_on_max(1))=[];
+%poke_rgb(poke_rgb>=LED_on_max(end))=[];
+poke_rgb = ((LED_on_max(1)+1):LED_on_max(end))';
 
 pos_within_TTL = zeros(length(poke_rgb),1);
 for curr_poke = 1:length(poke_rgb)
@@ -86,7 +93,7 @@ end
 % end
 
 %% save
-cd ..
+%cd ..
 csvwrite([currMouse, '_' currDate '_rgb_ts'], [poke_rgb pos_within_TTL]) 
 % previously '_poke_corrected'
 

@@ -5,20 +5,20 @@ close all
 clc
 
 Config_NovAna_ATLA
-cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/ATLA_DLC/')
-run('MiceIndex_ATLA')
+cd('/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Explorers_DLC/')
+run('MiceIndex_Explorers')
 
 radius_cm = 7; %%%%%%%% modify default radius (from Config_NovAna)
 
 % only analyze first 10 minutes of video
-start_min=0;%0.5;
-end_min=start_min+10.25;
+%start_min=0;%0.5;
+%end_min=start_min+10.25; 
 % startframe=start_min.*60.*fps;
 % endframe=end_min.*60.*fps;
 % startframe=round(startframe);
 % endframe=round(endframe);
-startframe=Dis_ts_frame;
-endframe=Dis_te_frame;
+startframe = Dis_ts_frame;
+endframe   = 31*60*15; %Dis_te_frame;
 
 % for smoothing
 Swindow=40;
@@ -63,8 +63,8 @@ for mousei = 1:length(nameDir)
         disp(nameDir{1,mousei})
         disp(startframe)
     else
-        startframe = Dis_ts_frame;
-        endframe   = Dis_te_frame;
+%         startframe = Dis_ts_frame;
+%         endframe   = Dis_te_frame; %%%%%%%%%%%%%%%%%%%%%%
         Xtime      = startframe:endframe;
     end
     

@@ -4,7 +4,7 @@ clear
 close all
 clc
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/ATLA_DLC/
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/Explorers_DLC/
 %cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/ForMelissa/')
 
 files    = dir;
@@ -14,7 +14,7 @@ nameDir  = {nameDir.name};
 nameDir(ismember(nameDir,{'.','..','temp'})) = [];
 mouseList = nameDir;
 
-for mouseiter=1:length(mouseList)
+for mouseiter=10%:length(mouseList)
     cd(mouseList{mouseiter})
     disp(['Mouse: ' mouseList{mouseiter}])
     
@@ -25,7 +25,7 @@ for mouseiter=1:length(mouseList)
     nameDir(ismember(nameDir,{'.','..','25fps','temp'})) = [];
     dateList = nameDir;
     
-    for dateiter = 3%1:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
+    for dateiter = 5%1:length(dateList) %%%%%%%%%%%%%%%%%%%%%%%
         cd(dateList{dateiter})
         
         filelist = dir('*.mp4');
