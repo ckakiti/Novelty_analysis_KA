@@ -1,4 +1,4 @@
-# How to work with data from MoSeqDataFrame file
+# [IN PROGRESS] How to work with data from MoSeqDataFrame file
 
 ## You'll need these files:
 - MiceIndex.mat (generated with [extract_uuid.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/extract_uuid.m))
