@@ -46,6 +46,7 @@ disp('section 1')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Section 2: Calculation (takes a while)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%tic
 
 % Generate Transition Matrix
 
@@ -192,10 +193,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % plots in following section:
-%   General Syllable Usage (sorted by usage)
-%   General Syllable Usage (top 20 syllables)
-%   Cumulative Syllable Usage
-%   Syllable Usage (comparing across conditions)
 %   
 
 close all
@@ -203,7 +200,6 @@ X=0:100;
 SyllablesX=-1:99;
 fsize=16;
 
-%% plot general syllable usage (sorted by usage)
 Plot_GeneralUsage=figure(1);
 plot(X,GSortedusage,'b.-', 'LineWidth',1.5)
 hold on
@@ -242,8 +238,7 @@ xticklabels(SyllablesX(GSortedusageindex(1:20)));
 set(Plot_GeneralUsage_Top20, 'Position', [340 386 716 450])
 hold off
 
-%% cumulative syllable usage
-
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 clc
 
@@ -274,7 +269,7 @@ if(0)
     saveas(Plot_AccGeneralUsage, [setName '_AccSyllableUsage_sorted_allFrames.tif'])
 end
 
-%% syllable usage compared across conditions
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Plot_UsageCompare=figure(4);
 plot(X,PG1Usage,'LineWidth',1.5)
 hold on
@@ -288,7 +283,7 @@ xlabel('Syllables','FontSize',fsize)
 xticks(X);
 xticklabels(SyllablesX);
 
-%% syllable usage compared across conditions, sorted by stimulus novelty enrichment
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 
 Plot_UsageCompare_sorted=figure(5);
@@ -539,7 +534,7 @@ diffMean = mean(b(G1_Mice,:))-mean(b(G2_Mice,:));
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Section 4: Saving Data
+% Saving Data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %pause
 close all

@@ -10,7 +10,8 @@ clc
 %cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
 %cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/
 % cd /media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data
-cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq')
+% cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq')
+cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
 
 fps=30;
 PlotWidth=200;%200;%500;%800;
