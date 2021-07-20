@@ -1,7 +1,7 @@
 # Notes to self, tips/tricks
 
 ## MATLAB
-- to change legend for already existing figure (no control over how it was plotted)
+- to change legend for already existing figure (if you have no access to replot it from scratch)
 ```
 f=get(gca,'Children');
 legend([f(2),f(6)],'second graph','sixth graph')
