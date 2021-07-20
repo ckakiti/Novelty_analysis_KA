@@ -1,8 +1,8 @@
 % this code move rgb videos from a MoSeq folder into a new folder suitable for DeepLabCut analysis, also rename those rgb video by mice names and date
 
-cd /media/alex/DataDrive1/MoSeqData/Explorers/
+cd /media/alex/DataDrive1/MoSeqData/Aviary/
 
-groupname='Explorers';
+groupname='Aviary';
 rootpath=cd;
 mkdir([groupname '_DLC']);
 cd([groupname '_MoSeq']);
@@ -25,7 +25,7 @@ for i=1:folderlen
     subfoldernames(ismember(subfoldernames,{'.','..'})) = [];
     subfolderlen=length(subfoldernames);
 
-    for j=1:subfolderlen %%%%%%%%%%%%%%%%%%%%%
+    for j=8%1:subfolderlen %%%%%%%%%%%%%%%%%%%%%
         disp(j)
         cd(subfoldernames{j});
 
@@ -42,13 +42,15 @@ for i=1:folderlen
             disp(k)
             cd(ssubfoldernames{k});
             
-            if(isfile('rgb.mp4'))
+            if(isfile('depth_ts.txt'))%'rgb.mp4'))
                 movefile('rgb.mp4',   [rootpath '/' groupname '_DLC' '/' foldernames{i} '/' subfoldernames{j} '/' ...
                     foldernames{i} '_' subfoldernames{j} '_' char(sprintfc('%02d', k)) '_' 'rgb.mp4'])
                 movefile('rgb_ts.txt',[rootpath '/' groupname '_DLC' '/' foldernames{i} '/' subfoldernames{j} '/' ...
                     foldernames{i} '_' subfoldernames{j} '_' char(sprintfc('%02d', k)) '_' 'rgb_ts.txt'])
                 copyfile('depth_ts.txt',[rootpath '/' groupname '_DLC' '/' foldernames{i} '/' subfoldernames{j} '/' ...
                     foldernames{i} '_' subfoldernames{j} '_' char(sprintfc('%02d', k)) '_' 'depth_ts.txt'])
+%                   copyfile('depth_ts.txt',[rootpath '/' groupname '_DLC' '/' foldernames{i} '/' ...
+%                       foldernames{i} '_' subfoldernames{j} '_' char(sprintfc('%02d', k)) '_' 'depth_ts.txt'])
             end
 
             cd ..

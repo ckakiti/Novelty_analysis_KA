@@ -7,8 +7,8 @@ close all
 % Config_NovAna_Ghana;
 Config_NovAna_ATLA;
 
-currSet = 'Explorers_DLC'; %%%
-currMouse = 'SouthPole';
+currSet = 'Aviary_DLC'; %%%
+currMouse = 'Robin';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
@@ -41,7 +41,7 @@ video=VideoReader(vn);
 %     pause
 %     timeShift=timeShift+1;
 % end
-%%
+% %
 video.CurrentTime = (timeShift-1)/video.FrameRate; %1;
 frame=readFrame(video);
 imshow(frame)
@@ -86,7 +86,7 @@ for fi =flen:-1:1
     fig1 = figure(1);
     set(fig1, 'Position', [545 1 1200 950]);
     if(number_of_obj == 1)
-        cur_obj  = Labelrect(frame,'Please Select Object 1');
+        cur_obj  = Labelrect(frame,['Session ' num2str(fi) '; Please Select Object 1']);
         close all
         
         obj(fi,:) = cur_obj;
@@ -129,8 +129,8 @@ close all
 %***********************************************************
 % pause
 
-mkdir Analyzed_Data
-cd Analyzed_Data
+%mkdir Analyzed_Data
+cd Analyzed_Data_1obj_7cm_nose
 
 clearvars -except arena obj obj_center currSet currMouse LEDpos
 save('Arena_Obj_Pos.mat')
