@@ -23,3 +23,7 @@ copyobj(fig1,s1)
 curr_sub = subplot(1,2,1);
 delete(curr_sub)
 ```
+- to change font for all text of all subplots
+```
+set(findall(gcf,'-property','FontSize'),'FontSize',20)
+```
