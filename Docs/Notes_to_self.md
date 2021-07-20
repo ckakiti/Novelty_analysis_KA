@@ -6,7 +6,7 @@
 f=get(gca,'Children');
 legend([f(2),f(6)],'second graph','sixth graph')
 ```
-- to copy contents from a subplot to its own figure
+- to copy contents from a subplot to its own figure (based on [this](https://www.mathworks.com/matlabcentral/answers/101806-how-can-i-insert-my-matlab-figure-fig-files-into-multiple-subplots) post)
 ```
 open('figurename.fig')
 
