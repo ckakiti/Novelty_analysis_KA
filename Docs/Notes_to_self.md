@@ -18,3 +18,8 @@ figure(2);
 s1 = subplot(1,1,1);
 copyobj(fig1,s1)
 ```
+- to delete a subplot (based on [this](https://www.mathworks.com/matlabcentral/answers/213341-is-it-possible-to-delete-subplots) post)
+```
+curr_sub = subplot(1,2,1);
+delete(curr_sub)
+```
