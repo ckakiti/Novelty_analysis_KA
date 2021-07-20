@@ -1,16 +1,12 @@
-% Now using a loop to generate image, by implementing matrix operation using index information in actalignedusage could improve speed
-% when syllable index is -5 it is a 'none' type
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Initialization
+% Section 1: Initialization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 close all
 clc
 
-%cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/CvsS_180831_DLC/
-%cd /media/alex/DataDrive1/MoSeqData/Iku_photometry2/Iku_photometry2_MoSeq/Nashville/
-% cd /media/alex/DataDrive1/MoSeqData/Dataset_20191007/Data
-cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq')
+%cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq')
+cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
 
 fps=30;
 PlotWidth=200;%200;%500;%800;
@@ -19,29 +15,30 @@ cmap=jet(100);
 fsize=24;
 
 load('MoSeqDataFrame.mat');
-% Mice_Index_path='./MiceIndex.m';
-% run(Mice_Index_path);
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
 %load('test_NearObj_ts.mat')
 
-AnalysisDay=3;      % 3 = first novelty day
+AnalysisDay=3;   % 3 = first novelty day
 detectCond = cat(1, Mice.novelty);
 G1_Mice=find(detectCond=='C')';%[1 2 3 4];
 G2_Mice=find(detectCond=='S')';%[5 6 7 8];
-whichMouse = 1;           %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp(['whichMouse: ' num2str(whichMouse) ...
-    ' (' Mice(G1_Mice(whichMouse)).name '/' Mice(G2_Mice(whichMouse)).name ')'])
 
-frameCutoff = 18000;
+% uncomment to look at syllable expression just for 1 mouse
+% whichMouse = 1;    %%%%
+% disp(['whichMouse: ' num2str(whichMouse) ...
+%     ' (' Mice(G1_Mice(whichMouse)).name '/' Mice(G2_Mice(whichMouse)).name ')'])
 
-trim_frame_start=899;
-% AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
-AllAct_file = dir('*poke_labels_N1_10min_7cm.csv');
-% AllAct_file = dir('*appr_labels_N1.csv'); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% load file with frame number of pokes (automatically identified based on DLC labels, 
+%   generated in bout_analysis.m)
+AllAct_file = dir('*poke_labels_N1_10min_7cm.csv'); % 
 AllAct=csvread(AllAct_file.name,0,0);
 AllActLabels=AllAct(:,3);
-AllActLabels=AllActLabels-trim_frame_start;
+%AllActLabels=csvread('CvsS_poke_labels_N1_byHand.csv',1,3);%2);
 
+% trim based on frames cropped when running MoSeq
+trim_frame_start=899; 
+AllActLabels=AllActLabels-trim_frame_start;
 
 for miceiter=1:length(Mice)
     Mice(miceiter).datanum = length(find(AllAct(:,1)==miceiter));
@@ -64,116 +61,9 @@ end
 
 disp('section 1')
 
-%% For PCA: overall syllable expression
-%  run section 1 before this section
-
-for miceiter=1:length(Mice)
-    disp(Mice(miceiter).name)
-    
-    for day_iter = 1:length(Mice(miceiter).ExpDay)
-        disp(day_iter)
-        
-        % find MSid index
-        MSidindex=1;
-        for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
-            if strcmp(MoSeqDataFrame.session_uuid(indexiter,:),Mice(miceiter).ExpDay(day_iter).MSid)
-                break
-            end
-            MSidindex=MSidindex+1;
-            if MSidindex==size(MoSeqDataFrame.session_uuid,1)+1
-                error('MSid not found');
-            end
-        end
-        
-        Labels=double(MoSeqDataFrame.labels{MSidindex});
-        Mice(miceiter).ExpDay(day_iter).labels = Labels;
-    end
-
-end
-if(0)
-    save('Mice_wLabels', 'Mice')
-end
-
-
-allLabels = []; % cropped by 10 min
-allSyls   = [];
-
-for miceiter = 1:length(Mice)
-    for dayiter = 3 %3:length(Mice(miceiter).ExpDay)   %%%%%%%%%%%%%%%%%%%%%%%
-        currLabels = cat(1, Mice(miceiter).ExpDay(dayiter).labels);
-        allSyls = [allSyls currLabels];
-        
-%         frameCutoff = length(currLabels);              %%%%%%%%%%%%%%%%%%%%%%%
-        [counts, centers] = hist(currLabels(1:frameCutoff),[-1 1:99]);
-        freq = counts./sum(counts);
-        allLabels = [allLabels; freq];
-    end
-end
-disp(['Frame cutoff: ' num2str(frameCutoff)])
-allLabels_S = allLabels(G2_Mice,:);
-allLabels_C = allLabels(G1_Mice,:);
-
-if(0)
-    csvwrite('Dataset_20191007_sylExpr_allN_stim_30min.csv', allLabels_S)
-    
-    csvwrite('Dataset_20191007_sylExpr_N1.csv', allLabels)
-    csvwrite('Dataset_20191007_sylExpr_N1_appr.csv', allLabels)
-        
-    csvwrite('Dataset_20191007_sylExpr_N1_stim_30min.csv', allLabels_S)
-    csvwrite('Dataset_20191007_sylExpr_N1_stim_10min.csv', allLabels_S)
-end
-
-disp('end')
-
-%% For PCA: event-based syllable expression over time
-clear
-clc
-cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/ActAlignedPercentage_Day3')
-
-fps=30;
-PGAASU_files = dir('ActAlignedPercentage*poke*.mat');
-PGAASU_files = cat(1,PGAASU_files.name);
-
-load(PGAASU_files(1,:))    
-timeBins = [flip(middle_x-fps:(-fps*2):1) ...
-                 middle_x+fps:(fps*2):size(PG1AASU,2)];
-% timeBins = [middle_x-fps (middle_x+fps-1)];
-
-sylExpr_stim = zeros(size(PGAASU_files,1),size(PG2AASU,1),...
-    length(timeBins));
-sylExpr_cont = zeros(size(PGAASU_files,1),size(PG1AASU,1),...
-    length(timeBins));
-    
-for fileiter=1:size(PGAASU_files,1)
-    load(PGAASU_files(fileiter,:))
-
-    for timeiter=1:size(timeBins,2)-1
-        % for approach/poke (2 sec avg, middle column)
-        curr_stim = PG2AASU(:,(timeBins(timeiter):timeBins(timeiter+1)));
-        curr_cont = PG1AASU(:,(timeBins(timeiter):timeBins(timeiter+1)));
-        % for retreat (2 sec avg, last 2 sec of poke file)
-     %  curr_stim = PG2AASU(:,(end-(fps*2):end));
-     %  curr_cont = PG1AASU(:,(end-(fps*2):end));
-        
-        curr_stim_avg = mean(curr_stim,2)';
-        curr_cont_avg = mean(curr_cont,2)';
-        
-        sylExpr_stim(fileiter,:,timeiter) = curr_stim_avg;
-        sylExpr_cont(fileiter,:,timeiter) = curr_cont_avg;
-    end
-end
-
-if(0)   
-%     csvwrite('Dataset_20190723_sylExpr_N1_retr_2s_stim.csv', sylExpr_stim)
-%     csvwrite('Dataset_20190723_sylExpr_N1_retr_2s_cont.csv', sylExpr_cont)
-    save('Dataset_20190723_sylExpr_N1_poke3D_stim', 'sylExpr_stim')
-    save('Dataset_20190723_sylExpr_N1_poke3D_cont', 'sylExpr_cont')
-end
-
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Calculation
+% Section 2: Calculation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%tic
 
 for miceiter=1:length(Mice)
 
@@ -282,12 +172,12 @@ PGAASU=GAASU./size(Generalactalignedusage,1);
 
 % Calculating Group1 Group2 usage only used when plot width is cosistent across mice
 G1actalignedusage=[];
-for miceiter=G1_Mice%(whichMouse)  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for miceiter=G1_Mice%(whichMouse)  %%%%
     G1actalignedusage=cat(1,G1actalignedusage,Mice(miceiter).ExpDay(AnalysisDay).actalignedusage);
 end
 
 G2actalignedusage=[];
-for miceiter=G2_Mice%(whichMouse)  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for miceiter=G2_Mice%(whichMouse)  %%%%
     G2actalignedusage=cat(1,G2actalignedusage,Mice(miceiter).ExpDay(AnalysisDay).actalignedusage);
 end
 
@@ -343,7 +233,7 @@ if(0)
 end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Making plots
+% Section 3: Making plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 timeline=((1:PlotWidth)-round(PlotWidth./2,0))./fps;
@@ -450,7 +340,7 @@ title(['Syllable ', num2str(currSyl)])
 legend([group1, group2], {'Contextual' 'Stimulus'})
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Saving
+% Section 4: Saving
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 mkdir('EventAlignedAnalysis')
@@ -463,3 +353,112 @@ end
 cd ..
 toc
 
+%% [EXTRA] For PCA: overall syllable expression
+%  run section 1 before this
+
+for miceiter=1:length(Mice)
+    disp(Mice(miceiter).name)
+    
+    for day_iter = 1:length(Mice(miceiter).ExpDay)
+        disp(day_iter)
+        
+        % find MSid index
+        MSidindex=1;
+        for indexiter=1:size(MoSeqDataFrame.session_uuid,1)
+            if strcmp(MoSeqDataFrame.session_uuid(indexiter,:),Mice(miceiter).ExpDay(day_iter).MSid)
+                break
+            end
+            MSidindex=MSidindex+1;
+            if MSidindex==size(MoSeqDataFrame.session_uuid,1)+1
+                error('MSid not found');
+            end
+        end
+        
+        Labels=double(MoSeqDataFrame.labels{MSidindex});
+        Mice(miceiter).ExpDay(day_iter).labels = Labels;
+    end
+
+end
+if(0)
+    save('Mice_wLabels', 'Mice')
+end
+
+% modify to look at whole session or only first 10 min %%%%
+frameCutoff = 18000;
+
+allLabels = [];
+allSyls   = [];
+
+for miceiter = 1:length(Mice)
+    for dayiter = 3 %3:length(Mice(miceiter).ExpDay)   %%%%%%%%%%%%%%%%%%%%%%%
+        currLabels = cat(1, Mice(miceiter).ExpDay(dayiter).labels);
+        allSyls = [allSyls currLabels];
+        
+%         frameCutoff = length(currLabels);              %%%%%%%%%%%%%%%%%%%%%%%
+        [counts, centers] = hist(currLabels(1:frameCutoff),[-1 1:99]);
+        freq = counts./sum(counts);
+        allLabels = [allLabels; freq];
+    end
+end
+disp(['Frame cutoff: ' num2str(frameCutoff)])
+allLabels_S = allLabels(G2_Mice,:);
+allLabels_C = allLabels(G1_Mice,:);
+
+if(0)
+    csvwrite('Dataset_20191007_sylExpr_allN_stim_30min.csv', allLabels_S)
+    
+    csvwrite('Dataset_20191007_sylExpr_N1.csv', allLabels)
+    csvwrite('Dataset_20191007_sylExpr_N1_appr.csv', allLabels)
+        
+    csvwrite('Dataset_20191007_sylExpr_N1_stim_30min.csv', allLabels_S)
+    csvwrite('Dataset_20191007_sylExpr_N1_stim_10min.csv', allLabels_S)
+end
+
+disp('end')
+
+%% For PCA: event-based syllable expression over time
+%  run section 1 before this
+
+clear
+clc
+cd('/media/alex/DataDrive1/MoSeqData/Dataset_20190723/MoSeq/ActAlignedPercentage_Day3')
+
+fps=30;
+PGAASU_files = dir('ActAlignedPercentage*poke*.mat');
+PGAASU_files = cat(1,PGAASU_files.name);
+
+load(PGAASU_files(1,:))    
+timeBins = [flip(middle_x-fps:(-fps*2):1) ...
+                 middle_x+fps:(fps*2):size(PG1AASU,2)];
+% timeBins = [middle_x-fps (middle_x+fps-1)];
+
+sylExpr_stim = zeros(size(PGAASU_files,1),size(PG2AASU,1),...
+    length(timeBins));
+sylExpr_cont = zeros(size(PGAASU_files,1),size(PG1AASU,1),...
+    length(timeBins));
+    
+for fileiter=1:size(PGAASU_files,1)
+    load(PGAASU_files(fileiter,:))
+
+    for timeiter=1:size(timeBins,2)-1
+        % for approach/poke (2 sec avg, middle column)
+        curr_stim = PG2AASU(:,(timeBins(timeiter):timeBins(timeiter+1)));
+        curr_cont = PG1AASU(:,(timeBins(timeiter):timeBins(timeiter+1)));
+        % for retreat (2 sec avg, last 2 sec of poke file)
+     %  curr_stim = PG2AASU(:,(end-(fps*2):end));
+     %  curr_cont = PG1AASU(:,(end-(fps*2):end));
+        
+        curr_stim_avg = mean(curr_stim,2)';
+        curr_cont_avg = mean(curr_cont,2)';
+        
+        sylExpr_stim(fileiter,:,timeiter) = curr_stim_avg;
+        sylExpr_cont(fileiter,:,timeiter) = curr_cont_avg;
+    end
+end
+
+if(0)   
+%     csvwrite('Dataset_20190723_sylExpr_N1_retr_2s_stim.csv', sylExpr_stim)
+%     csvwrite('Dataset_20190723_sylExpr_N1_retr_2s_cont.csv', sylExpr_cont)
+    save('Dataset_20190723_sylExpr_N1_poke3D_stim', 'sylExpr_stim')
+    save('Dataset_20190723_sylExpr_N1_poke3D_cont', 'sylExpr_cont')
+end

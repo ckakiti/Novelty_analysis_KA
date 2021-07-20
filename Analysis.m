@@ -39,16 +39,18 @@
 clear
 pause(0.5)
 clc
-cd /home/alex/Programs/Novelty_analysis_KA
-Config_NovAna_FP_test;
+%cd /home/alex/Programs/Novelty_analysis_KA
+cd ~/Documents/GitHub/Novelty_analysis_KA/
+Config_NovAna_NewHope_ROTJ %Config_NovAna_FP_test;
 
 durTotal = 10; % duration of analysis (min)M08_Bozeman
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
 
-cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/FP_test/no_mouse
+%cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/FP_test/no_mouse
 %cd(['/media/alex/DataDrive1/MoSeqData/Iku_photometry20/Iku_photometry2_MoSeq/'
 % 'Nashville/190425/session_20190425162005/proc'])
-whichFolder = 'Analyzed_Data_1obj_8cm_nose';        %%%%%%%%%%%%
+cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/NewHope+ROTJ/S1_DarthVader')
+whichFolder = 'Analyzed_Data_1obj_7cm_nose';        %%%%%%%%%%%%
 cd(['./' whichFolder]);
 load('Arena_Obj_Pos.mat');
 cd ..
@@ -70,7 +72,7 @@ if(shift_time==1)
     Ang_ts_frame=500+timeShift;
     Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
     
-    radius_cm = 8;
+    radius_cm = 7;
     disp(['radius_cm: ' num2str(radius_cm)])
 else
     Dis_ts_frame=500;
@@ -79,7 +81,7 @@ else
     Ang_ts_frame=500;
     Ang_te_frame=durTotal.*60.*fps+Ang_ts_frame;
     
-    radius_cm = 8; %%%%%%%%%%%%
+    radius_cm = 7; %%%%%%%%%%%%
     disp(['radius_cm: ' num2str(radius_cm)])
 end
 
@@ -105,7 +107,7 @@ end
 flen = length(filelist);
 
 tic;
-% %
+%%
 for fiter = 1:flen %%%%%%%%%%%
     vn = filelist(fiter).name;
     %fn=[vn(1:end-4) networkname_format(1:17) '*' networkname_format(end-15:end) '.csv'];
@@ -258,25 +260,36 @@ for fiter = 1:flen %%%%%%%%%%%
     %                       arena(fiter,4)-arena(fiter,2)])
 
 
-    % Plot trajectory
+    % % Plot trajectory
+    Labels_plot = Labels;
+    Labels_plot(Labels_plot(:,14)<arena(fiter,1),14)=arena(fiter,1);
+    Labels_plot(Labels_plot(:,14)>arena(fiter,3),14)=arena(fiter,3);
+    Labels_plot(Labels_plot(:,15)<arena(fiter,2),15)=arena(fiter,2);
+    Labels_plot(Labels_plot(:,15)>arena(fiter,4),15)=arena(fiter,4);
+    
+    % %
+%     close all
     Trafigure=figure('visible','off');
 %     Trafigure=figure('visible','on');
+    hold on
 %     scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),6,'filled');
-    plot(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),'k')
+    plot(Labels_plot(plot_fs:plot_fe,14),Labels_plot(plot_fs:plot_fe,15),'k','linewidth',2)
     rectangle('Position',[arena(fiter,1),arena(fiter,2),...
                           arena(fiter,3)-arena(fiter,1),...
-                          arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',8)
-    rectangle('Position',[obj(fiter,1),obj(fiter,2),...
-                          obj(fiter,3)-obj(fiter,1),obj(fiter,4)-obj(fiter,2)],...
-                          'EdgeColor','r','linewidth',2)
-    
-    hold on
+                          arena(fiter,4)-arena(fiter,2)],'EdgeColor','r','linewidth',12)
+    if(fiter>=3)
+%     rectangle('Position',[obj(fiter,1),obj(fiter,2),...
+%                           obj(fiter,3)-obj(fiter,1),obj(fiter,4)-obj(fiter,2)],...
+%                           'EdgeColor','r','linewidth',2)
+        scatter(obj_center(fiter,1), obj_center(fiter,2),300,'filled','r')
+    end
+
     th = 0:pi/50:2*pi;
     x  = obj_center(fiter,1);
     y  = obj_center(fiter,2);
     xunit = radius_cm * ppc * cos(th) + x;
     yunit = radius_cm * ppc * sin(th) + y;
-    plot(xunit, yunit,'r--','linewidth',3)
+    plot(xunit, yunit,'r--','linewidth',5)
     
     set(gca,'ydir','reverse')
     title(['Trajectory ' vn(1:end-8) ': '...
@@ -284,9 +297,9 @@ for fiter = 1:flen %%%%%%%%%%%
         'Interpreter', 'none');
     xlim([0 video_xlen+50]);
     ylim([0 video_ywid]);
-    set(Trafigure, 'position', [0 0 1200 900]);
+    set(Trafigure, 'position', [0 0 1200 900]);%[1 969 921 646]);
     
-    % ***********************************************************
+    % % ***********************************************************
     % Save
     % ***********************************************************
     % pause
@@ -315,6 +328,6 @@ end
 
 close all
 clear
-cd /home/alex/Programs/Novelty_analysis_KA
+%cd /home/alex/Programs/Novelty_analysis_KA
 
 disp('end')
