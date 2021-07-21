@@ -32,6 +32,11 @@ Processes raw data so it can be analysed with DLC or MoSeq
 cd /location/of/raw/data
 rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /media/alex/DataDrive1/MoSeqData/groupname/groupname_MoSeq/
 ```
+ - rsync for specific file paths and pruning empty directories:
+```
+rsync -avr --include '*/' --include '*/190413/*/proc/results_00.yaml' --include '*/190413/*/proc/results_00.h5' --exclude '*' --prune-empty-dirs . /media/alex/DataDrive1/MoSeqData/combine3L/Capoeira_MoSeq/
+```
+
 #### 4. in MATLAB, run [MoSeqMoveRGB.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/MoSeqMoveRGB.m)
  - edit lines 3 and 5 to match your data
  - this will create another folder within ```groupname``` called ```groupname_DLC``` that contains all rgb.mp4 and rgb_ts.txt files (transferred out of ```groupname_MoSeq```, folder structure preserved)
