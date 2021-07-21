@@ -24,6 +24,7 @@ curr_sub = subplot(1,2,1);
 delete(curr_sub)
 ```
 - to change font for all text of all subplots
+
 `set(findall(gcf,'-property','FontSize'),'FontSize',20)`
 
 - to change width of all lines in current plot (based on [this](https://www.mathworks.com/matlabcentral/answers/217993-how-can-i-change-linewidth-of-all-lines-in-a-printed-figure-from-simulink) post)
