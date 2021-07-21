@@ -24,6 +24,17 @@ curr_sub = subplot(1,2,1);
 delete(curr_sub)
 ```
 - to change font for all text of all subplots
-```
-set(findall(gcf,'-property','FontSize'),'FontSize',20)
-```
+`set(findall(gcf,'-property','FontSize'),'FontSize',20)`
+## Terminal
+
+- to quickly get path to all .dat files nested under folder, enter this into terminal:
+
+`find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
+
+- to get all .mp4 files:
+
+`find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
+
+- to delete all .mp4 files under current folder:
+
+`find -type f -name '*.mp4' -delete`
