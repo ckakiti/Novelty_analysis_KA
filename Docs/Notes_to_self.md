@@ -40,4 +40,5 @@ delete(curr_sub)
 `find -type f -name '*.mp4' -delete`
 
 - to find all .txt files with specific path
+
 `find -type f -path '*combine*' -name '*.txt`
