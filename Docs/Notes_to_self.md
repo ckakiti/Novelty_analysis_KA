@@ -42,3 +42,5 @@ delete(curr_sub)
 - to find all .txt files with specific path
 
 `find -type f -path '*combine*' -name '*.txt'`
+
+- keyboard shortcut to go to beginning of line: CTRL-A
