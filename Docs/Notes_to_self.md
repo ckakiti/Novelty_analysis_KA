@@ -38,3 +38,6 @@ delete(curr_sub)
 - to delete all .mp4 files under current folder:
 
 `find -type f -name '*.mp4' -delete`
+
+- to find all .txt files with specific path
+`find -type f -path '*combine*' -name '*.txt`
