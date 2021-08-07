@@ -32,6 +32,11 @@ Processes raw data so it can be analysed with DLC or MoSeq
 cd /location/of/raw/data
 rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /media/alex/DataDrive1/MoSeqData/groupname/groupname_MoSeq/
 ```
+ - rsync for specific file paths and pruning empty directories:
+```
+rsync -avr --include '*/' --include '*/190413/*/proc/results_00.yaml' --include '*/190413/*/proc/results_00.h5' --exclude '*' --prune-empty-dirs . /media/alex/DataDrive1/MoSeqData/combine3L/Capoeira_MoSeq/
+```
+
 #### 4. in MATLAB, run [MoSeqMoveRGB.m](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/MoSeqMoveRGB.m)
  - edit lines 3 and 5 to match your data
  - this will create another folder within ```groupname``` called ```groupname_DLC``` that contains all rgb.mp4 and rgb_ts.txt files (transferred out of ```groupname_MoSeq```, folder structure preserved)
@@ -56,17 +61,3 @@ rsync -a --include '*/' --include '*.mp4' --include 'rgb_ts*' --exclude '*' . /m
 #### 12. run ```Shell_Script.sh``` in terminal (within moseq environment)
  - will execute all commands you specified when editing the file in step 10
 #### 13. follow workflow to [analyze MoSeq-generated files](https://github.com/ckakiti/Novelty_analysis_KA#moseq-workflow)
-
-## Other: tips & tricks
-
-to quickly get path to all .dat files nested under folder, enter this into terminal:
-
-`find -type d -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
-
-to get all .mp4 files:
-
-`find -type f -regex '.*.mp4' -printf '%d\t%P\n' | sort -r -nk1 | cut -f2-`
-
-to delete all .mp4 files under current folder:
-
-`find -type f -name '*.mp4' -delete`
