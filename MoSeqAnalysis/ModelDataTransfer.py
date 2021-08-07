@@ -1,9 +1,9 @@
 # load in the model and the index to the extracted data
-index_file = '/media/alex/DataDrive1/MoSeqData/Configural_set/moseq2-index.yaml'
-model_file = '/media/alex/DataDrive1/MoSeqData/Configural_set/my_model.p'
+index_file = '/media/alex/DataDrive1/MoSeqData/combine3L/moseq2-index.yaml'
+model_file = '/media/alex/DataDrive1/MoSeqData/combine3L/my_model.p'
 
 # Save file directory
-save_directory='/media/alex/DataDrive1/MoSeqData/Configural_set/MoSeqDataFrame_sortTrue.mat'
+save_directory='/media/alex/DataDrive1/MoSeqData/combine3L/MoSeqDataFrame_sortTrue.mat'
 
 
 import scipy.io as sio

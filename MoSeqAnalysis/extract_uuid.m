@@ -11,7 +11,7 @@ clear
 close all
 clc
 
-cd /media/alex/DataDrive1/MoSeqData/Configural_set
+cd /media/alex/DataDrive1/MoSeqData/combine3L
 run('MiceIndex_blank')
 
 % identify basic information (name, date, uuid) within file
@@ -36,8 +36,8 @@ for extractiter = 1:length(extract_reshape)
     where_slash = strfind(curr_string, '/');
     
     % change curr_name depending on path format
-%     curr_name = curr_string(where_slash(1)+1:where_slash(2)-1); %%%%%%%%%%%%
-    curr_name = curr_string(5:where_slash(1)-1);                %%%%%%%%%%%%
+    curr_name = curr_string(where_slash(1)+1:where_slash(2)-1); %%%%%%%%%%%%
+%     curr_name = curr_string(5:where_slash(1)-1);                %%%%%%%%%%%%
     
     extract_separate(extractiter,1) = {curr_name};
     
@@ -47,7 +47,7 @@ for extractiter = 1:length(extract_reshape)
     extract_separate(extractiter,4) = {uuid_crop};
 end
 
-% integrate basic information into MiceIndex
+%% integrate basic information into MiceIndex
 for mouseiter = 1:length(Mice)
     currMouse   = Mice(mouseiter).name;
     currNovelty = Mice(mouseiter).novelty;
@@ -62,14 +62,16 @@ for mouseiter = 1:length(Mice)
     translate_day = datetime(curr_days, 'InputFormat', 'yyyyMMdd');
     
     % sort (by days if stim/cont, by time if conf)
-    if(strcmp(currNovelty,'S') || strcmp(currNovelty,'C'))
+    if(strcmp(currNovelty,'S') || strcmp(currNovelty,'C') || ...
+       strcmp(currNovelty,'s') || strcmp(currNovelty,'l'))
         new_order = datestr(sort(translate_day),'yymmdd');
     elseif(strcmp(currNovelty,'F'))
         new_order = sort(times_cell);
     end
     
     for daysiter = 1:length(whereMouse)
-        if(strcmp(currNovelty,'S') || strcmp(currNovelty,'C'))
+        if(strcmp(currNovelty,'S') || strcmp(currNovelty,'C') || ...
+           strcmp(currNovelty,'s') || strcmp(currNovelty,'l'))
             % add date
             Mice(mouseiter).ExpDay(daysiter).date = new_order(daysiter,:);
             

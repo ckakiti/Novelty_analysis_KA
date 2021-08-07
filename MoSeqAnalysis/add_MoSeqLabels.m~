@@ -5,16 +5,21 @@ clear
 close all
 clc
 
-cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
+%cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
+cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3L')
 
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
-df_ts = readtable('combine3_MoSeq_df.csv'); % to get this, need to run MoSeq_viz_loading_scalars.ipynb
+df_ts = readtable('combine3L_MoSeq_df.csv'); % to get this, need to run MoSeq_viz_loading_scalars.ipynb
 
-sessions = {'hab1','hab2','novel1','novel2','novel3','novel4'};
+%sessions = {'hab1','hab2','novel1','novel2','novel3','novel4'};
+sessions = {'novel1'};
 
 disp('section 1')
 
 %% add depth/rgb timestamps and MoSeq labels to MiceIndex
+%cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/')
+cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/')
+
 for miceiter=1:length(Mice)
     disp(Mice(miceiter).name)
     
@@ -22,6 +27,9 @@ for miceiter=1:length(Mice)
         cd stimulus
     elseif(strcmp(Mice(miceiter).novelty,'C'))
         cd contextual
+    elseif(strcmp(Mice(miceiter).novelty,'s'))
+        cd saline
+    elseif(
     end
     cd(Mice(miceiter).name)
     
@@ -29,49 +37,55 @@ for miceiter=1:length(Mice)
         disp(dayiter)
         
         % add session name (correct for Rook's missing session)
-        if(strcmp(Mice(miceiter).name,'Rook') && (day_iter==4))
-            Mice(miceiter).ExpDay(day_iter).session = sessions{day_iter+1};
-            cd(sessions{day_iter+1})
-        elseif(strcmp(Mice(miceiter).name,'Rook') && (day_iter==5))
-            Mice(miceiter).ExpDay(day_iter).session = sessions{day_iter+1};
-            cd(sessions{day_iter+1})
+        if(strcmp(Mice(miceiter).name,'Rook') && (dayiter==4))
+            Mice(miceiter).ExpDay(dayiter).session = sessions{dayiter+1};
+            cd(sessions{dayiter+1})
+        elseif(strcmp(Mice(miceiter).name,'Rook') && (dayiter==5))
+            Mice(miceiter).ExpDay(dayiter).session = sessions{dayiter+1};
+            cd(sessions{dayiter+1})
         else
-            Mice(miceiter).ExpDay(day_iter).session = sessions{day_iter};
-            cd(sessions{day_iter})
+            Mice(miceiter).ExpDay(dayiter).session = sessions{dayiter};
+            cd(sessions{dayiter})
         end
         
+        % add depthts and MoSeq labels
         uuid_curr    = Mice(miceiter).ExpDay(dayiter).MSid;
         where_uuid   = strcmp(uuid_curr, df_ts.uuid);
         depthts_curr = df_ts.timestamp(where_uuid);
         labels_curr  = df_ts.model_label(where_uuid);
         
-        Mice(miceiter).ExpDay(dayiter).depth_ts = depthts_curr;
-        Mice(miceiter).ExpDay(dayiter).labels   = labels_curr;
+%         Mice(miceiter).ExpDay(dayiter).depth_ts = depthts_curr;
+%         Mice(miceiter).ExpDay(dayiter).moseq_labels = labels_curr;
         
-                % add depthts/rgbts info to MiceIndex
-        depthts_file = dir('*depth_ts.txt');
-        rgbts_file   = dir('*rgb_ts.txt');
-        if(~isempty(depthts_file) && ~isempty(rgbts_file))
-            depthts = readmatrix(depthts_file.name);
-            rgbts   = readmatrix(rgbts_file.name);
-            Mice(miceiter).ExpDay(day_iter).depthts = depthts(:,1);
-            Mice(miceiter).ExpDay(day_iter).rgbts = rgbts(:,2);
+        % get rgbts file
+        rgbts_file = dir('*rgb_ts.txt');
+        if(~isempty(rgbts_file))
+%             rgbts = readmatrix(rgbts_file.name);
+            rgbts = csvread(rgbts_file.name);
+            rgbts_curr = rgbts(:,1);
+%             Mice(miceiter).ExpDay(dayiter).rgbts = rgbts_curr;
         end
         
-        cd 
-    end
-end
-
-
+        % align depthts with rgbts
+        which_label = [];
+        for rgbiter = 1:length(rgbts_curr)
+%             rgb_align = find(depthts_curr>=rgbts(800,1),1);
+            [minValue,closestIndex]=min(abs(depthts_curr-rgbts_curr(rgbiter)));
+            which_label = [which_label labels_curr(closestIndex)];
+            
+        end
+        Mice(miceiter).ExpDay(dayiter).moseq_align = which_label;
         
         cd ..
     end
     
     cd ../..
+end
 
-%% sync depth timestamps w DLC labels and integrate into MiceIndex
-
-
+if(0)
+    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
+    save('MiceIndex_wLabels', 'Mice')
+end
 %% OLD: add MoSeq labels and depthts/rgbts info to MiceIndex.mat
 %  need to run extract_uuid.m before this code
 %  code in part from MoSeqEventAlignedAnalysis.m

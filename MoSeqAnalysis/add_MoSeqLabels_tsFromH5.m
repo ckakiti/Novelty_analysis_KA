@@ -29,8 +29,8 @@ for miceiter=1:length(Mice)
         cd contextual
     elseif(strcmp(Mice(miceiter).novelty,'s'))
         cd saline
-    elseif(stcmp(Mice(miceiter).novelty,'l'))
-        cd lesion
+    elseif(strcmp(Mice(miceiter).novelty,'l'))
+        cd 6OHDA
     end
     cd(Mice(miceiter).name)
     
@@ -49,24 +49,56 @@ for miceiter=1:length(Mice)
             cd(sessions{dayiter})
         end
         
-        % add depthts and MoSeq labels
-        uuid_curr    = Mice(miceiter).ExpDay(dayiter).MSid;
-        where_uuid   = strcmp(uuid_curr, df_ts.uuid);
-        %depthts_curr = df_ts.timestamp(where_uuid);
-        depthts_curr = [];
-        labels_curr  = df_ts.model_label(where_uuid);
-        
-%         Mice(miceiter).ExpDay(dayiter).depth_ts = depthts_curr;
-%         Mice(miceiter).ExpDay(dayiter).moseq_labels = labels_curr;
-        
         % get rgbts file
         rgbts_file = dir('*rgb_ts.txt');
         if(~isempty(rgbts_file))
 %             rgbts = readmatrix(rgbts_file.name);
-            rgbts = csvread(rgbts_file.name);
-            rgbts_curr = rgbts(:,1);
+            rgbts = readtable(rgbts_file.name);
+            rgbts_curr = table2array(rgbts(:,1));
 %             Mice(miceiter).ExpDay(dayiter).rgbts = rgbts_curr;
         end
+        
+        % get depthts from results_00.h5
+        cd /media/alex/DataDrive1/MoSeqData/combine3L
+        if(any(miceiter==1:6)) % assumes Mice is grouped by set
+            cd Capoeira_MoSeq
+        elseif(any(miceiter==7:12))
+            cd Chess_MoSeq
+        elseif(any(miceiter==13:18))
+            cd Hiking_MoSeq
+        elseif(any(miceiter==19:24))
+            cd Ghana_MoSeq
+        elseif(any(miceiter==25:30))
+            cd Montana_MoSeq
+        elseif(any(miceiter==31:39))
+            cd Planets_MoSeq
+        elseif(any(miceiter==40:52))
+            cd Constellations_MoSeq
+        end
+        
+        cd(Mice(miceiter).name)
+        folderpath = cd;
+        folderd = dir(folderpath);
+        isub = [folderd(:).isdir];
+        foldernames = {folderd(isub).name}';
+        foldernames(ismember(foldernames,{'.','..'})) = [];
+        cd(foldernames{1})
+        sessionname = dir('session*');
+        cd(sessionname.name)
+        cd proc
+        
+        % add depthts and MoSeq labels
+        uuid_curr    = Mice(miceiter).ExpDay(dayiter).MSid;
+        where_uuid   = strcmp(uuid_curr, df_ts.uuid);
+        if(any(miceiter==1:18))
+            depthts_curr = df_ts.timestamp(where_uuid);
+        else
+            depthts_curr = h5read('results_00.h5','/timestamps');
+        end
+        labels_curr  = df_ts.model_label(where_uuid);
+        
+%         Mice(miceiter).ExpDay(dayiter).depth_ts = depthts_curr;
+%         Mice(miceiter).ExpDay(dayiter).moseq_labels = labels_curr;
         
         % align depthts with rgbts
         which_label = [];
@@ -85,7 +117,7 @@ for miceiter=1:length(Mice)
 end
 
 if(0)
-    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
+    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3L/')
     save('MiceIndex_wLabels', 'Mice')
 end
 %% OLD: add MoSeq labels and depthts/rgbts info to MiceIndex.mat
