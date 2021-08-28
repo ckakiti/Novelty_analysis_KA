@@ -11,7 +11,7 @@ clear
 close all
 clc
 
-cd /media/alex/DataDrive1/MoSeqData/combine3L
+cd /media/alex/DataDrive1/MoSeqData/combineF
 run('MiceIndex_blank')
 
 % identify basic information (name, date, uuid) within file
@@ -63,7 +63,8 @@ for mouseiter = 1:length(Mice)
     
     % sort (by days if stim/cont, by time if conf)
     if(strcmp(currNovelty,'S') || strcmp(currNovelty,'C') || ...
-       strcmp(currNovelty,'s') || strcmp(currNovelty,'l'))
+       strcmp(currNovelty,'s') || strcmp(currNovelty,'l') || ...
+       strcmp(currNovelty,'p'))
         new_order = datestr(sort(translate_day),'yymmdd');
     elseif(strcmp(currNovelty,'F'))
         new_order = sort(times_cell);
@@ -71,7 +72,8 @@ for mouseiter = 1:length(Mice)
     
     for daysiter = 1:length(whereMouse)
         if(strcmp(currNovelty,'S') || strcmp(currNovelty,'C') || ...
-           strcmp(currNovelty,'s') || strcmp(currNovelty,'l'))
+           strcmp(currNovelty,'s') || strcmp(currNovelty,'l') || ...
+           strcmp(currNovelty,'p'))
             % add date
             Mice(mouseiter).ExpDay(daysiter).date = new_order(daysiter,:);
             

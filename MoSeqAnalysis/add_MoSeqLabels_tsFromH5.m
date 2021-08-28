@@ -6,10 +6,11 @@ close all
 clc
 
 %cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
-cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3L')
+cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combineF')
 
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
-df_ts = readtable('combine3L_MoSeq_df.csv'); % to get this, need to run MoSeq_viz_loading_scalars.ipynb
+df_ts = readtable('combineF_MoSeq_df.csv'); % to get this, need to run MoSeq_viz_loading_scalars.ipynb
+                                            % save variable df_ts.csv and rename it ***_MoSeq_df.csv
 
 %sessions = {'hab1','hab2','novel1','novel2','novel3','novel4'};
 sessions = {'novel1'};
@@ -31,6 +32,8 @@ for miceiter=1:length(Mice)
         cd saline
     elseif(strcmp(Mice(miceiter).novelty,'l'))
         cd 6OHDA
+    elseif(strcmp(Mice(miceiter).novelty,'p'))
+        cd FP_all
     end
     cd(Mice(miceiter).name)
     
@@ -59,22 +62,29 @@ for miceiter=1:length(Mice)
         end
         
         % get depthts from results_00.h5
-        cd /media/alex/DataDrive1/MoSeqData/combine3L
-        if(any(miceiter==1:6)) % assumes Mice is grouped by set
-            cd Capoeira_MoSeq
-        elseif(any(miceiter==7:12))
-            cd Chess_MoSeq
-        elseif(any(miceiter==13:18))
-            cd Hiking_MoSeq
-        elseif(any(miceiter==19:24))
-            cd Ghana_MoSeq
-        elseif(any(miceiter==25:30))
-            cd Montana_MoSeq
-        elseif(any(miceiter==31:39))
-            cd Planets_MoSeq
-        elseif(any(miceiter==40:52))
-            cd Constellations_MoSeq
+        cd /media/alex/DataDrive1/MoSeqData/combineF
+        if(any(miceiter==1:2))
+            cd ATLA_MoSeq
+        elseif(any(miceiter==3:12))
+            cd Aviary_MoSeq
+        elseif(any(miceiter==13:15))
+            cd Explorers_MoSeq
         end
+%         if(any(miceiter==1:6)) % assumes Mice is grouped by set
+%             cd Capoeira_MoSeq
+%         elseif(any(miceiter==7:12))
+%             cd Chess_MoSeq
+%         elseif(any(miceiter==13:18))
+%             cd Hiking_MoSeq
+%         elseif(any(miceiter==19:24))
+%             cd Ghana_MoSeq
+%         elseif(any(miceiter==25:30))
+%             cd Montana_MoSeq
+%         elseif(any(miceiter==31:39))
+%             cd Planets_MoSeq
+%         elseif(any(miceiter==40:52))
+%             cd Constellations_MoSeq
+%         end
         
         cd(Mice(miceiter).name)
         folderpath = cd;
@@ -90,7 +100,8 @@ for miceiter=1:length(Mice)
         % add depthts and MoSeq labels
         uuid_curr    = Mice(miceiter).ExpDay(dayiter).MSid;
         where_uuid   = strcmp(uuid_curr, df_ts.uuid);
-        if(any(miceiter==1:18))
+%         if(any(miceiter==1:18))
+        if(any(miceiter==[1:2 13:15]))
             depthts_curr = df_ts.timestamp(where_uuid);
         else
             depthts_curr = h5read('results_00.h5','/timestamps');
@@ -117,7 +128,7 @@ for miceiter=1:length(Mice)
 end
 
 if(0)
-    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3L/')
+    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combineF/')
     save('MiceIndex_wLabels', 'Mice')
 end
 %% OLD: add MoSeq labels and depthts/rgbts info to MiceIndex.mat
