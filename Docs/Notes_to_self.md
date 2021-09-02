@@ -37,6 +37,13 @@ for i = 1:numel(lines)
 end
 ```
 
+- to change color of existing plotted data
+
+```
+h=get(gca,'children');
+set(h(1),'color','r')
+```
+
 ## Terminal
 
 - to quickly get path to all .dat files nested under folder, enter this into terminal:
