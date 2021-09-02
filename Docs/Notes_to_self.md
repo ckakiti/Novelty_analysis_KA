@@ -44,6 +44,10 @@ h=get(gca,'children');
 set(h(1),'color','r')
 ```
 
+- when SVGs don't save properly:
+
+` set(gcf, 'Renderer', 'painters'); `
+
 ## Terminal
 
 - to quickly get path to all .dat files nested under folder, enter this into terminal:
