@@ -67,3 +67,9 @@ set(h(1),'color','r')
 `find -type f -path '*combine*' -name '*.txt'`
 
 - keyboard shortcut to go to beginning of line: CTRL-A
+
+
+## Word
+
+- to lock a field: CMD + fn + F11
+- to unlock a field: CMD + SHIFT + fn + F11
