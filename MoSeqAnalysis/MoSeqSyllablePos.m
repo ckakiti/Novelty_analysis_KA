@@ -9,14 +9,14 @@ disp(dataset_name)
 disp([num2str(analysis_len) 'min'])
 
 
-MSDF_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
+MSDF_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/Standard setup/' ...
     'CombineAnalysis/Just-in-case files/' dataset_name '/MoSeqDataFrame.mat'];
 % '/media/alex/DataDrive1/MoSeqData/' dataset_name '/MoSeq';
 load(MSDF_path)
 Syllablebinedge=[-6,-0.5:1:99.5];
 
 % Mice_Index_path=['/media/alex/DataDrive1/MoSeqData/' dataset_name '/MoSeq/MiceIndex.mat'];
-Mice_Index_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/Standard setup/' ...
+Mice_Index_path = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/Standard setup/' ...
    'CombineAnalysis/Just-in-case files/Dataset_20190723/MiceIndex.mat'];
 load(Mice_Index_path)
 
@@ -69,7 +69,7 @@ end
 % IntSyllable=[45 20 9 33 14 17 64 62 60 95 85 94 36 50 55 11 0 10 16 2];%[42 94 39 38 70 13];
 % IntSyllable=[36 37 74 18 24];
 % IntSyllable = [15 41 72 1 4 23 63 75 31 52 44 33 49 47 8];
-IntSyllable = 1;% 9; 1; %[57 52];
+IntSyllable = 9;% 9; 1; %[57 52];
 
 close all
 SyllableDis=figure;
@@ -81,8 +81,8 @@ set(SyllableDis, 'position', [0 0 1000 850]);
 
 for syliter=1:length(IntSyllable)
     % *** plot position just for N1 ***
-%     XPos=MoSeqDataFrame.centroid_x_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));
-%     YPos=MoSeqDataFrame.centroid_y_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));    
+    XPos=MoSeqDataFrame.centroid_x_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));
+    YPos=MoSeqDataFrame.centroid_y_mm(MoSeqDataFrame.model_label==IntSyllable(syliter));    
     scatter(XPos,YPos,MarkerSize,'filled')
     hold on
     

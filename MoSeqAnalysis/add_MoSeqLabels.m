@@ -5,12 +5,13 @@ clear
 close all
 clc
 
-cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
+cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3L/')
 
 load('MiceIndex.mat') % to get this, need to run extract_uuid.m
-df_ts = readtable('combine3_MoSeq_df.csv'); % to get this, need to run MoSeq_viz_loading_scalars.ipynb
+df_ts = readtable('combine3L_MoSeq_df.csv'); % to get this, need to run MoSeq_viz_loading_scalars.ipynb
 
-sessions = {'hab1','hab2','novel1','novel2','novel3','novel4'};
+%sessions = {'hab1','hab2','novel1','novel2','novel3','novel4'};
+sessions = {'novel1'};
 
 disp('section 1')
 
@@ -24,6 +25,10 @@ for miceiter=1:length(Mice)
         cd stimulus
     elseif(strcmp(Mice(miceiter).novelty,'C'))
         cd contextual
+    elseif(strcmp(Mice(miceiter).novelty,'s'))
+        cd saline
+    elseif(strcmp(Mice(miceiter).novelty,'l'))
+        cd 6OHDA
     end
     cd(Mice(miceiter).name)
     
@@ -58,12 +63,14 @@ for miceiter=1:length(Mice)
             rgbts_curr = rgbts(:,1);
 %             Mice(miceiter).ExpDay(dayiter).rgbts = rgbts_curr;
         end
-        
+
         % align depthts with rgbts
         which_label = [];
+        test=[];
         for rgbiter = 1:length(rgbts_curr)
 %             rgb_align = find(depthts_curr>=rgbts(800,1),1);
             [minValue,closestIndex]=min(abs(depthts_curr-rgbts_curr(rgbiter)));
+            test = [test closestIndex];
             which_label = [which_label labels_curr(closestIndex)];
             
         end
@@ -76,7 +83,7 @@ for miceiter=1:length(Mice)
 end
 
 if(0)
-    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3/')
+    cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/others/MoSeq_combine3L/')
     save('MiceIndex_wLabels', 'Mice')
 end
 %% OLD: add MoSeq labels and depthts/rgbts info to MiceIndex.mat

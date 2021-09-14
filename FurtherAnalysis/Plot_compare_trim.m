@@ -5,7 +5,7 @@ close all
 clc
 
 path_to_your_files = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
-    'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
+    'Behavior/others/Standard setup/CombineAnalysis/Dataset_20190723'];
 %     'Behavior/Standard setup/CombineAnalysis/Dataset_20190723'];
 % [/home/alex/Programs/DeepLabCut_new/DeepLabCut/videos/StandardSetup_combine]
 cd(path_to_your_files)
@@ -14,6 +14,9 @@ cd(path_to_your_files)
 % (order matters - should be the same as your .csv files)
 run('MiceIndex_combine3')
 % run('MiceIndex_combine3')
+
+% load cumulative orientation file (created from combine_orientCumul.m)
+load('Dataset_20190723_orientCumul.mat')
 
 % name of novelty conditions
 cond2name = 'cont';
@@ -61,6 +64,11 @@ SAPnear_stim_avg=mean(Y_SAPnear(cond1,:));
 SAPnear_cont_std=std(Y_SAPnear(cond2,:));
 SAPnear_stim_std=std(Y_SAPnear(cond1,:));
 
+orientCumul_cont = orientCumul_all(cond2,:);
+orientCumul_stim = orientCumul_all(cond1,:);
+orientCumul_contCumul = cumsum(any(orientCumul_cont))/(15*60*25);
+orientCumul_stimCumul = cumsum(any(orientCumul_stim))/(15*60*25);
+
 % duration/frames spanned by statistics in .csv files (default first 10 min of session)
 totalTime = 10;
 fps = 15; % frame rate
@@ -90,7 +98,7 @@ Y_SAPnum_ylabel  = 'Number of SAPs';
 Y_SAPnear_ylabel = 'SAPs within radius';
 % Y_SAPnear_ylabel = 'SAPs within radius / time near';
 
-x_label = 'Training day';
+x_label = 'Session';
 
 cond2Color = [0.5 0.0 0.5];
 cond1Color = [1.0 0.5 0.0];
@@ -189,6 +197,109 @@ if(0)
     saveas(angfig,'orientToObj_10min_combine3.tif')
     %ranksum(Y_dis(cond1,3), Y_dis(cond2,3))
     %signrank(Y_dis(cond1,2), Y_dis(cond1,3))
+end
+
+%% plot orientation to object (dissertation format)
+mean_y_ang = mean(Y_ang,2,'omitnan'); %'zscore' cannot handle NaN
+std_y_ang = std(Y_ang,[],2,'omitnan');
+% Y_ang_zscore = (Y_ang - mean_y_ang)./std_y_ang; %zscore
+% Y_ang_zscore = (Y_ang - mean(Y_ang(:)))./std(Y_ang(:));
+Y_ang_plot = Y_ang;
+
+close all
+
+angfig=figure(2);
+set(angfig, 'Position', [-115 1133 1200 450])
+
+subplot(1, 2, 1)
+hold on
+a1 = plot(repmat(X, length(cond2), 1)', Y_ang(cond2,:)', ...
+    'Color', cond2Color, 'LineWidth',2);
+a2 = plot(repmat(X, length(cond1), 1)', Y_ang(cond1,:)', ...
+    'Color', cond1Color, 'LineWidth',2);
+title('Individual traces')
+set(gca, 'FontSize', 22)
+xlabel(x_label)
+ylabel(Y_ang_ylabel)
+legend([a1(1) a2(1)], ['contextual (n=' num2str(length(cond2)) ')'], ...
+   ['stimulus (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
+xlim([0 X(end)+1])
+ylim([0 0.2])
+ylimAng = angfig.CurrentAxes.YLim;
+xticks(X);
+xticklabels(XTick);
+set(gca,'YTick',[0 0.1 0.2])
+axis('square')
+
+subplot(1, 2, 2)
+hold on
+errorbar(X,ang_cont_avg,ang_cont_std, 'Color', cond2Color, 'LineWidth',2)
+errorbar(X,ang_stim_avg,ang_stim_std, 'Color', cond1Color, 'LineWidth',2)
+title('Group average')
+set(gca, 'FontSize', 22)
+xlabel(x_label)
+ylabel(Y_ang_ylabel)
+legend(['contextual (n=' num2str(length(cond2)) ')'], ...
+   ['stimulus (n=' num2str(length(cond1)) ')'])
+xlim([0 X(end)+1])
+ylim(ylimAng)
+xticks(X);
+xticklabels(XTick);
+set(gca,'YTick',[0 0.1 0.2])
+axis('square')
+
+% subplot(1, 3, 2)
+% a1 = plot(repmat(X, length(cond2), 1)', Y_ang_plot(cond2,:)', ...
+%     'Color', cond2Color, 'LineWidth',2);
+% title('Contextual')
+% set(gca, 'FontSize', 14)
+% xlabel(x_label)
+% ylabel('Orientation to object (fraction)')
+% legend(a1(1), ['contextual (n=' num2str(length(cond2)) ')']) %{'cont', 'stim'})
+% xlim([0 X(end)+1])
+% ylim([0 0.2])
+% ylimAng = angfig.CurrentAxes.YLim;
+% xticks(X);
+% xticklabels(XTick);
+% set(gca, 'FontSize', 16)
+% axis('square')
+% 
+% subplot(1, 3, 1)
+% a2 = plot(repmat(X, length(cond1), 1)', Y_ang_plot(cond1,:)', ...
+%     'Color', cond1Color, 'LineWidth',2);
+% % title(Y_ang_title)
+% set(gca, 'FontSize', 14)
+% title('Stimulus')
+% xlabel(x_label)
+% ylabel('Orientation to object (fraction)')
+% legend(a2(1), ['stimulus (n=' num2str(length(cond1)) ')']) %{'cont', 'stim'})
+% xlim([0 X(end)+1])
+% ylim([0 0.2])
+% ylimAng = angfig.CurrentAxes.YLim;
+% xticks(X);
+% xticklabels(XTick);
+% set(gca, 'FontSize', 16)
+% axis('square')
+% 
+% subplot(1,3,3)
+% xlim([0 30])
+% ylim([0 1])
+% xlabel('Orientation to object (/min)')
+% ylabel('Cumulative probability')
+% title('N1')
+% set(gca, 'FontSize', 16)
+% axis('square')
+
+% subplot(1, 2, 2)
+% boxplot([(Y_ang(cond1,3)-Y_ang(cond1,2)), ...
+%          (Y_ang(cond2,3)-Y_ang(cond2,2))])
+% % ylim([0 0.2])
+% xticklabels({'stim','cont'})
+% set(gca, 'FontSize', 16)
+% axis('square')
+
+if(0)
+    saveas(angfig,'orientToObj_10min_combine3.tif')
 end
 
 %% plot SAP (stretched attend posture) across days

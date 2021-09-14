@@ -108,7 +108,7 @@ flen = length(filelist);
 
 tic;
 %%
-for fiter = 1:flen %%%%%%%%%%%
+for fiter = 1%:flen %%%%%%%%%%%
     vn = filelist(fiter).name;
     %fn=[vn(1:end-4) networkname_format(1:17) '*' networkname_format(end-15:end) '.csv'];
     fn=dir([vn(1:end-4) '*.csv']);
@@ -269,8 +269,8 @@ for fiter = 1:flen %%%%%%%%%%%
     
     % %
 %     close all
-    Trafigure=figure('visible','off');
-%     Trafigure=figure('visible','on');
+%     Trafigure=figure('visible','off');
+    Trafigure=figure('visible','on');
     hold on
 %     scatter(Labels(plot_fs:plot_fe,14),Labels(plot_fs:plot_fe,15),6,'filled');
     plot(Labels_plot(plot_fs:plot_fe,14),Labels_plot(plot_fs:plot_fe,15),'k','linewidth',2)
@@ -298,7 +298,7 @@ for fiter = 1:flen %%%%%%%%%%%
     xlim([0 video_xlen+50]);
     ylim([0 video_ywid]);
     set(Trafigure, 'position', [0 0 1200 900]);%[1 969 921 646]);
-    
+    pause
     % % ***********************************************************
     % Save
     % ***********************************************************
@@ -311,11 +311,12 @@ for fiter = 1:flen %%%%%%%%%%%
 %     saveas(Angfigure,['Orientation_' vn(1:end-4) '.png'])
     
 %     cd('divide_sessions') %%%
-    saveas(Hmfigure,['Heatmap_' vn(1:end-4), num2str(durTotal) 'min.tif'])                  %%%%%%%%%%%%%%%%%
-    saveas(Trafigure,['Trajectory_' vn(1:end-4), num2str(durTotal) 'min.tif'])              %%%%%%%%%%%%%%%%%
+    %saveas(Hmfigure,['Heatmap_' vn(1:end-4), num2str(durTotal) 'min.tif'])                  %%%%%%%%%%%%%%%%%
+    %saveas(Trafigure,['Trajectory_' vn(1:end-4), num2str(durTotal) 'min.tif'])              %%%%%%%%%%%%%%%%%
+    saveas(Trafigure,['Trajectory_' vn(1:end-4), num2str(durTotal) 'min.fig'])
 %     cd ..
     
-    save(vn(1:end-4),'Labels','Dis_t_obj','Ang_t_obj', 'radius', 'radius_cm');              %%%%%%%%%%%%%%%%%
+    %save(vn(1:end-4),'Labels','Dis_t_obj','Ang_t_obj', 'radius', 'radius_cm');              %%%%%%%%%%%%%%%%%
     
     close all
     clearvars -except arena obj obj_center filelist fiter fpm fps ppc radius radius_cm angle_radius...

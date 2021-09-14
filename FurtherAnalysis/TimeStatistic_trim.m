@@ -2,15 +2,16 @@ clear
 close all
 clc
 
-% Config_NovAna_trim
-Config_NovAna
-
-path_to_your_files = ['/home/alex/Programs/DeepLabCut_new/DeepLabCut/'...
-    'videos/Capoeira_DLC/'];
-%['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
-%    'Behavior/Standard setup/CombineAnalysis/Just-in-case files/Capoeira_DLC'];
+% path_to_your_files = ['/home/alex/Programs/DeepLabCut_new/DeepLabCut/'...
+%     'videos/Capoeira_DLC/'];
+path_to_your_files = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
+   'Behavior/others/Standard setup/CombineAnalysis/Just-in-case files/Hiking_DLC'];
 cd(path_to_your_files)
 
+% Config_NovAna_trim
+path_to_configFile = ['/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/' ...
+   'Behavior/others/Standard setup/CombineAnalysis/Just-in-case files/Code/'];
+run([path_to_configFile 'Config_NovAna.m'])
 
 durTotal = 10; % duration of analysis (min)
 disp(['Duration of analysis: ' num2str(durTotal) 'min'])
@@ -39,7 +40,7 @@ disp('next')
 %%
 nearOrSAP = input('Analyzing time near obj or SAP? 0=timeNear 1=SAP: ');
 if(nearOrSAP==0)
-    whichAnalyzedFolder = 'Analyzed_Data_1obj_tail';
+    whichAnalyzedFolder = 'Analyzed_Data_1obj_head';
     disp('Analyzing time near / orientation to obj')
     disp(['radius_cm = ' num2str(radius_cm)])
     
@@ -60,7 +61,7 @@ else
     error(error_msg)
 end
 
-pause(1)
+% pause(1)
 
 for folderi=1:folderlen
     cd(foldernames{folderi});
@@ -75,7 +76,7 @@ for folderi=1:folderlen
     filelist=dir('*rgb_Converted.mat'); 
     flen = length(filelist);
     
-    for filei = 1:flen
+    for filei = 3%1:flen %3
         disp(filei)
         filename = filelist(filei).name;
         load(filename)
@@ -93,7 +94,11 @@ for folderi=1:folderlen
         isOrient = intersect(find(orientSmooth<=angle_radius), find(orientSmooth>=(-angle_radius)));
         Time_angle(filei) = length(isOrient);
         
-        
+        % analyze orientation across session (just for N1)
+        orientAllSmooth = smoothdata(Labels(1:(15*60*25),22),'rloess',Swindow_orient);
+        isOrientAll = (orientAllSmooth<=angle_radius) & (orientAllSmooth>=(-angle_radius));
+        orient_cumsum = isOrientAll;%cumsum(isOrientAll);
+
         % Analyze body length and SAP
         smooth_headX = smoothdata( LabelsCut(:,2), 'rloess', Swindow);
         smooth_headY = smoothdata( LabelsCut(:,3), 'rloess', Swindow);
@@ -137,14 +142,16 @@ for folderi=1:folderlen
     
     Time_distance_all(folderi,:)  = Time_distance;
     Time_angle_all(folderi,:)     = Time_angle;
+    Time_angle_cumul(folderi,:)   = orient_cumsum';
     SAP_num_all(folderi,:)        = sap_num;
     SAP_in_rad_all(folderi,:)     = sap_num_in_rad;
     dist_of_sap(folderi).sapFrame = sap_frame;
     dist_of_sap(folderi).sapDist  = sap_dist;
     dist_of_sap(folderi).sapPos   = sap_pos;
     dist_of_sap(folderi).nosePos  = nose_dist;
+    
     clearvars Time_angle Time_distance ...
-        sap_num sap_num_in_rad sap_frame sap_dist sap_pos nose_dist
+        sap_num sap_num_in_rad sap_frame sap_dist sap_pos nose_dist isOrientAll
     cd ../..
     DisOrAng{folderi,1}='Distance';
     DisOrAng{folderlen+folderi,1}='Angle';
@@ -162,6 +169,8 @@ Table2 = table(cat(1,foldernames,foldernames),SAPNumNear,[SAP_num_all;SAP_in_rad
 if(0)
     writetable(Table,'TimeStatistic_tail.csv');
     writetable(Table2,'TimeStatistic_SAP_8cm_norm.csv');
+    
+    save('TimeStatistic_orient_cumul', 'foldernames','Time_angle_cumul');
     save('SAP_plus_dist.mat', 'dist_of_sap')
     
     disp('saved')
