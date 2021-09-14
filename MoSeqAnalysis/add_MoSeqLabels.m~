@@ -18,9 +18,9 @@ disp('section 1')
 
 %% add depth/rgb timestamps and MoSeq labels to MiceIndex
 %cd('/Users/cakiti/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/')
+cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/')
 
 for miceiter=1:length(Mice)
-    cd('/home/alex/Dropbox (Uchida Lab)/Korleki Akiti/Behavior/')
     disp(Mice(miceiter).name)
     
     if(strcmp(Mice(miceiter).novelty,'S'))
@@ -29,8 +29,7 @@ for miceiter=1:length(Mice)
         cd contextual
     elseif(strcmp(Mice(miceiter).novelty,'s'))
         cd saline
-    elseif(stcmp(Mice(miceiter).novelty,'l'))
-        cd lesion
+    elseif(
     end
     cd(Mice(miceiter).name)
     
@@ -52,8 +51,7 @@ for miceiter=1:length(Mice)
         % add depthts and MoSeq labels
         uuid_curr    = Mice(miceiter).ExpDay(dayiter).MSid;
         where_uuid   = strcmp(uuid_curr, df_ts.uuid);
-        %depthts_curr = df_ts.timestamp(where_uuid);
-        depthts_curr = [];
+        depthts_curr = df_ts.timestamp(where_uuid);
         labels_curr  = df_ts.model_label(where_uuid);
         
 %         Mice(miceiter).ExpDay(dayiter).depth_ts = depthts_curr;

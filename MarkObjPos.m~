@@ -8,7 +8,7 @@ close all
 Config_NovAna_ATLA;
 
 currSet = 'Aviary_DLC'; %%%
-currMouse = 'Robin';
+currMouse = 'Cardinal';
 % currDate  = 'allFiles'; %190702
 timeShift = 901-900; %6000;%901-900; %For Strawberry/Kiwi: 2488/1725;
 
