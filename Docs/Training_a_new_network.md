@@ -128,7 +128,7 @@ cp -r UnaugmentedDataSet_NETWORKNAMEDATE ../pose-tensorflow/models/
 ```
 Start training
 ```
-cd pose-tensorflow/models/NETWORKNAMEDATE-trainset95shuffle1/train
+cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/pose-tensorflow/models/NETWORKNAMEDATE-trainset95shuffle1/train
 TF_CUDNN_USE_AUTOTUNE=0 CUDA_VISIBLE_DEVICES=0 python3 ../../../train.py 
 ```
 ## 7. Evaluate your network:
