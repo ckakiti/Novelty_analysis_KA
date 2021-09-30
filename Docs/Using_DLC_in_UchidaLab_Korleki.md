@@ -62,7 +62,7 @@ cd /home/alex/Programs/DeepLabCut_new/DeepLabCut/Analysis-tools
 python3 MakingLabeledVideo_fast.py
 ```
 - this will give you a file with the same name as your raw video except with 'DeepLabCutlabeled' appended
-- to unlock labeled video (if needed), run this line:
+- to unlock labeled video (if needed), run this line and change videopath (see `myconfig.py` and/or `myconfig_analysis.py`)
 ``` 
 chmod -R 777 /VIDEOPATH/
 ```
