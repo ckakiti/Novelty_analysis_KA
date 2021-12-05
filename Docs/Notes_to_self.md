@@ -48,6 +48,10 @@ set(h(1),'color','r')
 
 ` set(gcf, 'Renderer', 'painters'); `
 
+- when MATLAB crashes shortly after opening .fig file:
+
+` set(0, 'DefaultFigureRenderer', 'painters'); `
+
 ## Terminal
 
 - to quickly get path to all .dat files nested under folder, enter this into terminal:
