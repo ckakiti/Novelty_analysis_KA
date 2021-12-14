@@ -77,3 +77,7 @@ set(h(1),'color','r')
 
 - to lock a field: CMD + fn + F11
 - to unlock a field: CMD + SHIFT + fn + F11
+
+## Acrobat
+
+- [to resize PDF](http://khkonsulting.com/2017/03/scaling-page-content-in-adobe-acrobat-pro-dc/)
