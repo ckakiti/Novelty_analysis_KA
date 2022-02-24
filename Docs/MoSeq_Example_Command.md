@@ -1,6 +1,6 @@
 # MoSeq Example Commands
 
-You can use a shell script to do the following analysis automatically, there is a template
+You can use a shell script to do the following analysis automatically, there is a [template](https://github.com/ckakiti/Novelty_analysis_KA/blob/master/MoSeqAnalysis/Shell_Script_Template.sh)
 ```
 Shell_Script_Template.sh
 ```
