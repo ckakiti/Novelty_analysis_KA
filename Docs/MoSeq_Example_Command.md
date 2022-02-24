@@ -15,8 +15,9 @@ source activate moseq_1.2
 ```
 moseq2-extract extract ~/Programs/MoSeq_videos/MoSeq_test/session_20180728154636/depth.dat
 ```
-* Use a flip classifier
-If using for the first time, download a flip classifier
+* Can use a flip classifier to improve performance
+
+** If using for the first time, download a flip classifier
 ```
 moseq2-extract download-flip-file
 ```
