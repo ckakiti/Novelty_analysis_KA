@@ -18,9 +18,7 @@ moseq2-extract extract ~/Programs/MoSeq_videos/MoSeq_test/session_20180728154636
 * Can use a flip classifier to improve performance
 
 ** If using for the first time, download a flip classifier
-```
-moseq2-extract download-flip-file
-```
+` moseq2-extract download-flip-file `
 * Extraction using a flip classifier
 ```
 moseq2-extract extract /path/to/data/depth.dat --flip-classifier /home/alex/moseq2/flip_classifier_k2_c57_10to13weeks.pkl --bg-roi-dilate 75 75 
